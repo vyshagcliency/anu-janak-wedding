@@ -1,15 +1,18 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ParallaxLayers from "./ParallaxLayers";
 import BusRoad from "./BusRoad";
-import SchoolBus from "./SchoolBus";
+import SchoolVan from "./SchoolVan";
+import SchoolBuilding from "./SchoolBuilding";
+import BoardingFigure from "./BoardingFigure";
 import TimelineStop from "./TimelineStop";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/* ───── Stop data (positions adjusted per plan) ───── */
 const STOPS = [
   {
     title: "Where It All Began",
@@ -18,7 +21,7 @@ const STOPS = [
       "Two kids in the same class, same school van — not knowing the universe had already written their story.",
     imageSrc: "/images/timeline/classphoto1.jpeg",
     imageAlt: "Anu and Janak's class photo",
-    position: 12,
+    position: 14,
     revealType: "circle" as const,
   },
   {
@@ -28,7 +31,7 @@ const STOPS = [
       "Morning rides, shared laughter, and the kind of friendship that feels effortless. The school van was their first world together.",
     imageSrc: "/images/timeline/classphoto2.jpeg",
     imageAlt: "School group photo with teachers",
-    position: 28,
+    position: 30,
     revealType: "slide" as const,
   },
   {
@@ -73,10 +76,40 @@ const STOPS = [
   },
 ];
 
+/* ───── Vehicle state derivation from scroll progress ───── */
+function deriveVehicleState(
+  progress: number
+): "bus" | "transforming" | "plane" {
+  if (progress < 0.55) return "bus"; // Ch1-3
+  if (progress < 0.62) return "transforming"; // Ch4 transition zone
+  if (progress < 0.88) return "plane"; // Ch4-5 flying
+  return "bus"; // Ch6 landing
+}
+
+/* ───── Per-stop progress for boarding figures ───── */
+function getStopProgress(
+  busProgress: number,
+  stopStart: number,
+  stopEnd: number
+): number {
+  if (busProgress < stopStart) return 0;
+  if (busProgress > stopEnd) return 1;
+  return (busProgress - stopStart) / (stopEnd - stopStart);
+}
+
 export default function TimelineSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [busProgress, setBusProgress] = useState(0);
+
+  const vehicleState = useMemo(
+    () => deriveVehicleState(busProgress),
+    [busProgress]
+  );
+
+  // Boarding figure progress (girl at stop 1, boy at stop 2)
+  const girlProgress = getStopProgress(busProgress, 0.05, 0.2);
+  const boyProgress = getStopProgress(busProgress, 0.2, 0.38);
 
   useEffect(() => {
     if (!sectionRef.current || !trackRef.current) return;
@@ -85,7 +118,7 @@ export default function TimelineSection() {
 
     // Horizontal scroll via GSAP ScrollTrigger pin
     const scrollTween = gsap.to(track, {
-      xPercent: -83.33, // Move 5/6 of the track (6 sections, show 1 at a time)
+      xPercent: -83.33,
       ease: "none",
       scrollTrigger: {
         id: "timeline-horizontal",
@@ -181,8 +214,27 @@ export default function TimelineSection() {
           <BusRoad />
         </div>
 
-        {/* School Bus */}
-        <SchoolBus progress={busProgress} />
+        {/* School Building at journey start */}
+        <SchoolBuilding />
+
+        {/* Boarding Figures */}
+        {girlProgress > 0 && girlProgress < 1 && (
+          <BoardingFigure
+            type="girl"
+            stopProgress={girlProgress}
+            position={14}
+          />
+        )}
+        {boyProgress > 0 && boyProgress < 1 && (
+          <BoardingFigure
+            type="boy"
+            stopProgress={boyProgress}
+            position={30}
+          />
+        )}
+
+        {/* School Van (bus / plane) */}
+        <SchoolVan progress={busProgress} vehicleState={vehicleState} />
 
         {/* Timeline stops */}
         {STOPS.map((stop, i) => (

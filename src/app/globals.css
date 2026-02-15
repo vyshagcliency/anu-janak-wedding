@@ -66,3 +66,49 @@ body {
   content-visibility: auto;
   contain-intrinsic-size: 100vw 100vh;
 }
+
+/* ───── Timeline keyframe animations ───── */
+
+/* Bus wheel rotation */
+@keyframes wheelRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.wheel-rotate {
+  animation: wheelRotate 0.8s linear infinite;
+}
+
+/* Ch5 twinkling stars */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.twinkle {
+  animation: twinkle 2.5s ease-in-out infinite;
+}
+
+/* Gentle float for decorative elements */
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.gentle-float {
+  animation: gentleFloat 4s ease-in-out infinite;
+}
+
+/* Plane exhaust puff */
+@keyframes exhaustPuff {
+  0% { opacity: 0.4; transform: translateX(0) scale(1); }
+  100% { opacity: 0; transform: translateX(-20px) scale(1.5); }
+}
+
+.exhaust-puff circle {
+  animation: exhaustPuff 1.5s ease-out infinite;
+}
+
+.exhaust-puff circle:nth-child(2) { animation-delay: 0.3s; }
+.exhaust-puff circle:nth-child(3) { animation-delay: 0.6s; }
+.exhaust-puff circle:nth-child(4) { animation-delay: 0.9s; }
