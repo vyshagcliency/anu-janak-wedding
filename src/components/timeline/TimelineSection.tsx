@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ParallaxLayers from "./ParallaxLayers";
 import BusRoad from "./BusRoad";
+import RoadsideScenery from "./RoadsideScenery";
 import SchoolVan from "./SchoolVan";
 import BoardingFigure from "./BoardingFigure";
 import TimelineStop from "./TimelineStop";
@@ -221,6 +222,7 @@ export default function TimelineSection() {
         {/* Background layers */}
         <div className="absolute inset-0">
           <ParallaxLayers />
+          <RoadsideScenery />
           <BusRoad />
         </div>
 
