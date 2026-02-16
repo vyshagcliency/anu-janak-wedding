@@ -126,3 +126,77 @@ body {
   50%  { stroke-dasharray: 60 100; opacity: 0.8; }
   100% { stroke-dasharray: 60 100; opacity: 0; }
 }
+
+/* ───── Phase 2: Event section styles ───── */
+
+/* Content visibility for off-screen event sections */
+.event-section-offscreen {
+  content-visibility: auto;
+  contain-intrinsic-size: 100vw 100vh;
+}
+
+/* Sunset: warm floating dust motes */
+.event-particle-dust {
+  animation: gentleFloatDust 6s ease-in-out infinite alternate;
+}
+
+@keyframes gentleFloatDust {
+  0%   { transform: translateY(0) translateX(0); opacity: 0.2; }
+  50%  { opacity: 0.6; }
+  100% { transform: translateY(-30px) translateX(15px); opacity: 0.15; }
+}
+
+/* Night: twinkling sparkle dots */
+.event-particle-sparkle {
+  animation: twinkleSparkle 2.5s ease-in-out infinite;
+}
+
+@keyframes twinkleSparkle {
+  0%, 100% { transform: scale(0.5); opacity: 0.2; }
+  50%      { transform: scale(1.2); opacity: 0.9; }
+}
+
+/* Morning: drifting petals */
+.event-particle-petal {
+  animation: gentlePetal 8s ease-in-out infinite;
+}
+
+@keyframes gentlePetal {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.5; }
+  33%  { transform: translateY(20px) translateX(15px) rotate(30deg); opacity: 0.3; }
+  66%  { transform: translateY(-10px) translateX(-10px) rotate(-15deg); opacity: 0.5; }
+  100% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.5; }
+}
+
+/* Evening: golden bokeh dots */
+.event-particle-bokeh {
+  animation: goldenBokeh 5s ease-in-out infinite alternate;
+}
+
+@keyframes goldenBokeh {
+  0%   { transform: scale(0.8); opacity: 0.15; }
+  50%  { transform: scale(1.1); opacity: 0.4; }
+  100% { transform: scale(0.9); opacity: 0.2; }
+}
+
+/* Hashtag shimmer */
+.hashtag-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--gold) 0%,
+    var(--gold-light) 40%,
+    #fff 50%,
+    var(--gold-light) 60%,
+    var(--gold) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerText 3s ease-in-out infinite;
+}
+
+@keyframes shimmerText {
+  0%   { background-position: 100% 50%; }
+  100% { background-position: -100% 50%; }
+}
