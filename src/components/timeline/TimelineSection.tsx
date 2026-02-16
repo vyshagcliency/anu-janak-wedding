@@ -21,7 +21,7 @@ const STOPS = [
       "Two kids in the same class, same school van — not knowing the universe had already written their story.",
     imageSrc: "/images/timeline/classphoto1.jpeg",
     imageAlt: "Anu and Janak's class photo",
-    position: 14,
+    position: 8,
     revealType: "circle" as const,
   },
   {
@@ -31,7 +31,7 @@ const STOPS = [
       "Morning rides, shared laughter, and the kind of friendship that feels effortless. The school van was their first world together.",
     imageSrc: "/images/timeline/classphoto2.jpeg",
     imageAlt: "School group photo with teachers",
-    position: 30,
+    position: 25,
     revealType: "slide" as const,
   },
   {
@@ -41,7 +41,7 @@ const STOPS = [
       "Somewhere between walks and conversations, friendship quietly turned into something more. They just knew.",
     imageSrc: "/images/timeline/img2.jpeg",
     imageAlt: "Walking together on a nature path",
-    position: 44,
+    position: 42,
     revealType: "fade" as const,
   },
   {
@@ -51,7 +51,7 @@ const STOPS = [
       "Life took them on different paths — different cities, different dreams. But some threads can't be cut by distance.",
     imageSrc: "/images/timeline/img5.jpeg",
     imageAlt: "She walks ahead, he follows",
-    position: 60,
+    position: 58,
     revealType: "split" as const,
   },
   {
@@ -61,7 +61,7 @@ const STOPS = [
       "After all the years, all the roads — they chose each other. Not by chance, but by heart.",
     imageSrc: "/images/timeline/img6.jpeg",
     imageAlt: "Intimate embrace through foliage",
-    position: 76,
+    position: 75,
     revealType: "blur" as const,
   },
   {
@@ -80,10 +80,9 @@ const STOPS = [
 function deriveVehicleState(
   progress: number
 ): "bus" | "transforming" | "plane" {
-  if (progress < 0.55) return "bus"; // Ch1-3
-  if (progress < 0.62) return "transforming"; // Ch4 transition zone
-  if (progress < 0.88) return "plane"; // Ch4-5 flying
-  return "bus"; // Ch6 landing
+  if (progress < 0.52) return "bus"; // Ch1-3
+  if (progress < 0.58) return "transforming"; // Ch4 transition zone
+  return "plane"; // Ch4-5-6 stays as plane
 }
 
 /* ───── Per-stop progress for boarding figures ───── */
@@ -108,8 +107,9 @@ export default function TimelineSection() {
   );
 
   // Boarding figure progress (girl at stop 1, boy at stop 2)
-  const girlProgress = getStopProgress(busProgress, 0.05, 0.2);
-  const boyProgress = getStopProgress(busProgress, 0.2, 0.38);
+  // Wider ranges so figures are visible across the full snap segment
+  const girlProgress = getStopProgress(busProgress, 0.0, 0.18);
+  const boyProgress = getStopProgress(busProgress, 0.18, 0.38);
 
   useEffect(() => {
     if (!sectionRef.current || !trackRef.current) return;
@@ -222,14 +222,14 @@ export default function TimelineSection() {
           <BoardingFigure
             type="girl"
             stopProgress={girlProgress}
-            position={14}
+            position={8}
           />
         )}
         {boyProgress > 0 && boyProgress < 1 && (
           <BoardingFigure
             type="boy"
             stopProgress={boyProgress}
-            position={30}
+            position={25}
           />
         )}
 

@@ -12,19 +12,21 @@ export default function SchoolVan({ progress, vehicleState }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const busRef = useRef<SVGSVGElement>(null);
   const planeRef = useRef<SVGSVGElement>(null);
+  // Keep refs to active tweens so we can kill them on state change
+  const tweensRef = useRef<gsap.core.Tween[]>([]);
 
   // Position along the track: 5% to 95%
   const xPercent = 5 + progress * 90;
 
-  // Vertical position: bus stays low, plane rises
-  const isBus = vehicleState === "bus";
   const isPlane = vehicleState === "plane";
   const isTransforming = vehicleState === "transforming";
+  const showPlane = isPlane || isTransforming;
 
+  // Vertical position & rotation
   useEffect(() => {
     if (!containerRef.current) return;
 
-    let bottomTarget = "8vh";
+    let bottomTarget = "16vh";
     let rotation = 0;
 
     if (isPlane) {
@@ -35,33 +37,53 @@ export default function SchoolVan({ progress, vehicleState }: Props) {
       rotation = -5;
     }
 
-    gsap.to(containerRef.current, {
+    const tween = gsap.to(containerRef.current, {
       bottom: bottomTarget,
       rotation,
       duration: 1.2,
       ease: "power2.inOut",
     });
+
+    return () => { tween.kill(); };
   }, [vehicleState, isPlane, isTransforming]);
 
-  // Crossfade between bus and plane
+  // Crossfade between bus and plane — kill all previous tweens first
   useEffect(() => {
     if (!busRef.current || !planeRef.current) return;
 
-    if (isPlane || isTransforming) {
-      gsap.to(busRef.current, { opacity: 0, scale: 0.8, duration: 0.5, ease: "power2.in" });
-      gsap.to(planeRef.current, { opacity: 1, scale: 1, duration: 0.5, delay: 0.15, ease: "power2.out" });
+    // Kill any in-flight crossfade tweens to prevent both showing
+    tweensRef.current.forEach((t) => t.kill());
+    tweensRef.current = [];
+
+    if (showPlane) {
+      // Immediately snap bus hidden, then fade plane in
+      gsap.set(busRef.current, { opacity: 0, scale: 0.8 });
+      const t = gsap.to(planeRef.current, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.4,
+        ease: "power2.out",
+      });
+      tweensRef.current.push(t);
     } else {
-      gsap.to(planeRef.current, { opacity: 0, scale: 0.8, duration: 0.5, ease: "power2.in" });
-      gsap.to(busRef.current, { opacity: 1, scale: 1, duration: 0.5, delay: 0.15, ease: "power2.out" });
+      // Immediately snap plane hidden, then fade bus in
+      gsap.set(planeRef.current, { opacity: 0, scale: 0.8 });
+      const t = gsap.to(busRef.current, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.4,
+        ease: "power2.out",
+      });
+      tweensRef.current.push(t);
     }
-  }, [vehicleState, isPlane, isTransforming]);
+  }, [vehicleState, showPlane]);
 
   return (
     <div
       ref={containerRef}
       className="absolute z-20"
       style={{
-        bottom: "8vh",
+        bottom: "16vh",
         left: `${xPercent}%`,
         transform: "translateX(-50%)",
         willChange: "transform, bottom",
@@ -121,7 +143,6 @@ export default function SchoolVan({ progress, vehicleState }: Props) {
           <circle cx="32" cy="66" r="10" fill="#333" />
           <circle cx="32" cy="66" r="6" fill="#666" />
           <circle cx="32" cy="66" r="2" fill="#999" />
-          {/* Spokes */}
           <line x1="32" y1="58" x2="32" y2="74" stroke="#555" strokeWidth="1" />
           <line x1="24" y1="66" x2="40" y2="66" stroke="#555" strokeWidth="1" />
         </g>
@@ -179,7 +200,7 @@ export default function SchoolVan({ progress, vehicleState }: Props) {
         <ellipse cx="56" cy="22" rx="6" ry="4" fill="#999" />
 
         {/* Exhaust trail */}
-        {isPlane && (
+        {showPlane && (
           <g className="exhaust-puff">
             <circle cx="-5" cy="40" r="3" fill="rgba(255,255,255,0.4)" />
             <circle cx="-15" cy="42" r="4" fill="rgba(255,255,255,0.25)" />

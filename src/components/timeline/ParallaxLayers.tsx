@@ -6,55 +6,67 @@
  */
 
 /* ───── Theme zone definitions ───── */
+/*
+ * Each zone is much wider than one screen, overlapping heavily with neighbors.
+ * Combined with lower opacity and the crossfade divs, the colour shift feels
+ * gradual rather than in-your-face.
+ */
 const THEME_ZONES = [
   {
     id: "school-start",
     label: "Morning",
     gradient: "linear-gradient(180deg, #FFF8E7 0%, #FFE4B5 100%)",
-    left: "0%",
-    width: "120vw",
+    left: "-10vw",
+    width: "160vw",
+    opacity: 1,
   },
   {
     id: "ch1",
     label: "Warm Gold",
     gradient: "linear-gradient(180deg, #FFF8E7 0%, #FFE4B5 40%, #F5DEB3 100%)",
-    left: "80vw",
-    width: "120vw",
+    left: "60vw",
+    width: "160vw",
+    opacity: 0.7,
   },
   {
     id: "ch2",
     label: "Bright Blue",
-    gradient: "linear-gradient(180deg, #E3F2FD 0%, #BBDEFB 40%, #90CAF9 100%)",
-    left: "180vw",
-    width: "120vw",
+    gradient: "linear-gradient(180deg, #EDF5FD 0%, #D6EAFB 40%, #B8D8F8 100%)",
+    left: "160vw",
+    width: "160vw",
+    opacity: 0.6,
   },
   {
     id: "ch3",
     label: "Golden Sunset",
-    gradient: "linear-gradient(180deg, #FFF3E0 0%, #FFE0B2 40%, #FFCC80 100%)",
-    left: "280vw",
-    width: "120vw",
+    gradient: "linear-gradient(180deg, #FFF6EC 0%, #FFE8CC 40%, #FFDDB0 100%)",
+    left: "260vw",
+    width: "160vw",
+    opacity: 0.6,
   },
   {
     id: "ch4",
     label: "Overcast/Dusky",
-    gradient: "linear-gradient(180deg, #ECEFF1 0%, #CFD8DC 40%, #B0BEC5 100%)",
-    left: "360vw",
-    width: "120vw",
+    gradient: "linear-gradient(180deg, #F0F2F4 0%, #DDE1E5 40%, #C8CDD2 100%)",
+    left: "340vw",
+    width: "160vw",
+    opacity: 0.65,
   },
   {
     id: "ch5",
     label: "Starry Night",
     gradient: "linear-gradient(180deg, #1A237E 0%, #283593 40%, #3949AB 100%)",
-    left: "440vw",
-    width: "120vw",
+    left: "420vw",
+    width: "160vw",
+    opacity: 0.85,
   },
   {
     id: "ch6",
     label: "Radiant Sunrise",
-    gradient: "linear-gradient(180deg, #FFF8E1 0%, #FFE082 40%, #FFD54F 100%)",
-    left: "530vw",
-    width: "120vw",
+    gradient: "linear-gradient(180deg, #FFFAEB 0%, #FFE8A8 40%, #FFDD78 100%)",
+    left: "510vw",
+    width: "160vw",
+    opacity: 0.7,
   },
 ];
 
@@ -268,7 +280,7 @@ const TREES = generateTrees();
 export default function ParallaxLayers() {
   return (
     <>
-      {/* Themed sky zones */}
+      {/* Themed sky zones — wide and semi-transparent for gentle blending */}
       {THEME_ZONES.map((zone) => (
         <div
           key={zone.id}
@@ -277,23 +289,24 @@ export default function ParallaxLayers() {
             left: zone.left,
             width: zone.width,
             background: zone.gradient,
+            opacity: zone.opacity,
             contentVisibility: "auto",
           }}
         />
       ))}
 
-      {/* Crossfade overlaps: soften zone edges */}
+      {/* Wide crossfade overlaps between zones for smooth transitions */}
       {THEME_ZONES.slice(0, -1).map((zone, i) => (
         <div
           key={`fade-${zone.id}`}
           className="absolute inset-y-0"
           style={{
-            left: `calc(${THEME_ZONES[i + 1].left} - 20vw)`,
-            width: "40vw",
+            left: `calc(${THEME_ZONES[i + 1].left} - 30vw)`,
+            width: "60vw",
             background: `linear-gradient(to right, transparent, ${
               THEME_ZONES[i + 1].gradient.match(/#[A-Fa-f0-9]{6}/)?.[0] ?? "transparent"
             })`,
-            opacity: 0.5,
+            opacity: 0.35,
             contentVisibility: "auto",
           }}
         />
