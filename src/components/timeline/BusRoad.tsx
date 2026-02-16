@@ -6,12 +6,6 @@ export default function BusRoad() {
       className="absolute bottom-0 left-0 w-full"
       style={{
         height: "18vh",
-        /* Road fades out in Ch5 flying zone (70-82% of 600vw = 420vw-492vw)
-           and fades back in approaching Ch6 */
-        maskImage:
-          "linear-gradient(to right, black 0%, black 68%, transparent 72%, transparent 82%, black 88%, black 100%)",
-        WebkitMaskImage:
-          "linear-gradient(to right, black 0%, black 68%, transparent 72%, transparent 82%, black 88%, black 100%)",
       }}
     >
       {/* Ground */}

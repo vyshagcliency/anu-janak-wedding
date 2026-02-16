@@ -109,6 +109,13 @@ export default function TimelineSection() {
   // Celebration fires once user reaches Ch6 (progress >= 0.88)
   const atFinale = busProgress >= 0.88;
 
+  // Scroll past the pinned section to whatever comes next
+  const handleNext = () => {
+    if (!sectionRef.current) return;
+    const top = sectionRef.current.offsetTop + window.innerHeight * 5 + window.innerHeight;
+    window.scrollTo({ top, behavior: "smooth" });
+  };
+
   // Boarding figure progress (girl at stop 1, boy at stop 2)
   // Wider ranges so figures are visible across the full snap segment
   const girlProgress = getStopProgress(busProgress, 0.0, 0.18);
@@ -248,6 +255,7 @@ export default function TimelineSection() {
             imageAlt={stop.imageAlt}
             position={stop.position}
             revealType={stop.revealType}
+            onNext={i === STOPS.length - 1 ? handleNext : undefined}
           />
         ))}
       </div>

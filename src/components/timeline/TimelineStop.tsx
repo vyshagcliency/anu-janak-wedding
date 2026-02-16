@@ -53,6 +53,7 @@ interface Props {
   imageAlt: string;
   position: number;
   revealType?: "circle" | "slide" | "fade" | "split" | "blur" | "grand";
+  onNext?: () => void;
 }
 
 export default function TimelineStop({
@@ -64,6 +65,7 @@ export default function TimelineStop({
   imageAlt,
   position,
   revealType = "fade",
+  onNext,
 }: Props) {
   const stopRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -72,7 +74,6 @@ export default function TimelineStop({
 
   const theme = STOP_THEMES[index] ?? STOP_THEMES[1];
   const isGrand = revealType === "grand";
-  const isCh5 = index === 5;
 
   useEffect(() => {
     if (!stopRef.current || !imageRef.current || !textRef.current) return;
@@ -249,16 +250,6 @@ export default function TimelineStop({
             </>
           )}
 
-          {/* Ch5: soft radial glow frame */}
-          {isCh5 && (
-            <div
-              className="pointer-events-none absolute inset-0 rounded-2xl"
-              style={{
-                boxShadow:
-                  "inset 0 0 40px rgba(57,73,171,0.3), 0 0 40px rgba(57,73,171,0.2)",
-              }}
-            />
-          )}
         </div>
 
         {/* Desktop: slightly larger */}
@@ -287,32 +278,35 @@ export default function TimelineStop({
             className="mb-2 text-xl sm:text-2xl"
             style={{
               fontFamily: "var(--font-playfair), serif",
-              color: isCh5 ? "rgba(255,255,255,0.9)" : "var(--charcoal)",
+              color: "var(--charcoal)",
             }}
           >
             {title}
           </h3>
           <p
             className="text-sm leading-relaxed sm:text-base"
-            style={{
-              color: isCh5 ? "rgba(255,255,255,0.7)" : "var(--charcoal-light)",
-            }}
+            style={{ color: "var(--charcoal-light)" }}
           >
             {description}
           </p>
 
-          {/* Ch5 distance badge */}
-          {isCh5 && (
-            <div
-              className="mx-auto mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs"
+          {/* Ch6 — call-to-action to next section */}
+          {isGrand && onNext && (
+            <button
+              onClick={onNext}
+              className="mx-auto mt-6 flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-medium transition-all duration-300 hover:scale-105 active:scale-95"
               style={{
-                background: "rgba(255,255,255,0.1)",
-                border: "1px solid rgba(255,255,255,0.2)",
-                color: "rgba(255,255,255,0.6)",
+                background: "var(--gold)",
+                color: "#fff",
+                boxShadow: "0 4px 20px rgba(201,169,110,0.4)",
+                letterSpacing: "0.06em",
               }}
             >
-              <span>7,200 km apart</span>
-            </div>
+              Join Us
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
           )}
         </div>
       </div>
