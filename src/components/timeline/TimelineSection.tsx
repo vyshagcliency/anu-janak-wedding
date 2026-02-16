@@ -6,9 +6,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ParallaxLayers from "./ParallaxLayers";
 import BusRoad from "./BusRoad";
 import SchoolVan from "./SchoolVan";
-import SchoolBuilding from "./SchoolBuilding";
 import BoardingFigure from "./BoardingFigure";
 import TimelineStop from "./TimelineStop";
+import CelebrationBurst from "./CelebrationBurst";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -105,6 +105,9 @@ export default function TimelineSection() {
     () => deriveVehicleState(busProgress),
     [busProgress]
   );
+
+  // Celebration fires once user reaches Ch6 (progress >= 0.88)
+  const atFinale = busProgress >= 0.88;
 
   // Boarding figure progress (girl at stop 1, boy at stop 2)
   // Wider ranges so figures are visible across the full snap segment
@@ -214,9 +217,6 @@ export default function TimelineSection() {
           <BusRoad />
         </div>
 
-        {/* School Building at journey start */}
-        <SchoolBuilding />
-
         {/* Boarding Figures */}
         {girlProgress > 0 && girlProgress < 1 && (
           <BoardingFigure
@@ -251,6 +251,9 @@ export default function TimelineSection() {
           />
         ))}
       </div>
+
+      {/* Ch6 celebration — rendered outside the scrolling track so it stays fixed */}
+      <CelebrationBurst active={atFinale} />
     </section>
   );
 }
