@@ -15,21 +15,6 @@ const TimelineSection = dynamic(
   { ssr: false }
 );
 
-const EventsContainer = dynamic(
-  () => import("@/components/events/EventsContainer"),
-  { ssr: false }
-);
-
-const FAQSection = dynamic(
-  () => import("@/components/faq/FAQSection"),
-  { ssr: false }
-);
-
-const RSVPSection = dynamic(
-  () => import("@/components/rsvp/RSVPSection"),
-  { ssr: false }
-);
-
 export default function Home() {
   const timelineRef = useRef<HTMLDivElement>(null);
   const [journeyStarted, setJourneyStarted] = useState(false);
@@ -64,14 +49,6 @@ export default function Home() {
           <div ref={timelineRef}>
             {journeyStarted && <TimelineSection />}
           </div>
-
-          {journeyStarted && (
-            <>
-              <EventsContainer />
-              <FAQSection />
-              <RSVPSection />
-            </>
-          )}
         </main>
       </SmoothScrollProvider>
     </AudioProvider>
