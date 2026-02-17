@@ -67,7 +67,9 @@ export default function Home() {
 
           {journeyStarted && (
             <>
+              <div id="events-section">
               <CinematicEventsSection />
+              </div>
               <FAQSection />
               <RSVPSection />
             </>

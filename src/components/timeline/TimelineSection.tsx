@@ -110,11 +110,9 @@ export default function TimelineSection() {
   // Celebration fires once user reaches Ch6 (progress >= 0.88)
   const atFinale = busProgress >= 0.88;
 
-  // Scroll past the pinned section to whatever comes next
+  // Scroll to the events section
   const handleNext = () => {
-    if (!sectionRef.current) return;
-    const top = sectionRef.current.offsetTop + window.innerHeight * 5 + window.innerHeight;
-    window.scrollTo({ top, behavior: "smooth" });
+    document.getElementById("events-section")?.scrollIntoView({ behavior: "smooth" });
   };
 
   // Boarding figure progress (girl at stop 1, boy at stop 2)
