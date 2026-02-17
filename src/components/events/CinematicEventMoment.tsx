@@ -42,9 +42,9 @@ const TEXT_STYLES: Record<
   { color: string; shadow: string; ruleColor: string }
 > = {
   sunset: {
-    color: "#2C2C2C",
-    shadow: "0 1px 8px rgba(255,255,255,0.3)",
-    ruleColor: "#C9A96E",
+    color: "#FAF7F2",
+    shadow: "0 1px 12px rgba(0,0,0,0.5)",
+    ruleColor: "#FFD700",
   },
   night: {
     color: "#FAF7F2",
@@ -70,14 +70,14 @@ const TYPEWRITER_INDICES = new Set([0, 1, 3, 4, 5]);
 const EVENT_BG_IMAGES: Record<string, string> = {
   sundowner: "/images/events/sundowner/bg.webp",
   sangeet: "/images/events/sangeet/bg.webp",
-  wedding: "/images/events/wedding/bg.webp",
+  wedding: "/images/hero/img3.jpeg",
   reception: "/images/events/reception/bg.webp",
 };
 
 // ─── Per-event overlay gradients (ensure text readability) ───
 const EVENT_OVERLAYS: Record<string, string> = {
   sundowner:
-    "linear-gradient(180deg, rgba(180,120,40,0.45) 0%, rgba(120,60,20,0.55) 100%)",
+    "linear-gradient(180deg, rgba(80,30,10,0.55) 0%, rgba(50,15,5,0.65) 100%)",
   sangeet:
     "linear-gradient(180deg, rgba(20,10,60,0.6) 0%, rgba(40,20,80,0.65) 100%)",
   wedding:
@@ -119,6 +119,7 @@ const CinematicEventMoment = forwardRef<CinematicEventMomentHandle, Props>(
     // Background image + overlay for this event
     const bgImage = EVENT_BG_IMAGES[event.id] || EVENT_BG_IMAGES.wedding;
     const bgOverlay = EVENT_OVERLAYS[event.id] || EVENT_OVERLAYS.wedding;
+    const bgBlur = event.id === "wedding" ? "blur(12px)" : "none";
 
     // Fade out region: computed once
     function getFadeOutT(progress: number): number {
@@ -260,6 +261,7 @@ const CinematicEventMoment = forwardRef<CinematicEventMomentHandle, Props>(
           style={{
             opacity: 0,
             transform: "scale(1.05)",
+            filter: bgBlur,
             willChange: "opacity",
           }}
         />
