@@ -1,17 +1,32 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { EVENTS } from "@/data/events";
 import LuxuryEventGallery from "./LuxuryEventGallery";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function LuxuryEventsSection() {
-  const introRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    // The Timeline section adds virtual scroll height via its pin spacer.
+    // Without a refresh here GSAP calculates wrong positions for all event
+    // gallery triggers, causing sudden jumps between the bus section and events.
+    // Two staggered refreshes: one after initial mount layout settles,
+    // one after all child galleries have created their own ScrollTriggers.
+    const t1 = setTimeout(() => ScrollTrigger.refresh(), 100);
+    const t2 = setTimeout(() => ScrollTrigger.refresh(), 500);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, []);
 
   return (
     <div className="luxury-events-section">
       {/* Section intro — shown above all galleries, scrolls away naturally */}
       <div
-        ref={introRef}
         style={{
           position: "relative",
           zIndex: 1,

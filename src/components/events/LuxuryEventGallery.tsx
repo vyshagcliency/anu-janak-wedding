@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { WeddingEvent } from "@/data/events";
@@ -11,7 +12,6 @@ import AttireOverlay from "./AttireOverlay";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Per-event accent colours
 const ACCENT_COLORS: Record<string, string> = {
   sunset: "#D4880A",
   night: "#C9A96E",
@@ -33,99 +33,93 @@ export default function LuxuryEventGallery({ event, index }: Props) {
   const [attireOpen, setAttireOpen] = useState(false);
 
   const accentColor = ACCENT_COLORS[event.timeOfDay];
-
   const openAttire = useCallback(() => setAttireOpen(true), []);
   const closeAttire = useCallback(() => setAttireOpen(false), []);
 
   useEffect(() => {
-    // Mobile: no horizontal scroll — let it flow vertically
     if (window.matchMedia("(max-width: 767px)").matches) return;
 
     const section = sectionRef.current;
     const track = trackRef.current;
     if (!section || !track) return;
 
-    // Let layout settle before measuring
-    const init = () => {
-      const trackWidth = track.scrollWidth;
-      const viewportWidth = window.innerWidth;
-      const maxX = trackWidth - viewportWidth + 120; // 120px end padding
+    // Store refs for cleanup — the rAF callback return value is ignored,
+    // so we MUST store these outside and kill them in the useEffect cleanup.
+    let mainTrigger: ReturnType<typeof ScrollTrigger.create> | undefined;
+    let rafId: number;
 
-      // Pin section + drive horizontal scroll
-      const trigger = ScrollTrigger.create({
+    rafId = requestAnimationFrame(() => {
+      // Read info panel width from DOM so maxX accounts for the left offset
+      const infoPanel = infoPanelRef.current;
+      const infoPanelWidth = infoPanel ? infoPanel.offsetWidth : 280;
+      const trackScrollWidth = track.scrollWidth;
+      const viewportWidth = window.innerWidth;
+
+      // The track's left edge sits at `infoPanelWidth` px from viewport left.
+      // We need to translate the track leftward until its RIGHT edge reaches
+      // the viewport's right edge.
+      // maxX = (infoPanelWidth + trackScrollWidth) - viewportWidth
+      const maxX = Math.max(0, infoPanelWidth + trackScrollWidth - viewportWidth);
+
+      mainTrigger = ScrollTrigger.create({
         trigger: section,
         pin: true,
         scrub: 1.4,
         start: "top top",
         end: `+=${maxX}`,
         onUpdate: (self) => {
-          gsap.set(track, { x: -self.progress * maxX });
+          const p = self.progress;
+          gsap.set(track, { x: -p * maxX });
 
-          // Reveal each print as it approaches the centre of the screen
+          // Progress-driven photo reveal — no getBoundingClientRect polling
+          // Each photo occupies an equal slice of the progress range
+          const photoCount = printRefs.current.length;
           printRefs.current.forEach((el, i) => {
             if (!el) return;
-            const rect = el.getBoundingClientRect();
-            const centre = viewportWidth / 2;
-            const distFromCentre = Math.abs(rect.left + rect.width / 2 - centre);
-            const revealRadius = viewportWidth * 0.75;
-            // 0 = outside reveal zone, 1 = fully in view
-            const t = Math.max(0, Math.min(1, 1 - distFromCentre / revealRadius));
-            el.style.opacity = String(0.05 + t * 0.95);
-            el.style.transform = `rotate(${getPhotoTilt(i)}deg) scale(${0.88 + t * 0.12}) translateY(${(1 - t) * 24}px)`;
+            // Each photo is fully visible in the centre of its slice
+            const sliceCenter = (i + 0.5) / (photoCount + 1);
+            const dist = Math.abs(p - sliceCenter);
+            const halfWindow = 0.35;
+            const t = Math.max(0, Math.min(1, 1 - dist / halfWindow));
+            el.style.opacity = String(0.06 + t * 0.94);
+            el.style.transform = `rotate(${getPhotoTilt(i)}deg) scale(${
+              0.88 + t * 0.12
+            }) translateY(${(1 - t) * 24}px)`;
           });
 
-          // Reveal style card at end
+          // Style card reveals at the end
           if (styleCardRef.current) {
-            const rect = styleCardRef.current.getBoundingClientRect();
-            const t = Math.max(0, Math.min(1, 1 - Math.abs(rect.left + rect.width / 2 - viewportWidth / 2) / (viewportWidth * 0.6)));
+            const t = Math.max(0, Math.min(1, (p - 0.8) / 0.2));
             styleCardRef.current.style.opacity = String(t);
           }
         },
       });
 
-      // Animate info panel in when section first pins
+      // Reveal info panel immediately — no nested ScrollTrigger
       if (infoPanelRef.current) {
-        gsap.fromTo(
-          infoPanelRef.current,
-          { opacity: 0, y: 32 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: section,
-              start: "top 80%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
+        gsap.set(infoPanelRef.current, { opacity: 1, y: 0 });
       }
-
-      return trigger;
-    };
-
-    const raf = requestAnimationFrame(() => {
-      const trigger = init();
-      return () => trigger?.kill();
     });
 
-    return () => cancelAnimationFrame(raf);
+    // Cleanup: cancel the rAF if it hasn't fired yet, kill trigger if it has
+    return () => {
+      cancelAnimationFrame(rafId);
+      mainTrigger?.kill();
+    };
   }, []);
 
   return (
     <>
-      {/* Full-screen pinned gallery section */}
+      {/* ── Desktop: full-screen pinned horizontal gallery ── */}
       <section
         ref={sectionRef}
         className="luxury-event-gallery relative w-full overflow-hidden"
         style={{ height: "100vh" }}
         data-event-id={event.id}
       >
-        {/* Cinematic room atmosphere */}
         <EventRoomBackground timeOfDay={event.timeOfDay} />
 
-        {/* Event info panel — left side, overlaid on background */}
+        {/* Info panel */}
         <div
           ref={infoPanelRef}
           className="event-info-panel"
@@ -141,9 +135,10 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             justifyContent: "center",
             padding: "48px 40px 48px 48px",
             pointerEvents: "none",
+            // Start hidden; set to visible in useEffect (avoids flash)
+            opacity: 0,
           }}
         >
-          {/* Event number */}
           <p
             style={{
               fontFamily: "var(--font-body), sans-serif",
@@ -155,10 +150,14 @@ export default function LuxuryEventGallery({ event, index }: Props) {
               opacity: 0.8,
             }}
           >
-            0{index + 1} &mdash; {event.timeOfDay === "sunset" ? "Afternoon" : event.timeOfDay === "night" ? "Evening" : event.timeOfDay === "morning" ? "Morning" : "Evening"}
+            0{index + 1} &mdash;{" "}
+            {event.timeOfDay === "sunset"
+              ? "Afternoon"
+              : event.timeOfDay === "morning"
+              ? "Morning"
+              : "Evening"}
           </p>
 
-          {/* Event title */}
           <h2
             style={{
               fontFamily: "var(--font-heading), serif",
@@ -173,7 +172,6 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             {event.title}
           </h2>
 
-          {/* Subtitle */}
           <p
             style={{
               fontFamily: "var(--font-body), sans-serif",
@@ -187,7 +185,6 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             {event.subtitle}
           </p>
 
-          {/* Gold rule */}
           <div
             style={{
               width: 48,
@@ -197,7 +194,6 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             }}
           />
 
-          {/* Date + time */}
           <p
             style={{
               fontFamily: "var(--font-body), sans-serif",
@@ -222,7 +218,6 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             {event.time}
           </p>
 
-          {/* Venue */}
           <p
             style={{
               fontFamily: "var(--font-body), sans-serif",
@@ -235,7 +230,6 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             {event.venue}
           </p>
 
-          {/* Map link */}
           <a
             href={event.venueMapUrl}
             target="_blank"
@@ -252,14 +246,13 @@ export default function LuxuryEventGallery({ event, index }: Props) {
               pointerEvents: "auto",
               display: "inline-block",
               opacity: 0.85,
-              transition: "opacity 0.2s",
             }}
           >
             View Map
           </a>
         </div>
 
-        {/* Horizontal gallery track */}
+        {/* Horizontal track */}
         <div
           ref={trackRef}
           className="gallery-track"
@@ -276,7 +269,6 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             willChange: "transform",
           }}
         >
-          {/* Photo prints */}
           {event.photos.map((src, photoIndex) => (
             <div
               key={photoIndex}
@@ -284,7 +276,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
                 printRefs.current[photoIndex] = el;
               }}
               style={{
-                opacity: photoIndex === 0 ? 0.9 : 0.05,
+                opacity: photoIndex === 0 ? 0.9 : 0.06,
                 transition: "none",
               }}
             >
@@ -297,18 +289,13 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             </div>
           ))}
 
-          {/* Style Guide card at the end */}
-          <div
-            ref={styleCardRef}
-            style={{ opacity: 0 }}
-          >
+          <div ref={styleCardRef} style={{ opacity: 0 }}>
             <StyleGuideCard onClick={openAttire} accentColor={accentColor} />
           </div>
         </div>
 
-        {/* Scroll hint — fades out after first scroll movement */}
+        {/* Scroll hint */}
         <div
-          className="scroll-hint"
           style={{
             position: "absolute",
             bottom: 36,
@@ -342,27 +329,20 @@ export default function LuxuryEventGallery({ event, index }: Props) {
         </div>
       </section>
 
-      {/* Mobile layout — vertical stacked gallery */}
+      {/* ── Mobile: vertical scrollable gallery ── */}
       <section
         className="luxury-event-gallery-mobile"
         style={{
-          display: "none",
+          display: "none", // overridden to block by CSS on mobile
           position: "relative",
-          minHeight: "100vh",
-          padding: "64px 24px 80px",
+          padding: "64px 20px 80px",
         }}
         data-event-id={`${event.id}-mobile`}
       >
         <EventRoomBackground timeOfDay={event.timeOfDay} />
 
         {/* Event info */}
-        <div
-          style={{
-            position: "relative",
-            zIndex: 10,
-            marginBottom: 40,
-          }}
-        >
+        <div style={{ position: "relative", zIndex: 10, marginBottom: 36 }}>
           <p
             style={{
               fontFamily: "var(--font-body), sans-serif",
@@ -426,21 +406,20 @@ export default function LuxuryEventGallery({ event, index }: Props) {
           </a>
         </div>
 
-        {/* Mobile photo grid — 2-column masonry-like */}
+        {/* 2-column photo grid — use Image directly (no InstantFilmPrint fixed widths) */}
         <div
           style={{
             position: "relative",
             zIndex: 10,
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
-            gap: 16,
+            gap: 14,
             marginBottom: 40,
           }}
         >
           {event.photos.map((src, photoIndex) => (
             <div
               key={photoIndex}
-              className="film-print-mobile"
               style={{
                 backgroundColor: "#F8F4EE",
                 padding: "8px 8px 28px 8px",
@@ -449,6 +428,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
                 transform: `rotate(${getPhotoTilt(photoIndex)}deg)`,
               }}
             >
+              {/* Responsive image area — fills the grid cell width */}
               <div
                 style={{
                   position: "relative",
@@ -458,18 +438,20 @@ export default function LuxuryEventGallery({ event, index }: Props) {
                   backgroundColor: "#1a1a1a",
                 }}
               >
-                <InstantFilmPrint
+                <Image
                   src={src}
                   alt={`${event.title} — photo ${photoIndex + 1}`}
-                  index={photoIndex}
-                  priority={false}
+                  fill
+                  sizes="45vw"
+                  style={{ objectFit: "cover" }}
+                  loading="lazy"
                 />
               </div>
             </div>
           ))}
         </div>
 
-        {/* Style guide button (mobile) */}
+        {/* Style guide button */}
         <div style={{ position: "relative", zIndex: 10, textAlign: "center" }}>
           <button
             onClick={openAttire}
@@ -490,7 +472,6 @@ export default function LuxuryEventGallery({ event, index }: Props) {
         </div>
       </section>
 
-      {/* Attire overlay (shared between desktop + mobile) */}
       <AttireOverlay
         isOpen={attireOpen}
         onClose={closeAttire}
@@ -502,7 +483,6 @@ export default function LuxuryEventGallery({ event, index }: Props) {
   );
 }
 
-// Helper — deterministic tilt value
 function getPhotoTilt(index: number): number {
   const tilts = [-2.1, 1.4, -1.8, 2.2, -0.9, 1.7, -2.4, 1.1];
   return tilts[index % tilts.length];
