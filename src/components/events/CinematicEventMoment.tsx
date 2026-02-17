@@ -66,44 +66,24 @@ const TEXT_STYLES: Record<
 // Which element indices use typewriter effect (text elements only)
 const TYPEWRITER_INDICES = new Set([0, 1, 3, 4, 5]);
 
-// ─── Premium CSS backgrounds per event ───
-// Multi-layered gradients that give each event a distinct luxe atmosphere
+// ─── Per-event background images ───
+const EVENT_BG_IMAGES: Record<string, string> = {
+  sundowner: "/images/events/sundowner/bg.webp",
+  sangeet: "/images/events/sangeet/bg.webp",
+  wedding: "/images/events/wedding/bg.webp",
+  reception: "/images/events/reception/bg.webp",
+};
 
-const EVENT_BACKGROUNDS: Record<string, string[]> = {
-  // Sundowner: warm golden hour, light rays, amber bokeh
-  sunset: [
-    "radial-gradient(ellipse 60% 50% at 70% 30%, rgba(255,140,66,0.35) 0%, transparent 70%)",
-    "radial-gradient(ellipse 40% 60% at 20% 70%, rgba(201,169,110,0.25) 0%, transparent 60%)",
-    "radial-gradient(circle at 80% 80%, rgba(232,152,90,0.2) 0%, transparent 50%)",
-    "radial-gradient(circle at 50% 20%, rgba(255,179,71,0.15) 0%, transparent 40%)",
-    "linear-gradient(135deg, rgba(74,26,46,0.1) 0%, transparent 40%, rgba(232,152,90,0.08) 100%)",
-  ],
-  // Sangeet: deep glamorous night, jewel tones, disco shimmer
-  night: [
-    "radial-gradient(ellipse 50% 40% at 30% 25%, rgba(108,99,255,0.3) 0%, transparent 70%)",
-    "radial-gradient(ellipse 45% 55% at 75% 60%, rgba(106,27,154,0.25) 0%, transparent 65%)",
-    "radial-gradient(circle at 60% 15%, rgba(255,215,0,0.12) 0%, transparent 35%)",
-    "radial-gradient(circle at 15% 80%, rgba(21,101,192,0.2) 0%, transparent 45%)",
-    "radial-gradient(circle at 85% 85%, rgba(189,189,189,0.08) 0%, transparent 30%)",
-    "linear-gradient(160deg, rgba(13,27,42,0.15) 0%, transparent 50%, rgba(74,63,138,0.1) 100%)",
-  ],
-  // Wedding: soft ethereal dawn, sacred golden light, petal softness
-  morning: [
-    "radial-gradient(ellipse 70% 50% at 50% 40%, rgba(201,169,110,0.3) 0%, transparent 70%)",
-    "radial-gradient(ellipse 50% 70% at 30% 60%, rgba(240,221,213,0.25) 0%, transparent 60%)",
-    "radial-gradient(circle at 70% 25%, rgba(212,168,51,0.15) 0%, transparent 40%)",
-    "radial-gradient(circle at 50% 80%, rgba(245,230,211,0.2) 0%, transparent 50%)",
-    "linear-gradient(180deg, rgba(245,230,211,0.08) 0%, transparent 30%, rgba(232,213,176,0.06) 100%)",
-  ],
-  // Reception: midnight luxe, crystal refractions, gold champagne bubbles
-  evening: [
-    "radial-gradient(ellipse 40% 50% at 40% 35%, rgba(201,169,110,0.25) 0%, transparent 65%)",
-    "radial-gradient(ellipse 50% 40% at 70% 65%, rgba(128,0,32,0.2) 0%, transparent 60%)",
-    "radial-gradient(circle at 20% 20%, rgba(255,215,0,0.1) 0%, transparent 35%)",
-    "radial-gradient(circle at 80% 15%, rgba(232,213,176,0.08) 0%, transparent 30%)",
-    "radial-gradient(circle at 50% 90%, rgba(201,169,110,0.12) 0%, transparent 40%)",
-    "linear-gradient(200deg, rgba(26,26,46,0.1) 0%, transparent 40%, rgba(74,14,14,0.06) 100%)",
-  ],
+// ─── Per-event overlay gradients (ensure text readability) ───
+const EVENT_OVERLAYS: Record<string, string> = {
+  sundowner:
+    "linear-gradient(180deg, rgba(180,120,40,0.45) 0%, rgba(120,60,20,0.55) 100%)",
+  sangeet:
+    "linear-gradient(180deg, rgba(20,10,60,0.6) 0%, rgba(40,20,80,0.65) 100%)",
+  wedding:
+    "linear-gradient(180deg, rgba(245,235,220,0.4) 0%, rgba(230,215,190,0.45) 100%)",
+  reception:
+    "linear-gradient(180deg, rgba(10,10,30,0.6) 0%, rgba(30,20,15,0.55) 100%)",
 };
 
 const CinematicEventMoment = forwardRef<CinematicEventMomentHandle, Props>(
@@ -111,7 +91,7 @@ const CinematicEventMoment = forwardRef<CinematicEventMomentHandle, Props>(
     const containerRef = useRef<HTMLDivElement>(null);
     const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
     const ruleRef = useRef<HTMLDivElement>(null);
-    const bgRef = useRef<HTMLDivElement>(null);
+    const bgRef = useRef<HTMLImageElement>(null);
 
     // Auto-type state: timestamp when this event first became visible
     const eventVisibleSinceRef = useRef<number | null>(null);
@@ -136,9 +116,9 @@ const CinematicEventMoment = forwardRef<CinematicEventMomentHandle, Props>(
       [event]
     );
 
-    // Background layers
-    const bgLayers = EVENT_BACKGROUNDS[event.timeOfDay] || EVENT_BACKGROUNDS.evening;
-    const bgStyle = bgLayers.join(", ");
+    // Background image + overlay for this event
+    const bgImage = EVENT_BG_IMAGES[event.id] || EVENT_BG_IMAGES.wedding;
+    const bgOverlay = EVENT_OVERLAYS[event.id] || EVENT_OVERLAYS.wedding;
 
     // Fade out region: computed once
     function getFadeOutT(progress: number): number {
@@ -174,7 +154,7 @@ const CinematicEventMoment = forwardRef<CinematicEventMomentHandle, Props>(
 
         // Background atmosphere fade
         if (bgRef.current) {
-          const bgOpacity = Math.min(visibility * 3, 1) * 0.85;
+          const bgOpacity = Math.min(visibility * 3, 1) * 0.45;
           bgRef.current.style.opacity = String(
             fadeOutT > 0 ? bgOpacity * (1 - fadeOutT) : bgOpacity
           );
@@ -195,7 +175,6 @@ const CinematicEventMoment = forwardRef<CinematicEventMomentHandle, Props>(
               el.textContent = "";
               el.style.opacity = "0";
               el.style.transform = "translateY(12px)";
-              el.style.borderRight = "2px solid transparent";
               elementDoneRef.current[i] = false;
               return;
             }
@@ -212,23 +191,6 @@ const CinematicEventMoment = forwardRef<CinematicEventMomentHandle, Props>(
             }
 
             elementDoneRef.current[i] = isDone;
-
-            // Cursor: visible while typing, blinks briefly after done, then hides
-            if (!isDone) {
-              el.style.borderRight = `2px solid ${style.ruleColor}`;
-            } else {
-              const timeSinceDone =
-                elementElapsed - fullText.length * msPerChar;
-              // Blink for 600ms after completion, then hide
-              if (timeSinceDone < 600) {
-                el.style.borderRight =
-                  Math.floor(timeSinceDone / 150) % 2 === 0
-                    ? `2px solid ${style.ruleColor}`
-                    : "2px solid transparent";
-              } else {
-                el.style.borderRight = "2px solid transparent";
-              }
-            }
 
             // Fade in when first char appears, fade out on scroll-away
             const showOpacity = charsToShow > 0 ? 1 : 0;
@@ -287,18 +249,28 @@ const CinematicEventMoment = forwardRef<CinematicEventMomentHandle, Props>(
           textShadow: style.shadow,
         }}
       >
-        {/* Premium atmospheric background */}
-        <div
+        {/* Layer 1: Full-bleed background image */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           ref={bgRef}
-          className="absolute inset-0 z-0"
+          src={bgImage}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 z-0 w-full h-full object-cover"
           style={{
             opacity: 0,
-            background: bgStyle,
+            transform: "scale(1.05)",
             willChange: "opacity",
           }}
         />
 
-        {/* Subtle vignette for depth */}
+        {/* Layer 2: Per-event gradient overlay for text readability */}
+        <div
+          className="absolute inset-0 z-0 pointer-events-none"
+          style={{ background: bgOverlay }}
+        />
+
+        {/* Layer 3: Subtle vignette for depth */}
         <div
           className="absolute inset-0 z-0 pointer-events-none"
           style={{
@@ -316,7 +288,6 @@ const CinematicEventMoment = forwardRef<CinematicEventMomentHandle, Props>(
             style={{
               willChange: "transform, opacity",
               minHeight: "1.2em",
-              paddingRight: "3px",
             }}
           />
 
@@ -327,7 +298,6 @@ const CinematicEventMoment = forwardRef<CinematicEventMomentHandle, Props>(
             style={{
               willChange: "transform, opacity",
               minHeight: "1.2em",
-              paddingRight: "3px",
             }}
           />
 
@@ -350,7 +320,6 @@ const CinematicEventMoment = forwardRef<CinematicEventMomentHandle, Props>(
             style={{
               willChange: "transform, opacity",
               minHeight: "1.4em",
-              paddingRight: "3px",
             }}
           />
 
@@ -361,7 +330,6 @@ const CinematicEventMoment = forwardRef<CinematicEventMomentHandle, Props>(
             style={{
               willChange: "transform, opacity",
               minHeight: "1.2em",
-              paddingRight: "3px",
             }}
           />
 
@@ -372,7 +340,6 @@ const CinematicEventMoment = forwardRef<CinematicEventMomentHandle, Props>(
             style={{
               willChange: "transform, opacity",
               minHeight: "1.4em",
-              paddingRight: "3px",
             }}
           />
 
