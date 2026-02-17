@@ -20,9 +20,9 @@ const ROOM_STYLES: Record<
   },
   morning: {
     background:
-      "radial-gradient(ellipse at 50% 30%, #F5ECD7 0%, #E8D4B0 30%, #C9A96E 60%, #8B6914 100%)",
+      "radial-gradient(ellipse at 50% 20%, #7A5515 0%, #4A3008 30%, #261600 60%, #100800 100%)",
     vignette:
-      "radial-gradient(ellipse at center, transparent 35%, rgba(60,35,5,0.45) 100%)",
+      "radial-gradient(ellipse at center, transparent 30%, rgba(10,5,0,0.65) 100%)",
   },
   evening: {
     background:
@@ -112,6 +112,21 @@ export default function EventRoomBackground({
             borderRadius: "50%",
             background:
               "radial-gradient(circle, rgba(120,40,200,0.08) 0%, transparent 70%)",
+          }}
+        />
+      )}
+      {timeOfDay === "morning" && (
+        <div
+          style={{
+            position: "absolute",
+            top: "-5%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "60vw",
+            height: "60vw",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(210,160,60,0.18) 0%, transparent 70%)",
           }}
         />
       )}
