@@ -48,11 +48,11 @@ export default function CinematicEventsSection() {
     const tick = () => {
       const p = progressRef.current;
 
-      // Header fade out during first 8% of progress
+      // Header fade out during first 6% of progress (fully gone before Sundowner at 0.08)
       if (headerRef.current) {
-        const headerOpacity = Math.max(0, 1 - p / 0.08);
+        const headerOpacity = Math.max(0, 1 - p / 0.06);
         headerRef.current.style.opacity = String(headerOpacity);
-        headerRef.current.style.transform = `translateY(${-p * 200}px)`;
+        headerRef.current.style.transform = `translateY(${-p * 300}px)`;
         headerRef.current.style.display =
           headerOpacity <= 0 ? "none" : "flex";
       }

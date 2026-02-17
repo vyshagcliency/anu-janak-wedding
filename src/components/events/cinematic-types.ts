@@ -7,10 +7,10 @@ export interface EventProgressRange {
 }
 
 export const EVENT_PROGRESS_RANGES: EventProgressRange[] = [
-  { start: 0.00, peak: 0.10, end: 0.25 },  // Sundowner
-  { start: 0.22, peak: 0.35, end: 0.50 },  // Sangeet
-  { start: 0.47, peak: 0.60, end: 0.75 },  // Wedding
-  { start: 0.72, peak: 0.85, end: 1.00 },  // Reception
+  { start: 0.08, peak: 0.16, end: 0.28 },  // Sundowner — starts after header fades
+  { start: 0.26, peak: 0.38, end: 0.52 },  // Sangeet
+  { start: 0.50, peak: 0.62, end: 0.76 },  // Wedding
+  { start: 0.74, peak: 0.86, end: 1.00 },  // Reception
 ];
 
 export interface SkyKeyframe {
