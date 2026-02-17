@@ -87,6 +87,7 @@ export default function RSVPSection() {
 
   return (
     <section
+      id="rsvp"
       ref={sectionRef}
       className="relative py-20 sm:py-28"
       style={{

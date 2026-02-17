@@ -9,6 +9,7 @@ import ScrollProgressBar from "@/components/ui/ScrollProgressBar";
 import AudioToggle from "@/components/ui/AudioToggle";
 import HeroSection from "@/components/hero/HeroSection";
 import CinematicWipe from "@/components/transitions/CinematicWipe";
+import InvitationCTA from "@/components/invitation/InvitationCTA";
 
 const TimelineSection = dynamic(
   () => import("@/components/timeline/TimelineSection"),
@@ -66,6 +67,7 @@ export default function Home() {
               <div id="events-section">
                 <LuxuryEventsSection />
               </div>
+              <InvitationCTA />
               <FAQSection />
               <RSVPSection />
             </>
