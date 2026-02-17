@@ -251,7 +251,45 @@ body {
   opacity: 1;
 }
 
-/* Hashtag shimmer */
+/* ───── Luxury Events Section ───── */
+
+/* Mobile: show mobile gallery, hide desktop */
+@media (max-width: 767px) {
+  .luxury-event-gallery {
+    display: none !important;
+  }
+  .luxury-event-gallery-mobile {
+    display: block !important;
+  }
+}
+
+/* Desktop: show desktop gallery, hide mobile */
+@media (min-width: 768px) {
+  .luxury-event-gallery-mobile {
+    display: none !important;
+  }
+}
+
+/* Film print — GPU-composited for smooth scrub animation */
+.film-print {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.film-print-frame {
+  /* Prevent subpixel rounding on the frame */
+  transform: translateZ(0);
+}
+
+/* Gallery track — horizontal container */
+.gallery-track {
+  /* Prevent text-selection cursor during scrub */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ───── Hashtag shimmer */
 .hashtag-shimmer {
   background: linear-gradient(
     90deg,

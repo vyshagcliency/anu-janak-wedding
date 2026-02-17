@@ -15,8 +15,8 @@ const TimelineSection = dynamic(
   { ssr: false }
 );
 
-const CinematicEventsSection = dynamic(
-  () => import("@/components/events/CinematicEventsSection"),
+const LuxuryEventsSection = dynamic(
+  () => import("@/components/events/LuxuryEventsSection"),
   { ssr: false }
 );
 
@@ -68,7 +68,7 @@ export default function Home() {
           {journeyStarted && (
             <>
               <div id="events-section">
-              <CinematicEventsSection />
+                <LuxuryEventsSection />
               </div>
               <FAQSection />
               <RSVPSection />

@@ -1,6 +1,7 @@
 export interface WeddingEvent {
   id: string;
   title: string;
+  subtitle: string;
   date: string;
   time: string;
   venue: string;
@@ -9,14 +10,15 @@ export interface WeddingEvent {
   dressCode: string;
   colors: { hex: string; name: string }[];
   timeOfDay: "sunset" | "night" | "morning" | "evening";
-  bgImage: string;
-  imageRevealType: "circle" | "slide" | "fade" | "blur";
+  photos: string[];
+  attireImages: string[];
 }
 
 export const EVENTS: WeddingEvent[] = [
   {
     id: "sundowner",
     title: "Sundowner Carnival",
+    subtitle: "An afternoon of warmth and colour",
     date: "Friday, April 24, 2026",
     time: "3:30 PM onwards",
     venue: "The Leaf, Poomala",
@@ -32,12 +34,20 @@ export const EVENTS: WeddingEvent[] = [
       { hex: "#2196F3", name: "Blue" },
     ],
     timeOfDay: "sunset",
-    bgImage: "/images/events/sundowner/placeholder.webp",
-    imageRevealType: "circle",
+    photos: [
+      "/images/events/sundowner/photo1.jpg",
+      "/images/events/sundowner/photo2.png",
+      "/images/events/sundowner/photo3.jpg",
+      "/images/events/sundowner/photo4.jpg",
+      "/images/events/sundowner/photo5.jpg",
+      "/images/events/sundowner/photo6.jpg",
+    ],
+    attireImages: ["/images/events/attire/sundowner-ref.webp"],
   },
   {
     id: "sangeet",
     title: "Sangeet Mélange",
+    subtitle: "An evening of music and celebration",
     date: "Friday, April 24, 2026",
     time: "6:30 PM – 10:30 PM",
     venue: "The Leaf, Poomala",
@@ -54,12 +64,20 @@ export const EVENTS: WeddingEvent[] = [
       { hex: "#BDBDBD", name: "Silver" },
     ],
     timeOfDay: "night",
-    bgImage: "/images/events/sangeet/placeholder.webp",
-    imageRevealType: "slide",
+    photos: [
+      "/images/events/sangeet/photo1.jpg",
+      "/images/events/sangeet/photo2.jpg",
+      "/images/events/sangeet/photo3.png",
+      "/images/events/sangeet/photo4.jpg",
+      "/images/events/sangeet/photo5.jpg",
+      "/images/events/sangeet/photo6.jpg",
+    ],
+    attireImages: ["/images/events/attire/sangeet-ref.webp"],
   },
   {
     id: "wedding",
     title: "Wedding Ceremony",
+    subtitle: "The sacred union",
     date: "Sunday, April 26, 2026",
     time: "11:00 AM onwards",
     venue: "Gokulam Park, Guruvayur",
@@ -75,12 +93,20 @@ export const EVENTS: WeddingEvent[] = [
       { hex: "#F5E6D3", name: "Ivory" },
     ],
     timeOfDay: "morning",
-    bgImage: "/images/events/wedding/placeholder.webp",
-    imageRevealType: "fade",
+    photos: [
+      "/images/events/wedding/photo1.jpg",
+      "/images/events/wedding/photo2.jpg",
+      "/images/events/wedding/photo3.jpg",
+      "/images/events/wedding/photo4.jpg",
+      "/images/events/wedding/photo5.jpg",
+      "/images/events/wedding/photo6.jpg",
+    ],
+    attireImages: ["/images/events/attire/wedding-ref.webp"],
   },
   {
     id: "reception",
     title: "Wedding Reception",
+    subtitle: "An elegant close to the celebration",
     date: "Monday, April 27, 2026",
     time: "6:30 PM – 10:30 PM",
     venue: "Blue Serene Resorts, Thoyakkavu",
@@ -96,7 +122,14 @@ export const EVENTS: WeddingEvent[] = [
       { hex: "#4A0E0E", name: "Deep Maroon" },
     ],
     timeOfDay: "evening",
-    bgImage: "/images/events/reception/placeholder.webp",
-    imageRevealType: "blur",
+    photos: [
+      "/images/events/reception/photo1.jpg",
+      "/images/events/reception/photo2.jpg",
+      "/images/events/reception/photo3.jpg",
+      "/images/events/reception/photo4.jpg",
+      "/images/events/reception/photo5.jpg",
+      "/images/events/reception/photo6.jpg",
+    ],
+    attireImages: ["/images/events/attire/reception-ref.webp"],
   },
 ];
