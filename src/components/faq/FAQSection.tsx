@@ -52,15 +52,48 @@ export default function FAQSection() {
     <section
       ref={sectionRef}
       className="relative py-20 sm:py-28"
-      style={{ background: "var(--ivory)" }}
+      style={{ background: "#0D0A08" }}
     >
-      <div className="mx-auto max-w-2xl px-5">
+      {/* Ambient glow */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: "30%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "60vw",
+          height: "60vw",
+          maxWidth: 600,
+          maxHeight: 600,
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(201,169,110,0.05) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+      <div className="relative mx-auto max-w-2xl px-5">
+        {/* Label */}
+        <p
+          style={{
+            textAlign: "center",
+            fontFamily: "var(--font-body), sans-serif",
+            fontSize: "0.55rem",
+            letterSpacing: "0.38em",
+            textTransform: "uppercase",
+            color: "#C9A96E",
+            marginBottom: 16,
+            opacity: 0.85,
+          }}
+        >
+          Questions
+        </p>
         <h2
           ref={headingRef}
           className="mb-10 text-center text-3xl sm:text-4xl"
           style={{
             fontFamily: "var(--font-playfair), serif",
-            color: "var(--charcoal)",
+            color: "#F8F4EE",
             opacity: 0,
           }}
         >
@@ -81,3 +114,4 @@ export default function FAQSection() {
     </section>
   );
 }
+

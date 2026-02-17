@@ -14,17 +14,17 @@ export default function FAQItem({ item, isOpen, onToggle }: Props) {
   return (
     <div
       className="border-b"
-      style={{ borderColor: "var(--champagne)" }}
+      style={{ borderColor: "rgba(201,169,110,0.18)" }}
     >
       <button
         onClick={onToggle}
-        className="flex min-h-[52px] w-full items-center justify-between gap-4 py-5 text-left transition-colors hover:opacity-80"
+        className="flex min-h-[52px] w-full items-center justify-between gap-4 py-5 text-left transition-opacity hover:opacity-70"
       >
         <span
           className="text-base font-medium sm:text-lg"
           style={{
             fontFamily: "var(--font-playfair), serif",
-            color: "var(--charcoal)",
+            color: "#F8F4EE",
           }}
         >
           {item.question}
@@ -33,7 +33,7 @@ export default function FAQItem({ item, isOpen, onToggle }: Props) {
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.25 }}
           className="flex-shrink-0 text-lg"
-          style={{ color: "var(--gold)" }}
+          style={{ color: "#C9A96E" }}
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
             <path
@@ -59,12 +59,11 @@ export default function FAQItem({ item, isOpen, onToggle }: Props) {
             <div className="pb-5">
               <p
                 className="text-sm leading-relaxed sm:text-base"
-                style={{ color: "var(--charcoal-light)" }}
+                style={{ color: "rgba(248,244,238,0.55)" }}
               >
                 {item.answer}
               </p>
 
-              {/* Attire reference images (placeholder) */}
               {item.attireImages && item.attireImages.length > 0 && (
                 <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
                   {item.attireImages.map((src) => (
@@ -72,13 +71,13 @@ export default function FAQItem({ item, isOpen, onToggle }: Props) {
                       key={src}
                       className="relative flex aspect-[3/4] items-center justify-center overflow-hidden rounded-xl"
                       style={{
-                        background: "var(--champagne)",
-                        border: "1px dashed var(--gold-light)",
+                        background: "rgba(201,169,110,0.08)",
+                        border: "1px dashed rgba(201,169,110,0.3)",
                       }}
                     >
                       <p
                         className="text-center text-xs"
-                        style={{ color: "var(--charcoal-light)" }}
+                        style={{ color: "rgba(248,244,238,0.4)" }}
                       >
                         Attire reference
                       </p>

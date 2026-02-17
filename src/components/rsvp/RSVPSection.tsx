@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const EVENT_OPTIONS = [
   { id: "sundowner", label: "Sundowner Carnival" },
-  { id: "sangeet", label: "Sangeet M\u00e9lange" },
+  { id: "sangeet", label: "Sangeet Mélange" },
   { id: "wedding", label: "Wedding Ceremony" },
   { id: "reception", label: "Reception" },
 ];
@@ -71,18 +71,22 @@ export default function RSVPSection() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // Placeholder submit — log and show confirmation
     console.log("RSVP submitted:", formData);
     setSubmitted(true);
   };
 
+  // Dark-theme input shared styles
   const inputClasses =
-    "w-full rounded-xl border px-4 py-3 text-sm outline-none transition-colors focus:border-[var(--gold)] sm:text-base";
+    "w-full rounded-xl border px-4 py-3 text-sm outline-none transition-colors focus:border-[#C9A96E] sm:text-base";
   const inputStyle = {
-    background: "white",
-    borderColor: "var(--champagne)",
-    color: "var(--charcoal)",
+    background: "rgba(255,255,255,0.04)",
+    borderColor: "rgba(201,169,110,0.25)",
+    color: "#F8F4EE",
     fontFamily: "var(--font-inter), sans-serif",
+  };
+
+  const labelStyle = {
+    color: "rgba(248,244,238,0.75)",
   };
 
   return (
@@ -90,12 +94,28 @@ export default function RSVPSection() {
       id="rsvp"
       ref={sectionRef}
       className="relative py-20 sm:py-28"
-      style={{
-        background:
-          "linear-gradient(to bottom, var(--ivory) 0%, var(--champagne) 100%)",
-      }}
+      style={{ background: "#0D0A08" }}
     >
-      <div className="mx-auto max-w-xl px-5">
+      {/* Ambient glow */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          bottom: "10%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "70vw",
+          height: "70vw",
+          maxWidth: 700,
+          maxHeight: 700,
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(201,169,110,0.06) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      <div className="relative mx-auto max-w-xl px-5">
         {/* Hashtag banner */}
         <div className="rsvp-animate mb-10">
           <HashtagBanner />
@@ -103,44 +123,67 @@ export default function RSVPSection() {
 
         {submitted ? (
           <div className="rsvp-animate text-center">
-            <div
-              className="mb-4 text-5xl"
-              role="img"
-              aria-label="celebration"
-            >
-              \ud83c\udf89
+            <div className="mb-4 text-5xl" role="img" aria-label="celebration">
+              🎉
             </div>
             <h2
               className="mb-3 text-2xl sm:text-3xl"
               style={{
                 fontFamily: "var(--font-playfair), serif",
-                color: "var(--charcoal)",
+                color: "#F8F4EE",
               }}
             >
               Thank You!
             </h2>
-            <p
-              className="text-base"
-              style={{ color: "var(--charcoal-light)" }}
-            >
+            <p className="text-base" style={{ color: "rgba(248,244,238,0.55)" }}>
               We&apos;ve received your RSVP. We can&apos;t wait to celebrate
               with you!
             </p>
           </div>
         ) : (
           <>
+            {/* Section label */}
+            <p
+              className="rsvp-animate"
+              style={{
+                textAlign: "center",
+                fontFamily: "var(--font-body), sans-serif",
+                fontSize: "0.55rem",
+                letterSpacing: "0.38em",
+                textTransform: "uppercase",
+                color: "#C9A96E",
+                marginBottom: 12,
+                opacity: 0.85,
+              }}
+            >
+              Reserve Your Place
+            </p>
+
             <h2
               className="rsvp-animate mb-2 text-center text-3xl sm:text-4xl"
               style={{
                 fontFamily: "var(--font-playfair), serif",
-                color: "var(--charcoal)",
+                color: "#F8F4EE",
               }}
             >
               RSVP
             </h2>
+
+            {/* Divider */}
+            <div
+              className="rsvp-animate"
+              style={{
+                width: 48,
+                height: 1,
+                background:
+                  "linear-gradient(90deg, transparent, #C9A96E, transparent)",
+                margin: "0 auto 16px",
+              }}
+            />
+
             <p
               className="rsvp-animate mb-10 text-center text-sm sm:text-base"
-              style={{ color: "var(--charcoal-light)" }}
+              style={{ color: "rgba(248,244,238,0.45)" }}
             >
               We&apos;d love to have you there. Let us know you&apos;re coming!
             </p>
@@ -155,9 +198,9 @@ export default function RSVPSection() {
                 <label
                   htmlFor="rsvp-name"
                   className="mb-1 block text-sm font-medium"
-                  style={{ color: "var(--charcoal)" }}
+                  style={labelStyle}
                 >
-                  Full Name <span className="text-red-400">*</span>
+                  Full Name <span style={{ color: "#C9A96E" }}>*</span>
                 </label>
                 <input
                   id="rsvp-name"
@@ -178,9 +221,9 @@ export default function RSVPSection() {
                 <label
                   htmlFor="rsvp-email"
                   className="mb-1 block text-sm font-medium"
-                  style={{ color: "var(--charcoal)" }}
+                  style={labelStyle}
                 >
-                  Email <span className="text-red-400">*</span>
+                  Email <span style={{ color: "#C9A96E" }}>*</span>
                 </label>
                 <input
                   id="rsvp-email"
@@ -201,7 +244,7 @@ export default function RSVPSection() {
                 <label
                   htmlFor="rsvp-phone"
                   className="mb-1 block text-sm font-medium"
-                  style={{ color: "var(--charcoal)" }}
+                  style={labelStyle}
                 >
                   Phone
                 </label>
@@ -223,9 +266,9 @@ export default function RSVPSection() {
                 <label
                   htmlFor="rsvp-guests"
                   className="mb-1 block text-sm font-medium"
-                  style={{ color: "var(--charcoal)" }}
+                  style={labelStyle}
                 >
-                  Number of Guests <span className="text-red-400">*</span>
+                  Number of Guests <span style={{ color: "#C9A96E" }}>*</span>
                 </label>
                 <input
                   id="rsvp-guests"
@@ -246,10 +289,10 @@ export default function RSVPSection() {
               <fieldset>
                 <legend
                   className="mb-2 text-sm font-medium"
-                  style={{ color: "var(--charcoal)" }}
+                  style={labelStyle}
                 >
                   Which events will you attend?{" "}
-                  <span className="text-red-400">*</span>
+                  <span style={{ color: "#C9A96E" }}>*</span>
                 </legend>
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   {EVENT_OPTIONS.map((opt) => (
@@ -258,22 +301,26 @@ export default function RSVPSection() {
                       className="flex min-h-[44px] cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-colors"
                       style={{
                         borderColor: formData.events.includes(opt.id)
-                          ? "var(--gold)"
-                          : "var(--champagne)",
+                          ? "#C9A96E"
+                          : "rgba(201,169,110,0.2)",
                         background: formData.events.includes(opt.id)
-                          ? "var(--gold-light)"
-                          : "white",
+                          ? "rgba(201,169,110,0.12)"
+                          : "rgba(255,255,255,0.03)",
                       }}
                     >
                       <input
                         type="checkbox"
                         checked={formData.events.includes(opt.id)}
                         onChange={() => handleEventToggle(opt.id)}
-                        className="h-4 w-4 accent-[var(--gold)]"
+                        className="h-4 w-4 accent-[#C9A96E]"
                       />
                       <span
                         className="text-sm"
-                        style={{ color: "var(--charcoal)" }}
+                        style={{
+                          color: formData.events.includes(opt.id)
+                            ? "#F8F4EE"
+                            : "rgba(248,244,238,0.65)",
+                        }}
                       >
                         {opt.label}
                       </span>
@@ -287,7 +334,7 @@ export default function RSVPSection() {
                 <label
                   htmlFor="rsvp-dietary"
                   className="mb-1 block text-sm font-medium"
-                  style={{ color: "var(--charcoal)" }}
+                  style={labelStyle}
                 >
                   Dietary Requirements / Notes
                 </label>
@@ -307,11 +354,15 @@ export default function RSVPSection() {
               {/* Submit */}
               <button
                 type="submit"
-                className="w-full rounded-full py-3.5 text-base font-medium text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full rounded-full py-3.5 text-sm font-medium transition-all hover:scale-[1.02] active:scale-[0.98]"
                 style={{
-                  background: "var(--gold)",
-                  boxShadow: "0 4px 20px rgba(201,169,110,0.4)",
-                  letterSpacing: "0.06em",
+                  background:
+                    "linear-gradient(135deg, #C9A96E 0%, #E8D5B0 50%, #C9A96E 100%)",
+                  color: "#0D0A08",
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  boxShadow:
+                    "0 0 0 1px rgba(201,169,110,0.3), 0 8px 32px rgba(201,169,110,0.2)",
                 }}
               >
                 Send RSVP

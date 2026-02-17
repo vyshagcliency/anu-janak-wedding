@@ -40,6 +40,12 @@ body {
   overflow-x: hidden;
 }
 
+/* Dark-theme form inputs — muted placeholder so it reads naturally on dark bg */
+#rsvp input::placeholder,
+#rsvp textarea::placeholder {
+  color: rgba(248, 244, 238, 0.28);
+}
+
 /* Flip clock styles */
 .flip-card {
   perspective: 400px;
