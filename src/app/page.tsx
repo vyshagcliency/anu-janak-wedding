@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 import AudioProvider from "@/components/providers/AudioProvider";
@@ -31,7 +31,6 @@ const RSVPSection = dynamic(
 );
 
 export default function Home() {
-  const timelineRef = useRef<HTMLDivElement>(null);
   const [journeyStarted, setJourneyStarted] = useState(false);
   const [showWipe, setShowWipe] = useState(false);
 
@@ -40,27 +39,13 @@ export default function Home() {
   }, []);
 
   const handleWipeComplete = useCallback(() => {
-    // 1. Render the timeline section immediately
+    // Ensure we're at the top, then swap hero → timeline while wipe still
+    // covers the screen. No scroll logic needed: once the hero is removed from
+    // the DOM the timeline renders at position 0, so when the wipe fades out
+    // the user lands directly on the timeline regardless of device/browser.
+    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
     setJourneyStarted(true);
-
-    // 2. Wait for React to flush the re-render so the wrapper div is in layout,
-    //    then jump to the timeline position BEFORE fading the wipe out.
-    //    Using "instant" (synchronous) scroll so the position is set before
-    //    the wipe becomes transparent — this prevents the hero section from
-    //    flashing into view on mobile while the wipe is still fading.
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const el = timelineRef.current;
-        if (el) {
-          const top = el.getBoundingClientRect().top + window.scrollY;
-          // "instant" is reliable on all mobile browsers; the wipe is still
-          // covering the screen so the jump is invisible to the user.
-          window.scrollTo({ top, behavior: "instant" as ScrollBehavior });
-        }
-        // 3. NOW fade the wipe out — page is already at the timeline position.
-        setShowWipe(false);
-      });
-    });
+    setShowWipe(false);
   }, []);
 
   return (
@@ -73,14 +58,11 @@ export default function Home() {
         <CinematicWipe active={showWipe} onComplete={handleWipeComplete} />
 
         <main>
-          <HeroSection onStartJourney={handleStartJourney} />
-
-          <div ref={timelineRef}>
-            {journeyStarted && <TimelineSection />}
-          </div>
-
-          {journeyStarted && (
+          {!journeyStarted ? (
+            <HeroSection onStartJourney={handleStartJourney} />
+          ) : (
             <>
+              <TimelineSection />
               <div id="events-section">
                 <LuxuryEventsSection />
               </div>

@@ -8,22 +8,32 @@ interface Props {
   onComplete: () => void;
 }
 
+// Enter animation duration (seconds) — must match the clipPath transition below.
+const ENTER_DURATION_MS = 900; // 0.8s + 100ms buffer
+
 export default function CinematicWipe({ active, onComplete }: Props) {
-  // Guard: onAnimationComplete fires for BOTH the enter AND exit animations.
-  // Without this, onComplete (which calls scrollIntoView) fires twice —
-  // the second call ~1.4s later interrupts the scroll and kicks the user back.
   const calledRef = useRef(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (active) calledRef.current = false; // reset each time wipe activates
-  }, [active]);
+    if (active) {
+      calledRef.current = false;
 
-  const handleAnimationComplete = () => {
-    if (!calledRef.current) {
-      calledRef.current = true;
-      onComplete();
+      // Use a timer instead of onAnimationComplete to avoid a framer-motion
+      // bug on iOS Safari where onAnimationComplete fires for the EXIT
+      // animation before the ENTER animation, or fires in the wrong order.
+      timerRef.current = setTimeout(() => {
+        if (!calledRef.current) {
+          calledRef.current = true;
+          onComplete();
+        }
+      }, ENTER_DURATION_MS);
     }
-  };
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [active, onComplete]);
 
   return (
     <AnimatePresence>
@@ -37,7 +47,6 @@ export default function CinematicWipe({ active, onComplete }: Props) {
             clipPath: { duration: 0.8, ease: [0.76, 0, 0.24, 1] },
             opacity: { delay: 0.6, duration: 0.4 },
           }}
-          onAnimationComplete={handleAnimationComplete}
           style={{
             background:
               "linear-gradient(180deg, var(--gold) 0%, var(--champagne) 50%, var(--ivory) 100%)",
