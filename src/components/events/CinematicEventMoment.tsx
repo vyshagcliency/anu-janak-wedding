@@ -119,7 +119,7 @@ const CinematicEventMoment = forwardRef<CinematicEventMomentHandle, Props>(
     // Background image + overlay for this event
     const bgImage = EVENT_BG_IMAGES[event.id] || EVENT_BG_IMAGES.wedding;
     const bgOverlay = EVENT_OVERLAYS[event.id] || EVENT_OVERLAYS.wedding;
-    const bgBlur = event.id === "wedding" ? "blur(12px)" : "none";
+    const bgBlur = event.id === "wedding" ? "blur(4px)" : "none";
 
     // Fade out region: computed once
     function getFadeOutT(progress: number): number {
