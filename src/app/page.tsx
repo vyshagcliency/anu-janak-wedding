@@ -43,9 +43,20 @@ export default function Home() {
     setShowWipe(false);
     setJourneyStarted(true);
 
-    // Scroll to timeline after a brief moment
+    // Double-rAF ensures React has flushed the re-render and the TimelineSection
+    // wrapper div is in layout before we scroll. The 120ms timeout gives the
+    // dynamic import a moment to mount so the scroll lands at the right place.
+    // On mobile, scrollIntoView with 'smooth' can be unreliable (iOS Safari),
+    // so we also fall back to window.scrollTo with the element's offsetTop.
     requestAnimationFrame(() => {
-      timelineRef.current?.scrollIntoView({ behavior: "smooth" });
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          const el = timelineRef.current;
+          if (!el) return;
+          const top = el.getBoundingClientRect().top + window.scrollY;
+          window.scrollTo({ top, behavior: "smooth" });
+        }, 120);
+      });
     });
   }, []);
 

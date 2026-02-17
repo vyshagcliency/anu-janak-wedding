@@ -289,6 +289,15 @@ body {
   -webkit-user-select: none;
 }
 
+/* Mobile swipe strip — hide scrollbar, keep scroll */
+.mobile-gallery-strip {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.mobile-gallery-strip::-webkit-scrollbar {
+  display: none;
+}
+
 /* ───── Hashtag shimmer */
 .hashtag-shimmer {
   background: linear-gradient(
