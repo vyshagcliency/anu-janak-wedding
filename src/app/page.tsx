@@ -15,8 +15,8 @@ const TimelineSection = dynamic(
   { ssr: false }
 );
 
-const EventsContainer = dynamic(
-  () => import("@/components/events/EventsContainer"),
+const CinematicEventsSection = dynamic(
+  () => import("@/components/events/CinematicEventsSection"),
   { ssr: false }
 );
 
@@ -67,7 +67,7 @@ export default function Home() {
 
           {journeyStarted && (
             <>
-              <EventsContainer />
+              <CinematicEventsSection />
               <FAQSection />
               <RSVPSection />
             </>

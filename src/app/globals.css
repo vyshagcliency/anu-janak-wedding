@@ -179,6 +179,78 @@ body {
   100% { transform: scale(0.9); opacity: 0.2; }
 }
 
+/* ───── Cinematic Events Section ───── */
+
+.cinematic-event-title {
+  font-family: var(--font-heading), serif;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+
+.cinematic-date {
+  font-family: var(--font-body), sans-serif;
+  font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.cinematic-rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gold) 20%,
+    var(--gold-light) 50%,
+    var(--gold) 80%,
+    transparent 100%
+  );
+  will-change: width;
+}
+
+.cinematic-venue {
+  font-family: var(--font-body), sans-serif;
+  font-size: clamp(0.9rem, 1.5vw, 1.15rem);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+}
+
+.cinematic-venue-address {
+  font-family: var(--font-body), sans-serif;
+  font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+}
+
+.cinematic-dresscode {
+  font-family: var(--font-body), sans-serif;
+  font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+
+.cinematic-map-link {
+  font-family: var(--font-body), sans-serif;
+  font-size: clamp(0.7rem, 1vw, 0.8rem);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.cinematic-map-link:hover {
+  opacity: 1;
+}
+
 /* Hashtag shimmer */
 .hashtag-shimmer {
   background: linear-gradient(
