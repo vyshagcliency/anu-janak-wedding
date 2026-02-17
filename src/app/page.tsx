@@ -40,22 +40,25 @@ export default function Home() {
   }, []);
 
   const handleWipeComplete = useCallback(() => {
-    setShowWipe(false);
+    // 1. Render the timeline section immediately
     setJourneyStarted(true);
 
-    // Double-rAF ensures React has flushed the re-render and the TimelineSection
-    // wrapper div is in layout before we scroll. The 120ms timeout gives the
-    // dynamic import a moment to mount so the scroll lands at the right place.
-    // On mobile, scrollIntoView with 'smooth' can be unreliable (iOS Safari),
-    // so we also fall back to window.scrollTo with the element's offsetTop.
+    // 2. Wait for React to flush the re-render so the wrapper div is in layout,
+    //    then jump to the timeline position BEFORE fading the wipe out.
+    //    Using "instant" (synchronous) scroll so the position is set before
+    //    the wipe becomes transparent — this prevents the hero section from
+    //    flashing into view on mobile while the wipe is still fading.
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        setTimeout(() => {
-          const el = timelineRef.current;
-          if (!el) return;
+        const el = timelineRef.current;
+        if (el) {
           const top = el.getBoundingClientRect().top + window.scrollY;
-          window.scrollTo({ top, behavior: "smooth" });
-        }, 120);
+          // "instant" is reliable on all mobile browsers; the wipe is still
+          // covering the screen so the jump is invisible to the user.
+          window.scrollTo({ top, behavior: "instant" as ScrollBehavior });
+        }
+        // 3. NOW fade the wipe out — page is already at the timeline position.
+        setShowWipe(false);
       });
     });
   }, []);
