@@ -23,6 +23,9 @@ export default function StartJourneyCTA({ onStart }: Props) {
         borderColor: "var(--gold)",
         color: "var(--gold)",
         fontFamily: "var(--font-body), sans-serif",
+        cursor: "pointer",
+        // iOS Safari: first tap = hover, second tap = click unless this is set
+        touchAction: "manipulation",
       }}
       whileHover={{
         backgroundColor: "rgba(201, 169, 110, 0.15)",

@@ -30,6 +30,9 @@ export default function LuxuryEventGallery({ event, index }: Props) {
   const infoPanelRef = useRef<HTMLDivElement>(null);
   const printRefs = useRef<(HTMLDivElement | null)[]>([]);
   const styleCardRef = useRef<HTMLDivElement>(null);
+  // Mobile scroll-driven refs
+  const mobileSectionRef = useRef<HTMLElement>(null);
+  const mobileTrackRef = useRef<HTMLDivElement>(null);
   const [attireOpen, setAttireOpen] = useState(false);
 
   const accentColor = ACCENT_COLORS[event.timeOfDay];
@@ -105,6 +108,50 @@ export default function LuxuryEventGallery({ event, index }: Props) {
     return () => {
       cancelAnimationFrame(rafId);
       mainTrigger?.kill();
+    };
+  }, []);
+
+  // ── Mobile: vertical scroll → horizontal track (sticky + translateX) ──
+  useEffect(() => {
+    if (!window.matchMedia("(max-width: 767px)").matches) return;
+
+    const section = mobileSectionRef.current;
+    const track = mobileTrackRef.current;
+    if (!section || !track) return;
+
+    let rafId: number;
+
+    const setupHeight = () => {
+      // Set section height so scroll range = track width × 1.5 for a
+      // premium slow-drift feel (1.5px scroll = 1px horizontal movement)
+      const maxX = Math.max(0, track.scrollWidth - window.innerWidth);
+      section.style.height = `${window.innerHeight + maxX * 1.5}px`;
+    };
+
+    const onScroll = () => {
+      rafId = requestAnimationFrame(() => {
+        const sectionTop = section.offsetTop;
+        const maxX = Math.max(0, track.scrollWidth - window.innerWidth);
+        const scrollableRange = section.offsetHeight - window.innerHeight;
+        const progress = Math.max(
+          0,
+          Math.min(1, (window.scrollY - sectionTop) / scrollableRange)
+        );
+        track.style.transform = `translateX(${-progress * maxX}px)`;
+      });
+    };
+
+    // Measure after layout settles
+    const measureId = requestAnimationFrame(() => {
+      setupHeight();
+      onScroll(); // set initial position
+    });
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(rafId);
+      cancelAnimationFrame(measureId);
+      window.removeEventListener("scroll", onScroll);
     };
   }, []);
 
@@ -329,241 +376,243 @@ export default function LuxuryEventGallery({ event, index }: Props) {
         </div>
       </section>
 
-      {/* ── Mobile: vertical scrollable gallery ── */}
+      {/* ── Mobile: tall outer wrapper + sticky viewport + scroll-driven track ── */}
+      {/*
+        Architecture:
+        - Outer <section> is tall (height set by JS = 100vh + maxX * 1.5)
+        - Inner sticky div stays fixed at top: 0 for 100vh while user scrolls
+        - Scroll progress drives translateX on the photo track
+        - Result: vertical scrolling = horizontal photo movement, no GSAP pin needed
+      */}
       <section
+        ref={mobileSectionRef}
         className="luxury-event-gallery-mobile"
         style={{
-          display: "none", // overridden to block by CSS on mobile
+          display: "none", // overridden to block by globals.css on mobile
           position: "relative",
-          padding: "64px 20px 80px",
+          // Height is set dynamically by the scroll useEffect after layout
+          minHeight: "100vh",
         }}
         data-event-id={`${event.id}-mobile`}
       >
-        <EventRoomBackground timeOfDay={event.timeOfDay} />
-
-        {/* Event info */}
-        <div style={{ position: "relative", zIndex: 10, marginBottom: 36 }}>
-          <p
-            style={{
-              fontFamily: "var(--font-body), sans-serif",
-              fontSize: "0.6rem",
-              letterSpacing: "0.28em",
-              textTransform: "uppercase",
-              color: accentColor,
-              marginBottom: 12,
-            }}
-          >
-            0{index + 1}
-          </p>
-          <h2
-            style={{
-              fontFamily: "var(--font-heading), serif",
-              fontSize: "clamp(1.8rem, 8vw, 2.6rem)",
-              fontWeight: 400,
-              color: "#F8F4EE",
-              lineHeight: 1.15,
-              marginBottom: 8,
-            }}
-          >
-            {event.title}
-          </h2>
-          <p
-            style={{
-              fontFamily: "var(--font-body), sans-serif",
-              fontSize: "0.65rem",
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: accentColor,
-              marginBottom: 16,
-            }}
-          >
-            {event.date} &middot; {event.time}
-          </p>
-          <p
-            style={{
-              fontFamily: "var(--font-body), sans-serif",
-              fontSize: "0.7rem",
-              color: "rgba(248,244,238,0.55)",
-              marginBottom: 6,
-            }}
-          >
-            {event.venue}
-          </p>
-          <a
-            href={event.venueMapUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontFamily: "var(--font-body), sans-serif",
-              fontSize: "0.58rem",
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              color: accentColor,
-              textDecoration: "none",
-            }}
-          >
-            View Map &rarr;
-          </a>
-        </div>
-
-        {/* Horizontal swipe strip — touch-native scroll-snap */}
+        {/* Sticky viewport — stays visible as user scrolls through outer section */}
         <div
-          className="mobile-gallery-strip"
           style={{
-            position: "relative",
-            zIndex: 10,
-            display: "flex",
-            overflowX: "scroll",
-            overflowY: "hidden",
-            scrollSnapType: "x mandatory",
-            WebkitOverflowScrolling: "touch" as React.CSSProperties["WebkitOverflowScrolling"],
-            gap: 20,
-            paddingLeft: 20,
-            paddingRight: 20,
-            paddingTop: 12,
-            paddingBottom: 40,
-            marginLeft: -20,
-            marginRight: -20,
-            marginBottom: 16,
+            position: "sticky",
+            top: 0,
+            height: "100vh",
+            overflow: "hidden",
           }}
         >
-          {event.photos.map((src, photoIndex) => (
-            <div
-              key={photoIndex}
+          <EventRoomBackground timeOfDay={event.timeOfDay} />
+
+          {/* Info panel — top left */}
+          <div
+            style={{
+              position: "absolute",
+              top: 48,
+              left: 24,
+              right: 24,
+              zIndex: 10,
+            }}
+          >
+            <p
               style={{
-                scrollSnapAlign: "center",
+                fontFamily: "var(--font-body), sans-serif",
+                fontSize: "0.58rem",
+                letterSpacing: "0.28em",
+                textTransform: "uppercase",
+                color: accentColor,
+                marginBottom: 10,
+                opacity: 0.9,
+              }}
+            >
+              0{index + 1} &mdash; {event.date}
+            </p>
+            <h2
+              style={{
+                fontFamily: "var(--font-heading), serif",
+                fontSize: "clamp(1.6rem, 7vw, 2.2rem)",
+                fontWeight: 400,
+                color: "#F8F4EE",
+                lineHeight: 1.15,
+                marginBottom: 6,
+              }}
+            >
+              {event.title}
+            </h2>
+            <p
+              style={{
+                fontFamily: "var(--font-body), sans-serif",
+                fontSize: "0.62rem",
+                letterSpacing: "0.12em",
+                color: accentColor,
+                marginBottom: 4,
+              }}
+            >
+              {event.time} &middot; {event.venue}
+            </p>
+            <a
+              href={event.venueMapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontFamily: "var(--font-body), sans-serif",
+                fontSize: "0.55rem",
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                color: accentColor,
+                textDecoration: "none",
+                opacity: 0.75,
+              }}
+            >
+              Map &rarr;
+            </a>
+          </div>
+
+          {/* Horizontal photo track — translated by scroll progress */}
+          <div
+            ref={mobileTrackRef}
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              display: "flex",
+              alignItems: "center",
+              gap: 20,
+              paddingLeft: 24,
+              paddingRight: 40,
+              paddingTop: 100, // clear the info panel
+              willChange: "transform",
+            }}
+          >
+            {event.photos.map((src, photoIndex) => (
+              <div
+                key={photoIndex}
+                style={{
+                  flexShrink: 0,
+                  width: "80vw",
+                  maxWidth: 280,
+                  backgroundColor: "#F8F4EE",
+                  padding: "10px 10px 36px 10px",
+                  boxShadow:
+                    "0 4px 10px rgba(0,0,0,0.2), 0 14px 32px rgba(0,0,0,0.28)",
+                  transform: `rotate(${getPhotoTilt(photoIndex)}deg)`,
+                }}
+              >
+                <div
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    aspectRatio: "3/4",
+                    overflow: "hidden",
+                    backgroundColor: "#1a1a1a",
+                  }}
+                >
+                  <Image
+                    src={src}
+                    alt={`${event.title} — photo ${photoIndex + 1}`}
+                    fill
+                    sizes="80vw"
+                    style={{ objectFit: "cover" }}
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            ))}
+
+            {/* Style guide card — last in track */}
+            <div
+              style={{
                 flexShrink: 0,
-                width: "calc(100vw - 72px)",
-                maxWidth: 300,
+                width: "80vw",
+                maxWidth: 280,
                 backgroundColor: "#F8F4EE",
                 padding: "10px 10px 36px 10px",
                 boxShadow:
-                  "0 4px 8px rgba(0,0,0,0.18), 0 12px 28px rgba(0,0,0,0.25)",
-                transform: `rotate(${getPhotoTilt(photoIndex)}deg)`,
-              }}
-            >
-              <div
-                style={{
-                  position: "relative",
-                  width: "100%",
-                  aspectRatio: "3/4",
-                  overflow: "hidden",
-                  backgroundColor: "#1a1a1a",
-                }}
-              >
-                <Image
-                  src={src}
-                  alt={`${event.title} — photo ${photoIndex + 1}`}
-                  fill
-                  sizes="(max-width: 768px) 80vw, 300px"
-                  style={{ objectFit: "cover" }}
-                  loading="lazy"
-                />
-              </div>
-            </div>
-          ))}
-
-          {/* Style guide as a swipe card at the end */}
-          <div
-            style={{
-              scrollSnapAlign: "center",
-              flexShrink: 0,
-              width: "calc(100vw - 72px)",
-              maxWidth: 300,
-              backgroundColor: "#F8F4EE",
-              padding: "10px 10px 36px 10px",
-              boxShadow:
-                "0 4px 8px rgba(0,0,0,0.18), 0 12px 28px rgba(0,0,0,0.25)",
-              transform: "rotate(-1.2deg)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <button
-              onClick={openAttire}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                width: "100%",
-                height: "100%",
+                  "0 4px 10px rgba(0,0,0,0.2), 0 14px 32px rgba(0,0,0,0.28)",
+                transform: "rotate(-1.2deg)",
                 display: "flex",
-                flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: 14,
-                padding: "40px 16px",
               }}
             >
-              <div style={{ width: 36, height: 1, background: accentColor, opacity: 0.7 }} />
-              <p
+              <button
+                onClick={openAttire}
                 style={{
-                  fontFamily: "var(--font-heading), serif",
-                  fontSize: "1.4rem",
-                  fontWeight: 400,
-                  color: "#2C2C2C",
-                  letterSpacing: "0.06em",
-                  textAlign: "center",
-                  lineHeight: 1.2,
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  touchAction: "manipulation",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 14,
+                  padding: "40px 24px",
+                  width: "100%",
                 }}
               >
-                Style<br />Guide
-              </p>
-              <p
-                style={{
-                  fontFamily: "var(--font-body), sans-serif",
-                  fontSize: "0.58rem",
-                  letterSpacing: "0.22em",
-                  textTransform: "uppercase",
-                  color: "#5A5A5A",
-                }}
-              >
-                Tap to explore
-              </p>
-              <div style={{ width: 36, height: 1, background: accentColor, opacity: 0.7 }} />
-            </button>
+                <div style={{ width: 32, height: 1, background: accentColor, opacity: 0.7 }} />
+                <p
+                  style={{
+                    fontFamily: "var(--font-heading), serif",
+                    fontSize: "1.5rem",
+                    fontWeight: 400,
+                    color: "#2C2C2C",
+                    letterSpacing: "0.06em",
+                    textAlign: "center",
+                    lineHeight: 1.25,
+                  }}
+                >
+                  Style<br />Guide
+                </p>
+                <p
+                  style={{
+                    fontFamily: "var(--font-body), sans-serif",
+                    fontSize: "0.56rem",
+                    letterSpacing: "0.22em",
+                    textTransform: "uppercase",
+                    color: "#5A5A5A",
+                  }}
+                >
+                  Tap to explore
+                </p>
+                <div style={{ width: 32, height: 1, background: accentColor, opacity: 0.7 }} />
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* Swipe indicator dots */}
-        <div
-          style={{
-            position: "relative",
-            zIndex: 10,
-            display: "flex",
-            justifyContent: "center",
-            gap: 6,
-            marginBottom: 32,
-          }}
-        >
-          {[...Array(event.photos.length + 1)].map((_, i) => (
-            <div
-              key={i}
-              style={{
-                width: 5,
-                height: 5,
-                borderRadius: "50%",
-                background: i === 0 ? accentColor : "rgba(248,244,238,0.3)",
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Dress code reminder */}
-        <div style={{ position: "relative", zIndex: 10, textAlign: "center" }}>
-          <p
+          {/* Scroll down hint */}
+          <div
             style={{
-              fontFamily: "var(--font-body), sans-serif",
-              fontSize: "0.6rem",
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: "rgba(248,244,238,0.4)",
-              fontStyle: "italic",
+              position: "absolute",
+              bottom: 28,
+              left: "50%",
+              transform: "translateX(-50%)",
+              zIndex: 10,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 6,
+              opacity: 0.4,
+              pointerEvents: "none",
             }}
           >
-            {event.dressCode}
-          </p>
+            <div style={{ width: 1, height: 24, background: "rgba(248,244,238,0.6)" }} />
+            <p
+              style={{
+                fontFamily: "var(--font-body), sans-serif",
+                fontSize: "0.5rem",
+                letterSpacing: "0.25em",
+                textTransform: "uppercase",
+                color: "rgba(248,244,238,0.8)",
+              }}
+            >
+              Scroll
+            </p>
+          </div>
         </div>
       </section>
 
