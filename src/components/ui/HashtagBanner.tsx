@@ -11,7 +11,7 @@ export default function HashtagBanner() {
           letterSpacing: "0.02em",
         }}
       >
-        #AnuWedsJanak
+        #JaAnKeDilSe
       </p>
     </div>
   );

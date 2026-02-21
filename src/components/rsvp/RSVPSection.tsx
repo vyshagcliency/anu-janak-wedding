@@ -20,7 +20,6 @@ interface FormData {
   phone: string;
   guests: string;
   events: string[];
-  dietary: string;
 }
 
 export default function RSVPSection() {
@@ -33,7 +32,6 @@ export default function RSVPSection() {
     phone: "",
     guests: "1",
     events: [],
-    dietary: "",
   });
 
   useEffect(() => {
@@ -328,28 +326,6 @@ export default function RSVPSection() {
                   ))}
                 </div>
               </fieldset>
-
-              {/* Dietary notes */}
-              <div>
-                <label
-                  htmlFor="rsvp-dietary"
-                  className="mb-1 block text-sm font-medium"
-                  style={labelStyle}
-                >
-                  Dietary Requirements / Notes
-                </label>
-                <textarea
-                  id="rsvp-dietary"
-                  rows={3}
-                  placeholder="Any allergies or dietary preferences..."
-                  value={formData.dietary}
-                  onChange={(e) =>
-                    setFormData((p) => ({ ...p, dietary: e.target.value }))
-                  }
-                  className={inputClasses}
-                  style={{ ...inputStyle, resize: "none" as const }}
-                />
-              </div>
 
               {/* Submit */}
               <button

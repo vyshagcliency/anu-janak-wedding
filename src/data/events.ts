@@ -121,8 +121,6 @@ export const EVENTS: WeddingEvent[] = [
       "/images/events/reception/photo2.jpg",
       "/images/events/reception/photo3.jpg",
       "/images/events/reception/photo4.jpg",
-      "/images/events/reception/photo5.jpg",
-      "/images/events/reception/photo6.jpg",
     ],
     attireImages: ["/images/events/attire/reception-ref.webp"],
   },
