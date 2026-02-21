@@ -161,9 +161,9 @@ export default function EngagementHighlights() {
             preload="metadata"
             style={{
               width: "100%",
+              height: "auto",
               display: "block",
-              aspectRatio: "9/16",
-              objectFit: "cover",
+              objectFit: "contain",
               background: "#1a1a1a",
             }}
           />
