@@ -69,11 +69,11 @@ export default function Home() {
           ) : (
             <>
               <TimelineSection />
-              <EngagementHighlights />
               <div id="events-section">
                 <LuxuryEventsSection />
               </div>
               <InvitationCTA />
+              <EngagementHighlights />
               <FAQSection />
               <RSVPSection />
             </>
