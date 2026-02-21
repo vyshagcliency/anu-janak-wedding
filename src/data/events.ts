@@ -51,7 +51,7 @@ export const EVENTS: WeddingEvent[] = [
     venue: "The Leaf, Poomala",
     venueAddress: "The Leaf, Poomala",
     venueMapUrl: "https://share.google/1fN4rknlVSPCqqrbU",
-    dressCode: "Sparkle and Shine — Cocktail Attire",
+    dressCode: "Sparkle and Shine — Cocktail Attire (Indo-Western Chic)",
     colors: [
       { hex: "#1565C0", name: "Blue" },
       { hex: "#2E7D32", name: "Green" },
