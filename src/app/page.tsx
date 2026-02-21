@@ -21,6 +21,11 @@ const LuxuryEventsSection = dynamic(
   { ssr: false }
 );
 
+const EngagementHighlights = dynamic(
+  () => import("@/components/engagement/EngagementHighlights"),
+  { ssr: false }
+);
+
 const FAQSection = dynamic(
   () => import("@/components/faq/FAQSection"),
   { ssr: false }
@@ -64,6 +69,7 @@ export default function Home() {
           ) : (
             <>
               <TimelineSection />
+              <EngagementHighlights />
               <div id="events-section">
                 <LuxuryEventsSection />
               </div>
