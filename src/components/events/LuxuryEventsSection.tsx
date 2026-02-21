@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { EVENTS } from "@/data/events";
@@ -8,13 +8,77 @@ import LuxuryEventGallery from "./LuxuryEventGallery";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const REVEAL_TEXT =
+  "Join us as we celebrate love, joy, and the start of forever. This is your go-to for all the details as we count down to the big day.";
+
+function ScrollRevealText() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const words = el.querySelectorAll<HTMLSpanElement>(".reveal-word");
+
+    gsap.set(words, { opacity: 0.12 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: el,
+        start: "top 80%",
+        end: "bottom 40%",
+        scrub: 0.6,
+      },
+    });
+
+    tl.to(words, {
+      opacity: 1,
+      duration: 0.15,
+      stagger: 0.08,
+      ease: "power2.out",
+    });
+
+    return () => {
+      tl.scrollTrigger?.kill();
+      tl.kill();
+    };
+  }, []);
+
+  const words = REVEAL_TEXT.split(" ");
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        fontFamily: "var(--font-handwriting), cursive",
+        fontSize: "clamp(1.6rem, 4vw, 2.8rem)",
+        fontWeight: 400,
+        color: "#F8F4EE",
+        lineHeight: 1.5,
+        maxWidth: 620,
+        margin: "0 auto",
+        textAlign: "center",
+      }}
+    >
+      {words.map((word, i) => (
+        <span
+          key={i}
+          className="reveal-word"
+          style={{
+            display: "inline-block",
+            marginRight: "0.3em",
+            opacity: 0.12,
+          }}
+        >
+          {word}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export default function LuxuryEventsSection() {
   useEffect(() => {
-    // The Timeline section adds virtual scroll height via its pin spacer.
-    // Without a refresh here GSAP calculates wrong positions for all event
-    // gallery triggers, causing sudden jumps between the bus section and events.
-    // Two staggered refreshes: one after initial mount layout settles,
-    // one after all child galleries have created their own ScrollTriggers.
     const t1 = setTimeout(() => ScrollTrigger.refresh(), 100);
     const t2 = setTimeout(() => ScrollTrigger.refresh(), 500);
     return () => {
@@ -50,22 +114,11 @@ export default function LuxuryEventsSection() {
           The Celebration
         </p>
 
-        {/* Main heading */}
-        <h2
-          style={{
-            fontFamily: "var(--font-heading), serif",
-            fontSize: "clamp(2.2rem, 5vw, 4rem)",
-            fontWeight: 400,
-            color: "#F8F4EE",
-            letterSpacing: "0.04em",
-            lineHeight: 1.1,
-            marginBottom: 24,
-          }}
-        >
-          Four Evenings.
-          <br />
-          One Story.
-        </h2>
+        {/* Main heading — scroll-reveal word by word */}
+        <ScrollRevealText />
+
+        {/* Spacer to give scroll room for the reveal */}
+        <div style={{ height: 24 }} />
 
         {/* Rule */}
         <div
