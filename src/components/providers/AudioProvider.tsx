@@ -35,7 +35,7 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
     const muted = localStorage.getItem("aj-muted") === "true";
 
     howlRef.current = new Howl({
-      src: ["/audio/bg-music.mp3"],
+      src: ["/audio/romantic-piano.webm"],
       loop: true,
       volume: muted ? 0 : 0.35,
       html5: true,
