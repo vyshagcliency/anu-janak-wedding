@@ -102,7 +102,7 @@ export const EVENTS: WeddingEvent[] = [
     title: "Wedding Reception",
     subtitle: "An elegant close to the celebration",
     date: "Monday, April 27, 2026",
-    time: "6:30 PM – 10:30 PM",
+    time: "6:30 PM onwards",
     venue: "Blue Serene Resorts, Thoyakkavu",
     venueAddress: "Blue Serene Resorts, Thoyakkavu",
     venueMapUrl: "https://share.google/hkCLwZBFRdU5uSext",
