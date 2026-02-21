@@ -328,49 +328,33 @@ body {
 
 /* ───── Envelope Reveal ───── */
 
-.envelope-perspective {
-  background: linear-gradient(
-    135deg,
-    rgba(250, 247, 242, 0.95) 0%,
-    rgba(245, 230, 211, 0.95) 100%
-  );
-}
-
-/* Wax seal pulsing shimmer glow */
+/* Wax seal — subtle glow pulse */
 .seal-shimmer {
-  filter: drop-shadow(0 0 8px rgba(139, 26, 26, 0.4));
-  transition: filter 0.3s;
+  transition: transform 0.3s;
 }
 
 .seal-shimmer::before {
   content: "";
   position: absolute;
-  inset: -8px;
+  inset: -6px;
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(201, 169, 110, 0.3) 0%,
+    rgba(139, 26, 26, 0.15) 0%,
     transparent 70%
   );
-  animation: sealGlow 2s ease-in-out infinite;
+  animation: sealGlow 2.5s ease-in-out infinite;
   pointer-events: none;
 }
 
-.seal-shimmer:hover {
-  filter: drop-shadow(0 0 14px rgba(139, 26, 26, 0.6));
-}
-
 @keyframes sealGlow {
-  0%, 100% { opacity: 0.4; transform: scale(0.95); }
-  50%      { opacity: 1;   transform: scale(1.1); }
+  0%, 100% { opacity: 0.3; transform: scale(0.97); }
+  50%      { opacity: 0.8; transform: scale(1.05); }
 }
 
-/* Reduced motion: skip fancy animations */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .seal-shimmer::before {
     animation: none;
-  }
-  .envelope-perspective {
-    transition: opacity 0.3s;
   }
 }

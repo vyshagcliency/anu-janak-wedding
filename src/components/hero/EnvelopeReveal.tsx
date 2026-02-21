@@ -21,14 +21,12 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
 
     const tl = gsap.timeline();
 
-    // Envelope fades in
     tl.fromTo(
       envelopeRef.current,
       { opacity: 0 },
       { opacity: 1, duration: 0.6, ease: "power2.out" }
     );
 
-    // Wax seal stamps in with a bounce
     tl.fromTo(
       sealRef.current,
       { opacity: 0, scale: 0, rotation: -20 },
@@ -55,7 +53,6 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
       onComplete: onRevealed,
     });
 
-    // 1. Seal cracks — scale up, rotate, fade out
     tl.to(sealRef.current, {
       scale: 1.3,
       rotation: 15,
@@ -64,7 +61,6 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
       ease: "power2.in",
     });
 
-    // 2. Flap rotates open (3D perspective)
     tl.to(
       flapRef.current,
       {
@@ -75,7 +71,6 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
       "-=0.1"
     );
 
-    // 3. Card slides up from envelope
     tl.to(
       cardRef.current,
       {
@@ -86,7 +81,6 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
       "-=0.2"
     );
 
-    // 4. Entire envelope fades away
     tl.to(
       containerRef.current,
       {
@@ -101,10 +95,12 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
   return (
     <div
       ref={containerRef}
-      className="envelope-perspective fixed inset-0 z-50 flex items-end justify-center"
-      style={{ perspective: "1200px" }}
+      className="fixed inset-0 z-50"
+      style={{
+        perspective: "1200px",
+        background: "#F7F1EA",
+      }}
     >
-      {/* Full-screen envelope */}
       <div
         ref={envelopeRef}
         className="relative h-full w-full"
@@ -113,135 +109,81 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           transformStyle: "preserve-3d",
         }}
       >
-        {/* Inner liner (visible when flap opens) — fills behind the flap area */}
+        {/* Inner liner — deep burgundy, visible when flap opens */}
         <div
-          className="absolute inset-x-0 top-0 overflow-hidden"
-          style={{
-            height: "52vh",
-            background:
-              "linear-gradient(135deg, #5B1A1A 0%, #7B2D2D 40%, #5B1A1A 100%)",
-            clipPath: "polygon(0 0, 50% 100%, 100% 0)",
-            zIndex: 1,
-          }}
-        >
-          {/* Gold filigree pattern */}
-          <svg
-            className="absolute inset-0 h-full w-full opacity-15"
-            preserveAspectRatio="none"
-          >
-            <pattern
-              id="filigree"
-              x="0"
-              y="0"
-              width="50"
-              height="50"
-              patternUnits="userSpaceOnUse"
-            >
-              <circle
-                cx="25"
-                cy="25"
-                r="10"
-                fill="none"
-                stroke="var(--gold)"
-                strokeWidth="0.5"
-              />
-              <circle
-                cx="25"
-                cy="25"
-                r="4"
-                fill="none"
-                stroke="var(--gold)"
-                strokeWidth="0.3"
-              />
-              <line
-                x1="0"
-                y1="25"
-                x2="50"
-                y2="25"
-                stroke="var(--gold)"
-                strokeWidth="0.15"
-              />
-              <line
-                x1="25"
-                y1="0"
-                x2="25"
-                y2="50"
-                stroke="var(--gold)"
-                strokeWidth="0.15"
-              />
-            </pattern>
-            <rect width="100%" height="100%" fill="url(#filigree)" />
-          </svg>
-        </div>
-
-        {/* Envelope body — bottom portion of screen */}
-        <div
-          className="envelope-body absolute inset-x-0 bottom-0 overflow-hidden"
+          className="absolute inset-x-0 top-0"
           style={{
             height: "55vh",
             background:
-              "linear-gradient(165deg, #FAF3E8 0%, #F2E6D0 50%, #EBD9BF 100%)",
+              "linear-gradient(180deg, #4A1520 0%, #6B2030 60%, #4A1520 100%)",
+            clipPath: "polygon(0 0, 50% 100%, 100% 0)",
+            zIndex: 1,
+          }}
+        />
+
+        {/* Envelope body — lower portion, clean paper */}
+        <div
+          className="absolute inset-x-0 bottom-0"
+          style={{
+            height: "52vh",
+            background:
+              "linear-gradient(175deg, #F5EDE2 0%, #EDE3D5 40%, #E8DBCA 100%)",
+            boxShadow: "0 -1px 0 rgba(0,0,0,0.04)",
             zIndex: 3,
           }}
         >
-          {/* Paper texture overlay */}
+          {/* Realistic paper grain — very subtle noise texture */}
           <div
-            className="absolute inset-0 opacity-30"
+            className="absolute inset-0"
             style={{
+              opacity: 0.4,
               backgroundImage:
-                "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.008) 3px, rgba(0,0,0,0.008) 6px), repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(0,0,0,0.008) 3px, rgba(0,0,0,0.008) 6px)",
+                `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E")`,
+              backgroundSize: "200px 200px",
             }}
           />
 
-          {/* Subtle fold lines from envelope sides */}
+          {/* Left fold shadow */}
           <div
-            className="absolute left-0 top-0 h-full w-px opacity-10"
+            className="absolute top-0 h-full"
             style={{
-              left: "15%",
-              background: "linear-gradient(to bottom, rgba(0,0,0,0.1), transparent 60%)",
+              left: 0,
+              width: "30%",
+              background: "linear-gradient(to right, rgba(0,0,0,0.03), transparent)",
+              clipPath: "polygon(0 0, 100% 30%, 0 100%)",
             }}
           />
+          {/* Right fold shadow */}
           <div
-            className="absolute right-0 top-0 h-full w-px opacity-10"
+            className="absolute top-0 h-full"
             style={{
-              right: "15%",
-              background: "linear-gradient(to bottom, rgba(0,0,0,0.1), transparent 60%)",
+              right: 0,
+              width: "30%",
+              background: "linear-gradient(to left, rgba(0,0,0,0.03), transparent)",
+              clipPath: "polygon(100% 0, 0 30%, 100% 100%)",
             }}
           />
 
-          {/* Gold border accent */}
-          <div
-            className="absolute inset-4 border sm:inset-6"
-            style={{ borderColor: "rgba(201, 169, 110, 0.15)" }}
-          />
-
-          {/* Card inside envelope — slides up on open */}
+          {/* Card inside envelope */}
           <div
             ref={cardRef}
-            className="absolute inset-x-6 bottom-6 top-6 sm:inset-x-10 sm:bottom-10 sm:top-10"
+            className="absolute left-[8%] right-[8%] bottom-[8%] top-[8%]"
             style={{
-              background:
-                "linear-gradient(180deg, #FFFFFF 0%, #FDF9F3 100%)",
-              boxShadow: "0 -2px 20px rgba(0,0,0,0.06)",
+              background: "#FFFDF9",
+              boxShadow:
+                "0 1px 8px rgba(0,0,0,0.05), 0 0 1px rgba(0,0,0,0.08)",
               zIndex: 2,
             }}
           >
-            {/* Card gold border */}
-            <div
-              className="absolute inset-4 border sm:inset-6"
-              style={{ borderColor: "rgba(201, 169, 110, 0.25)" }}
-            />
-
-            {/* Card content — monogram only */}
-            <div className="flex h-full flex-col items-center justify-center px-6">
-              <svg width="80" height="80" viewBox="0 0 120 120">
+            <div className="flex h-full flex-col items-center justify-center">
+              <svg width="70" height="70" viewBox="0 0 120 120">
                 <circle
                   cx="60"
                   cy="60"
                   r="55"
                   fill="none"
                   stroke="var(--gold)"
-                  strokeWidth="1"
+                  strokeWidth="0.8"
                 />
                 <text
                   x="32"
@@ -276,12 +218,12 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           </div>
         </div>
 
-        {/* Envelope flap — full-width triangular, 3D rotation from top */}
+        {/* Envelope flap — large triangle from top */}
         <div
           ref={flapRef}
           className="absolute inset-x-0 top-0"
           style={{
-            height: "52vh",
+            height: "55vh",
             transformOrigin: "top center",
             transformStyle: "preserve-3d",
             zIndex: 4,
@@ -293,36 +235,37 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(165deg, #EFE2CE 0%, #E8D6BF 50%, #E2CDAF 100%)",
+                "linear-gradient(175deg, #F0E6D8 0%, #E8DCCC 50%, #E2D4C2 100%)",
               clipPath: "polygon(0 0, 50% 100%, 100% 0)",
               backfaceVisibility: "hidden",
             }}
           >
-            {/* Paper texture on flap */}
+            {/* Paper grain on flap */}
             <div
-              className="absolute inset-0 opacity-20"
+              className="absolute inset-0"
               style={{
+                opacity: 0.35,
                 backgroundImage:
-                  "repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(0,0,0,0.006) 4px, rgba(0,0,0,0.006) 8px)",
+                  `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E")`,
+                backgroundSize: "200px 200px",
               }}
             />
-            {/* Gold edge line along flap */}
+            {/* Subtle shadow at fold crease */}
             <div
-              className="absolute inset-0 opacity-30"
+              className="absolute inset-x-0 bottom-0 h-8"
               style={{
-                clipPath:
-                  "polygon(0 0, 1.5% 0, 50% 97%, 98.5% 0, 100% 0, 50% 100%)",
-                background: "var(--gold)",
+                background: "linear-gradient(to top, rgba(0,0,0,0.06), transparent)",
+                clipPath: "polygon(0 100%, 50% 0%, 100% 100%)",
               }}
             />
           </div>
 
-          {/* Back of flap (visible after rotation) */}
+          {/* Back of flap */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(135deg, #5B1A1A 0%, #7B2D2D 40%, #5B1A1A 100%)",
+                "linear-gradient(180deg, #4A1520 0%, #6B2030 60%, #4A1520 100%)",
               clipPath: "polygon(0 0, 50% 100%, 100% 0)",
               backfaceVisibility: "hidden",
               transform: "rotateX(180deg)",
@@ -330,13 +273,13 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           />
         </div>
 
-        {/* Wax seal — centered at the flap tip */}
+        {/* Wax seal — clean, refined */}
         <div
           ref={sealRef}
           onClick={handleOpen}
           className="seal-shimmer absolute left-1/2 cursor-pointer"
           style={{
-            top: "calc(52vh - 44px)",
+            top: "calc(55vh - 48px)",
             transform: "translateX(-50%)",
             zIndex: 5,
             opacity: 0,
@@ -353,64 +296,85 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           }}
         >
           <svg
-            width="88"
-            height="88"
-            viewBox="0 0 80 80"
-            className="drop-shadow-lg"
+            width="96"
+            height="96"
+            viewBox="0 0 96 96"
           >
-            {/* Wax base */}
-            <circle cx="40" cy="40" r="36" fill="#8B1A1A" />
+            {/* Outer wax — slightly irregular with radial gradient for depth */}
+            <defs>
+              <radialGradient id="waxGrad" cx="45%" cy="40%" r="55%">
+                <stop offset="0%" stopColor="#A62B2B" />
+                <stop offset="60%" stopColor="#8B1A1A" />
+                <stop offset="100%" stopColor="#6E1414" />
+              </radialGradient>
+              <filter id="waxShadow">
+                <feDropShadow dx="0" dy="2" stdDeviation="4" floodOpacity="0.3" />
+              </filter>
+            </defs>
             <circle
-              cx="40"
-              cy="40"
+              cx="48"
+              cy="48"
+              r="42"
+              fill="url(#waxGrad)"
+              filter="url(#waxShadow)"
+            />
+            {/* Subtle rim highlight */}
+            <circle
+              cx="48"
+              cy="48"
+              r="40"
+              fill="none"
+              stroke="rgba(255,255,255,0.08)"
+              strokeWidth="1"
+            />
+
+            {/* Decorative outer ring */}
+            <circle
+              cx="48"
+              cy="48"
               r="34"
               fill="none"
-              stroke="#A02020"
-              strokeWidth="1"
+              stroke="var(--gold)"
+              strokeWidth="0.7"
+              opacity="0.5"
             />
-            {/* Wax drip effects */}
-            <ellipse cx="18" cy="30" rx="6" ry="5" fill="#8B1A1A" />
-            <ellipse cx="62" cy="28" rx="5" ry="6" fill="#8B1A1A" />
-            <ellipse cx="25" cy="65" rx="5" ry="4" fill="#8B1A1A" />
-            <ellipse cx="58" cy="62" rx="4" ry="5" fill="#8B1A1A" />
-
             {/* Inner ring */}
             <circle
-              cx="40"
-              cy="40"
-              r="26"
+              cx="48"
+              cy="48"
+              r="30"
               fill="none"
               stroke="var(--gold)"
-              strokeWidth="1"
-              opacity="0.6"
+              strokeWidth="0.4"
+              opacity="0.3"
             />
 
-            {/* A & J text */}
+            {/* A & J monogram */}
             <text
-              x="24"
-              y="47"
+              x="30"
+              y="56"
               fontFamily="var(--font-playfair), serif"
-              fontSize="22"
+              fontSize="26"
               fill="var(--gold)"
               fontWeight="400"
             >
               A
             </text>
             <text
-              x="48"
-              y="47"
+              x="54"
+              y="56"
               fontFamily="var(--font-playfair), serif"
-              fontSize="22"
+              fontSize="26"
               fill="var(--gold)"
               fontWeight="400"
             >
               J
             </text>
             <text
-              x="40"
-              y="42"
+              x="48"
+              y="49"
               fontFamily="var(--font-playfair), serif"
-              fontSize="10"
+              fontSize="11"
               fill="var(--gold-light)"
               textAnchor="middle"
             >
@@ -418,13 +382,11 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
             </text>
           </svg>
 
-          {/* "Tap to open" hint */}
           <p
-            className="mt-1 text-center text-[10px] uppercase tracking-[0.2em]"
+            className="mt-2 text-center text-[10px] uppercase tracking-[0.2em]"
             style={{
-              color: "var(--charcoal-light)",
+              color: "rgba(90, 70, 50, 0.5)",
               fontFamily: "var(--font-body), sans-serif",
-              opacity: 0.6,
             }}
           >
             Tap to open
