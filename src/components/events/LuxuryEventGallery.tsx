@@ -530,38 +530,21 @@ export default function LuxuryEventGallery({ event, index }: Props) {
               style={{
                 display: "flex",
                 flexWrap: "wrap",
-                gap: 5,
+                gap: 6,
               }}
             >
               {event.colors.map((color, idx) => (
                 <div
                   key={idx}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 4,
+                    width: 14,
+                    height: 14,
+                    borderRadius: "50%",
+                    backgroundColor: color.hex,
+                    border: "1px solid rgba(248,244,238,0.25)",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
                   }}
-                >
-                  <div
-                    style={{
-                      width: 10,
-                      height: 10,
-                      borderRadius: "50%",
-                      backgroundColor: color.hex,
-                      border: "1px solid rgba(248,244,238,0.2)",
-                    }}
-                  />
-                  <span
-                    style={{
-                      fontFamily: "var(--font-body), sans-serif",
-                      fontSize: "0.58rem",
-                      color: "rgba(248,244,238,0.6)",
-                      letterSpacing: "0.02em",
-                    }}
-                  >
-                    {color.name}
-                  </span>
-                </div>
+                />
               ))}
             </div>
           </div>
