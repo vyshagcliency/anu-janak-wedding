@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { gsap } from "gsap";
 
 interface Props {
@@ -15,7 +16,6 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
   const cardRef = useRef<HTMLDivElement>(null);
   const hasOpened = useRef(false);
 
-  // Entrance animation
   useEffect(() => {
     if (!containerRef.current || !sealRef.current) return;
 
@@ -23,8 +23,8 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
 
     tl.fromTo(
       envelopeRef.current,
-      { opacity: 0 },
-      { opacity: 1, duration: 0.6, ease: "power2.out" }
+      { opacity: 0, scale: 0.92 },
+      { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }
     );
 
     tl.fromTo(
@@ -74,7 +74,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
     tl.to(
       cardRef.current,
       {
-        y: "-40vh",
+        y: -280,
         duration: 0.8,
         ease: "power2.out",
       },
@@ -85,6 +85,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
       containerRef.current,
       {
         opacity: 0,
+        scale: 0.9,
         duration: 0.5,
         ease: "power2.in",
       },
@@ -95,25 +96,44 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-50"
-      style={{
-        perspective: "1200px",
-        background: "#F7F1EA",
-      }}
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{ perspective: "1200px" }}
     >
+      {/* Blurred photo background */}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/hero/envelope-bg.jpeg"
+          alt=""
+          fill
+          priority
+          className="object-cover blur-[20px] scale-110"
+          sizes="100vw"
+        />
+        {/* Dark overlay for contrast */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.4) 100%)",
+          }}
+        />
+      </div>
+
+      {/* Centered envelope card */}
       <div
         ref={envelopeRef}
-        className="relative h-full w-full"
+        className="relative w-[85vw] max-w-[400px]"
         style={{
+          aspectRatio: "3 / 4",
           opacity: 0,
           transformStyle: "preserve-3d",
         }}
       >
         {/* Inner liner — deep burgundy, visible when flap opens */}
         <div
-          className="absolute inset-x-0 top-0"
+          className="absolute inset-x-0 top-0 overflow-hidden rounded-t-lg"
           style={{
-            height: "55vh",
+            height: "55%",
             background:
               "linear-gradient(180deg, #4A1520 0%, #6B2030 60%, #4A1520 100%)",
             clipPath: "polygon(0 0, 50% 100%, 100% 0)",
@@ -121,29 +141,29 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           }}
         />
 
-        {/* Envelope body — lower portion, clean paper */}
+        {/* Envelope body */}
         <div
-          className="absolute inset-x-0 bottom-0"
+          className="absolute inset-x-0 bottom-0 overflow-hidden rounded-b-lg"
           style={{
-            height: "52vh",
+            height: "52%",
             background:
               "linear-gradient(175deg, #F5EDE2 0%, #EDE3D5 40%, #E8DBCA 100%)",
-            boxShadow: "0 -1px 0 rgba(0,0,0,0.04)",
+            boxShadow:
+              "0 8px 32px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.1)",
             zIndex: 3,
           }}
         >
-          {/* Realistic paper grain — very subtle noise texture */}
+          {/* Paper grain */}
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 opacity-40"
             style={{
-              opacity: 0.4,
               backgroundImage:
                 `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E")`,
               backgroundSize: "200px 200px",
             }}
           />
 
-          {/* Left fold shadow */}
+          {/* Fold shadows */}
           <div
             className="absolute top-0 h-full"
             style={{
@@ -153,7 +173,6 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
               clipPath: "polygon(0 0, 100% 30%, 0 100%)",
             }}
           />
-          {/* Right fold shadow */}
           <div
             className="absolute top-0 h-full"
             style={{
@@ -167,7 +186,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           {/* Card inside envelope */}
           <div
             ref={cardRef}
-            className="absolute left-[8%] right-[8%] bottom-[8%] top-[8%]"
+            className="absolute bottom-[8%] left-[8%] right-[8%] top-[8%]"
             style={{
               background: "#FFFDF9",
               boxShadow:
@@ -218,12 +237,12 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           </div>
         </div>
 
-        {/* Envelope flap — large triangle from top */}
+        {/* Envelope flap */}
         <div
           ref={flapRef}
           className="absolute inset-x-0 top-0"
           style={{
-            height: "55vh",
+            height: "55%",
             transformOrigin: "top center",
             transformStyle: "preserve-3d",
             zIndex: 4,
@@ -232,7 +251,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
         >
           {/* Front of flap */}
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 rounded-t-lg"
             style={{
               background:
                 "linear-gradient(175deg, #F0E6D8 0%, #E8DCCC 50%, #E2D4C2 100%)",
@@ -240,17 +259,14 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
               backfaceVisibility: "hidden",
             }}
           >
-            {/* Paper grain on flap */}
             <div
-              className="absolute inset-0"
+              className="absolute inset-0 opacity-35"
               style={{
-                opacity: 0.35,
                 backgroundImage:
                   `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E")`,
                 backgroundSize: "200px 200px",
               }}
             />
-            {/* Subtle shadow at fold crease */}
             <div
               className="absolute inset-x-0 bottom-0 h-8"
               style={{
@@ -273,13 +289,13 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           />
         </div>
 
-        {/* Wax seal — clean, refined */}
+        {/* Wax seal */}
         <div
           ref={sealRef}
           onClick={handleOpen}
           className="seal-shimmer absolute left-1/2 cursor-pointer"
           style={{
-            top: "calc(55vh - 48px)",
+            top: "calc(55% - 48px)",
             transform: "translateX(-50%)",
             zIndex: 5,
             opacity: 0,
@@ -295,12 +311,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
             }
           }}
         >
-          <svg
-            width="96"
-            height="96"
-            viewBox="0 0 96 96"
-          >
-            {/* Outer wax — slightly irregular with radial gradient for depth */}
+          <svg width="96" height="96" viewBox="0 0 96 96">
             <defs>
               <radialGradient id="waxGrad" cx="45%" cy="40%" r="55%">
                 <stop offset="0%" stopColor="#A62B2B" />
@@ -308,7 +319,12 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
                 <stop offset="100%" stopColor="#6E1414" />
               </radialGradient>
               <filter id="waxShadow">
-                <feDropShadow dx="0" dy="2" stdDeviation="4" floodOpacity="0.3" />
+                <feDropShadow
+                  dx="0"
+                  dy="2"
+                  stdDeviation="4"
+                  floodOpacity="0.3"
+                />
               </filter>
             </defs>
             <circle
@@ -318,7 +334,6 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
               fill="url(#waxGrad)"
               filter="url(#waxShadow)"
             />
-            {/* Subtle rim highlight */}
             <circle
               cx="48"
               cy="48"
@@ -327,8 +342,6 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
               stroke="rgba(255,255,255,0.08)"
               strokeWidth="1"
             />
-
-            {/* Decorative outer ring */}
             <circle
               cx="48"
               cy="48"
@@ -338,7 +351,6 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
               strokeWidth="0.7"
               opacity="0.5"
             />
-            {/* Inner ring */}
             <circle
               cx="48"
               cy="48"
@@ -348,8 +360,6 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
               strokeWidth="0.4"
               opacity="0.3"
             />
-
-            {/* A & J monogram */}
             <text
               x="30"
               y="56"
@@ -385,7 +395,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           <p
             className="mt-2 text-center text-[10px] uppercase tracking-[0.2em]"
             style={{
-              color: "rgba(90, 70, 50, 0.5)",
+              color: "rgba(255, 255, 255, 0.5)",
               fontFamily: "var(--font-body), sans-serif",
             }}
           >
