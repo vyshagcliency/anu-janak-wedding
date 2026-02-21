@@ -267,6 +267,9 @@ body {
   .luxury-event-gallery-mobile {
     display: block !important;
   }
+  .mobile-swipe-track::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Desktop: show desktop gallery, hide mobile */
