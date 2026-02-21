@@ -47,7 +47,7 @@ export default function StartJourneyCTA({ onStart }: Props) {
         },
       }}
     >
-      How We Got Here
+      How We Got Here!
     </motion.button>
   );
 }

@@ -91,12 +91,18 @@ export default function LuxuryEventsSection() {
     <div className="luxury-events-section">
       {/* Section intro — shown above all galleries, scrolls away naturally */}
       <div
+        className="events-intro"
         style={{
           position: "relative",
           zIndex: 1,
           textAlign: "center",
           padding: "96px 24px 64px",
           background: "#0D0A08",
+          minHeight: "100svh",
+          display: "flex",
+          flexDirection: "column" as const,
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         {/* Label */}
@@ -147,6 +153,40 @@ export default function LuxuryEventsSection() {
           Scroll through each event.
           <br />
           Walk at your own pace.
+        </p>
+      </div>
+
+      {/* Events heading section */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          textAlign: "center",
+          padding: "80px 24px 48px",
+          background: "#0D0A08",
+        }}
+      >
+        <h2
+          style={{
+            fontFamily: "var(--font-playfair), serif",
+            fontSize: "clamp(2rem, 5vw, 3rem)",
+            fontWeight: 400,
+            color: "#F8F4EE",
+            marginBottom: 16,
+          }}
+        >
+          Events
+        </h2>
+        <p
+          style={{
+            fontFamily: "var(--font-body), sans-serif",
+            fontSize: "clamp(0.875rem, 1.8vw, 1.125rem)",
+            fontWeight: 300,
+            color: "rgba(248,244,238,0.5)",
+            letterSpacing: "0.05em",
+          }}
+        >
+          A look at how the days unfold.
         </p>
       </div>
 
