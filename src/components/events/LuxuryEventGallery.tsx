@@ -487,67 +487,6 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             Map &rarr;
           </a>
 
-          {/* Dress Code & Color Palette - Mobile */}
-          <div style={{ marginTop: 16 }}>
-            <p
-              style={{
-                fontFamily: "var(--font-body), sans-serif",
-                fontSize: "0.56rem",
-                letterSpacing: "0.16em",
-                textTransform: "uppercase",
-                color: "rgba(248,244,238,0.45)",
-                marginBottom: 5,
-              }}
-            >
-              Dress Code
-            </p>
-            <p
-              style={{
-                fontFamily: "var(--font-body), sans-serif",
-                fontSize: "0.65rem",
-                letterSpacing: "0.03em",
-                color: "#F8F4EE",
-                marginBottom: 12,
-                lineHeight: 1.4,
-              }}
-            >
-              {event.dressCode}
-            </p>
-
-            <p
-              style={{
-                fontFamily: "var(--font-body), sans-serif",
-                fontSize: "0.56rem",
-                letterSpacing: "0.16em",
-                textTransform: "uppercase",
-                color: "rgba(248,244,238,0.45)",
-                marginBottom: 6,
-              }}
-            >
-              Colors
-            </p>
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 6,
-              }}
-            >
-              {event.colors.map((color, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    width: 14,
-                    height: 14,
-                    borderRadius: "50%",
-                    backgroundColor: color.hex,
-                    border: "1px solid rgba(248,244,238,0.25)",
-                    boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-                  }}
-                />
-              ))}
-            </div>
-          </div>
         </div>
 
         {/* Horizontal swipe track */}
@@ -679,34 +618,61 @@ export default function LuxuryEventGallery({ event, index }: Props) {
           </div>
         </div>
 
-        {/* Swipe hint */}
+        {/* Dress Code & Color Palette — bottom bar */}
         <div
           style={{
             position: "absolute",
-            bottom: 28,
-            left: "50%",
-            transform: "translateX(-50%)",
+            bottom: 0,
+            left: 0,
+            right: 0,
             zIndex: 10,
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            opacity: 0.4,
-            pointerEvents: "none",
+            padding: "14px 24px 20px",
+            background:
+              "linear-gradient(to top, rgba(13,10,8,0.85) 0%, rgba(13,10,8,0.5) 70%, transparent 100%)",
           }}
         >
-          <p
-            style={{
-              fontFamily: "var(--font-body), sans-serif",
-              fontSize: "0.5rem",
-              letterSpacing: "0.25em",
-              textTransform: "uppercase",
-              color: "rgba(248,244,238,0.8)",
-            }}
-          >
-            Swipe
-          </p>
-          <div style={{ width: 24, height: 1, background: "rgba(248,244,238,0.6)" }} />
-          <span style={{ color: "rgba(248,244,238,0.6)", fontSize: "0.6rem" }}>&rarr;</span>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div>
+              <p
+                style={{
+                  fontFamily: "var(--font-body), sans-serif",
+                  fontSize: "0.5rem",
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                  color: "rgba(248,244,238,0.45)",
+                  marginBottom: 3,
+                }}
+              >
+                Dress Code
+              </p>
+              <p
+                style={{
+                  fontFamily: "var(--font-body), sans-serif",
+                  fontSize: "0.65rem",
+                  color: "#F8F4EE",
+                  letterSpacing: "0.03em",
+                  lineHeight: 1.4,
+                }}
+              >
+                {event.dressCode}
+              </p>
+            </div>
+            <div style={{ display: "flex", gap: 6, flexShrink: 0, marginLeft: 16 }}>
+              {event.colors.map((color, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    width: 16,
+                    height: 16,
+                    borderRadius: "50%",
+                    backgroundColor: color.hex,
+                    border: "1px solid rgba(248,244,238,0.25)",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
+                  }}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
