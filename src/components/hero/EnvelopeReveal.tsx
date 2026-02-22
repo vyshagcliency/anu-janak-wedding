@@ -326,34 +326,69 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
         }}
       />
 
+      {/* Side filigree accents — left */}
+      <svg
+        className="absolute"
+        style={{ left: "22px", top: "50%", transform: "translateY(-50%)", zIndex: 2 }}
+        width="8"
+        height="80"
+        viewBox="0 0 8 80"
+        fill="none"
+        aria-hidden="true"
+      >
+        <line x1="4" y1="0" x2="4" y2="25" stroke="var(--gold)" strokeWidth="0.4" opacity="0.3" />
+        <circle cx="4" cy="28" r="1.5" fill="none" stroke="var(--gold)" strokeWidth="0.4" opacity="0.35" />
+        <circle cx="4" cy="40" r="2.5" fill="none" stroke="var(--gold)" strokeWidth="0.4" opacity="0.4" />
+        <circle cx="4" cy="52" r="1.5" fill="none" stroke="var(--gold)" strokeWidth="0.4" opacity="0.35" />
+        <line x1="4" y1="55" x2="4" y2="80" stroke="var(--gold)" strokeWidth="0.4" opacity="0.3" />
+      </svg>
+
+      {/* Side filigree accents — right */}
+      <svg
+        className="absolute"
+        style={{ right: "22px", top: "50%", transform: "translateY(-50%)", zIndex: 2 }}
+        width="8"
+        height="80"
+        viewBox="0 0 8 80"
+        fill="none"
+        aria-hidden="true"
+      >
+        <line x1="4" y1="0" x2="4" y2="25" stroke="var(--gold)" strokeWidth="0.4" opacity="0.3" />
+        <circle cx="4" cy="28" r="1.5" fill="none" stroke="var(--gold)" strokeWidth="0.4" opacity="0.35" />
+        <circle cx="4" cy="40" r="2.5" fill="none" stroke="var(--gold)" strokeWidth="0.4" opacity="0.4" />
+        <circle cx="4" cy="52" r="1.5" fill="none" stroke="var(--gold)" strokeWidth="0.4" opacity="0.35" />
+        <line x1="4" y1="55" x2="4" y2="80" stroke="var(--gold)" strokeWidth="0.4" opacity="0.3" />
+      </svg>
+
       {/* Content stack */}
-      <div className="relative flex h-full flex-col items-center justify-center gap-4 px-8 py-10" style={{ zIndex: 3 }}>
-        {/* Ornamental flourish */}
+      <div className="relative flex h-full flex-col items-center justify-center gap-3 px-8 py-8" style={{ zIndex: 3 }}>
+        {/* Top ornamental flourish — scrollwork with diamond */}
         <svg
           ref={ornamentRef}
-          width="160"
-          height="16"
-          viewBox="0 0 160 16"
+          width="200"
+          height="32"
+          viewBox="0 0 200 32"
           fill="none"
           aria-hidden="true"
           style={{ opacity: 0 }}
         >
-          <line x1="0" y1="8" x2="62" y2="8" stroke="var(--gold)" strokeWidth="0.5" />
-          <line x1="98" y1="8" x2="160" y2="8" stroke="var(--gold)" strokeWidth="0.5" />
+          {/* Left scroll */}
+          <path d="M 10 16 Q 30 16 40 10 Q 50 4 60 8 Q 68 11 72 16" stroke="var(--gold)" strokeWidth="0.6" fill="none" />
+          <path d="M 30 16 Q 38 20 44 16" stroke="var(--gold)" strokeWidth="0.4" fill="none" opacity="0.5" />
+          {/* Right scroll (mirrored) */}
+          <path d="M 190 16 Q 170 16 160 10 Q 150 4 140 8 Q 132 11 128 16" stroke="var(--gold)" strokeWidth="0.6" fill="none" />
+          <path d="M 170 16 Q 162 20 156 16" stroke="var(--gold)" strokeWidth="0.4" fill="none" opacity="0.5" />
           {/* Center diamond */}
-          <rect
-            x="74"
-            y="2"
-            width="12"
-            height="12"
-            transform="rotate(45 80 8)"
-            fill="none"
-            stroke="var(--gold)"
-            strokeWidth="0.5"
-          />
-          {/* Small dots flanking diamond */}
-          <circle cx="66" cy="8" r="1" fill="var(--gold)" opacity="0.5" />
-          <circle cx="94" cy="8" r="1" fill="var(--gold)" opacity="0.5" />
+          <rect x="94" y="10" width="12" height="12" transform="rotate(45 100 16)" fill="none" stroke="var(--gold)" strokeWidth="0.6" />
+          {/* Flanking dots */}
+          <circle cx="80" cy="16" r="1.2" fill="var(--gold)" opacity="0.4" />
+          <circle cx="120" cy="16" r="1.2" fill="var(--gold)" opacity="0.4" />
+          {/* Outer dots */}
+          <circle cx="18" cy="16" r="0.8" fill="var(--gold)" opacity="0.3" />
+          <circle cx="182" cy="16" r="0.8" fill="var(--gold)" opacity="0.3" />
+          {/* Horizontal lines connecting to scrolls */}
+          <line x1="0" y1="16" x2="10" y2="16" stroke="var(--gold)" strokeWidth="0.3" opacity="0.4" />
+          <line x1="190" y1="16" x2="200" y2="16" stroke="var(--gold)" strokeWidth="0.3" opacity="0.4" />
         </svg>
 
         {/* "You are invited to celebrate" */}
@@ -369,46 +404,83 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           You are invited to celebrate
         </p>
 
-        {/* A & J Monogram */}
-        <svg width="90" height="90" viewBox="0 0 120 120" aria-label="A and J monogram">
+        {/* Gold rule above monogram */}
+        <div
+          ref={ruleRef}
+          className="h-px w-44"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent 0%, var(--gold) 15%, var(--gold-light) 50%, var(--gold) 85%, transparent 100%)",
+            transformOrigin: "center",
+            transform: "scaleX(0)",
+          }}
+        />
+
+        {/* A & J Monogram — large, premium */}
+        <svg width="130" height="130" viewBox="0 0 160 160" aria-label="A and J monogram">
+          {/* Outer decorative circle */}
           <circle
             ref={monogramCircleRef}
-            cx="60"
-            cy="60"
-            r="55"
+            cx="80"
+            cy="80"
+            r="75"
             fill="none"
             stroke="var(--gold)"
             strokeWidth="0.8"
           />
+          {/* Inner thin circle */}
+          <circle
+            cx="80"
+            cy="80"
+            r="70"
+            fill="none"
+            stroke="var(--gold)"
+            strokeWidth="0.3"
+            opacity="0.35"
+          />
+          {/* Tiny dot accents at compass points */}
+          <circle cx="80" cy="5" r="1.5" fill="var(--gold)" opacity="0.4" />
+          <circle cx="80" cy="155" r="1.5" fill="var(--gold)" opacity="0.4" />
+          <circle cx="5" cy="80" r="1.5" fill="var(--gold)" opacity="0.4" />
+          <circle cx="155" cy="80" r="1.5" fill="var(--gold)" opacity="0.4" />
+          {/* A */}
           <text
             ref={monogramARef}
-            x="32"
-            y="72"
+            x="38"
+            y="96"
             fontFamily="var(--font-playfair), serif"
-            fontSize="36"
+            fontSize="52"
+            fontWeight="400"
+            fontStyle="italic"
             fill="var(--gold)"
             style={{ opacity: 0 }}
           >
             A
           </text>
+          {/* Decorative ampersand */}
           <text
             ref={monogramAmpRef}
-            x="50"
-            y="64"
+            x="80"
+            y="86"
             fontFamily="var(--font-playfair), serif"
-            fontSize="14"
+            fontSize="18"
+            fontStyle="italic"
             fill="var(--gold)"
             textAnchor="middle"
+            opacity="0.7"
             style={{ opacity: 0 }}
           >
             &amp;
           </text>
+          {/* J */}
           <text
             ref={monogramJRef}
-            x="68"
-            y="72"
+            x="92"
+            y="96"
             fontFamily="var(--font-playfair), serif"
-            fontSize="36"
+            fontSize="52"
+            fontWeight="400"
+            fontStyle="italic"
             fill="var(--gold)"
             style={{ opacity: 0 }}
           >
@@ -416,17 +488,28 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           </text>
         </svg>
 
-        {/* Gold horizontal rule */}
+        {/* Gold rule below monogram */}
         <div
-          ref={ruleRef}
-          className="h-px w-40"
+          className="h-px w-44"
           style={{
             background:
-              "linear-gradient(90deg, transparent 0%, var(--gold) 20%, var(--gold-light) 50%, var(--gold) 80%, transparent 100%)",
-            transformOrigin: "center",
-            transform: "scaleX(0)",
+              "linear-gradient(90deg, transparent 0%, var(--gold) 15%, var(--gold-light) 50%, var(--gold) 85%, transparent 100%)",
           }}
         />
+
+        {/* Leaf / branch motif */}
+        <svg width="80" height="20" viewBox="0 0 80 20" fill="none" aria-hidden="true">
+          {/* Left branch */}
+          <path d="M 40 10 Q 30 6 20 10 Q 14 12 8 10" stroke="var(--gold)" strokeWidth="0.5" fill="none" />
+          <path d="M 28 8 Q 24 4 20 6" stroke="var(--gold)" strokeWidth="0.4" fill="none" opacity="0.5" />
+          <path d="M 24 10 Q 20 14 16 12" stroke="var(--gold)" strokeWidth="0.4" fill="none" opacity="0.5" />
+          {/* Right branch (mirrored) */}
+          <path d="M 40 10 Q 50 6 60 10 Q 66 12 72 10" stroke="var(--gold)" strokeWidth="0.5" fill="none" />
+          <path d="M 52 8 Q 56 4 60 6" stroke="var(--gold)" strokeWidth="0.4" fill="none" opacity="0.5" />
+          <path d="M 56 10 Q 60 14 64 12" stroke="var(--gold)" strokeWidth="0.4" fill="none" opacity="0.5" />
+          {/* Center dot */}
+          <circle cx="40" cy="10" r="1" fill="var(--gold)" opacity="0.5" />
+        </svg>
 
         {/* "Tap to reveal" */}
         <p
@@ -440,6 +523,13 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
         >
           Tap to reveal
         </p>
+
+        {/* Bottom ornamental flourish — mirrored scrollwork */}
+        <svg width="140" height="20" viewBox="0 0 140 20" fill="none" aria-hidden="true">
+          <path d="M 10 10 Q 25 10 35 6 Q 42 3 50 6 Q 56 8 62 10" stroke="var(--gold)" strokeWidth="0.4" fill="none" opacity="0.5" />
+          <path d="M 130 10 Q 115 10 105 6 Q 98 3 90 6 Q 84 8 78 10" stroke="var(--gold)" strokeWidth="0.4" fill="none" opacity="0.5" />
+          <rect x="64" y="4" width="12" height="12" transform="rotate(45 70 10)" fill="none" stroke="var(--gold)" strokeWidth="0.4" opacity="0.4" />
+        </svg>
       </div>
     </>
   );
@@ -469,8 +559,8 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
         />
       </div>
 
-      {/* Card wrapper — centered */}
-      <div className="relative w-[90vw] max-w-[440px]" style={{ aspectRatio: "5 / 6" }}>
+      {/* Card wrapper — centered, shorter on mobile */}
+      <div className="relative w-[90vw] max-w-[440px] max-h-[72vh] md:max-h-none" style={{ aspectRatio: "5 / 6" }}>
         {/* Main visible card */}
         <div
           ref={cardRef}
