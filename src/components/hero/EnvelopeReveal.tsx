@@ -137,7 +137,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
     tl.fromTo(
       tapPromptRef.current,
       { opacity: 0 },
-      { opacity: 1, duration: 0.25, ease: "power1.out" },
+      { opacity: 1, duration: 0.4, ease: "power1.out" },
       "-=0.15"
     );
 
@@ -496,8 +496,13 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
         {/* "Tap to reveal" */}
         <p
           ref={tapPromptRef}
-          className="tap-prompt-pulse text-center text-[10px] uppercase tracking-[0.2em]"
-          style={{ color: "var(--gold)", fontFamily: "var(--font-body), sans-serif", opacity: 0 }}
+          className="tap-prompt-pulse text-center text-base uppercase tracking-[0.2em] font-semibold"
+          style={{
+            color: "#FFD700",
+            fontFamily: "var(--font-body), sans-serif",
+            opacity: 0,
+            textShadow: "0 0 12px rgba(255, 215, 0, 0.6), 0 0 4px rgba(255, 215, 0, 0.4)",
+          }}
         >
           Tap to reveal
         </p>

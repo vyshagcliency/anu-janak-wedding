@@ -38,7 +38,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     id: "hashtag",
     question: "What's the wedding hashtag?",
     answer:
-      "It's #AnuWedsJanak! Use it on all your photos and stories so we can find and treasure every captured moment.",
+      "It's #JaAnKeDilSe! Use it on all your photos and stories so we can find and treasure every captured moment.",
     category: "general",
   },
 ];

@@ -94,6 +94,7 @@ export const EVENTS: WeddingEvent[] = [
       {
         name: "Thaalikettu",
         venue: "Sree Krishna Temple, Guruvayur",
+        venueMapUrl: "https://share.google/ukLv2RvssSETwUU6V",
         time: "7:30 AM – 8:00 AM",
       },
       {

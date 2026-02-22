@@ -18,7 +18,7 @@ export default function StartJourneyCTA({ onStart }: Props) {
   return (
     <motion.button
       onClick={handleClick}
-      className="relative rounded-full border-2 px-8 py-3 text-sm uppercase tracking-[0.2em] transition-colors sm:px-10 sm:py-4 sm:text-base"
+      className="relative flex flex-col items-center gap-1 rounded-full border-2 px-8 py-3 text-sm uppercase tracking-[0.2em] transition-colors sm:px-10 sm:py-4 sm:text-base"
       style={{
         borderColor: "var(--gold)",
         color: "var(--gold)",
@@ -47,7 +47,13 @@ export default function StartJourneyCTA({ onStart }: Props) {
         },
       }}
     >
-      How We Got Here!
+      <span>How We Got Here!</span>
+      <span
+        className="text-[10px] tracking-wider"
+        style={{ opacity: 0.8, fontWeight: "300" }}
+      >
+        Tap here
+      </span>
     </motion.button>
   );
 }
