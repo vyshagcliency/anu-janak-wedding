@@ -198,7 +198,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
           <p
             style={{
               fontFamily: "var(--font-body), sans-serif",
-              fontSize: "0.65rem",
+              fontSize: "0.75rem",
               letterSpacing: "0.18em",
               textTransform: "uppercase",
               color: "rgba(248,244,238,0.7)",
@@ -215,7 +215,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
                   <p
                     style={{
                       fontFamily: "var(--font-body), sans-serif",
-                      fontSize: "0.62rem",
+                      fontSize: "0.72rem",
                       fontWeight: 500,
                       letterSpacing: "0.1em",
                       color: "#F8F4EE",
@@ -227,7 +227,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
                   <p
                     style={{
                       fontFamily: "var(--font-body), sans-serif",
-                      fontSize: "0.6rem",
+                      fontSize: "0.72rem",
                       letterSpacing: "0.04em",
                       color: "rgba(248,244,238,0.55)",
                       marginBottom: 3,
@@ -238,7 +238,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
                   <p
                     style={{
                       fontFamily: "var(--font-body), sans-serif",
-                      fontSize: "0.6rem",
+                      fontSize: "0.7rem",
                       letterSpacing: "0.14em",
                       color: accentColor,
                       marginBottom: sub.venueMapUrl ? 4 : 0,
@@ -276,7 +276,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
               <p
                 style={{
                   fontFamily: "var(--font-body), sans-serif",
-                  fontSize: "0.65rem",
+                  fontSize: "0.75rem",
                   letterSpacing: "0.14em",
                   color: accentColor,
                   marginBottom: 20,
@@ -288,7 +288,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
               <p
                 style={{
                   fontFamily: "var(--font-body), sans-serif",
-                  fontSize: "0.7rem",
+                  fontSize: "0.82rem",
                   letterSpacing: "0.04em",
                   color: "rgba(248,244,238,0.55)",
                   marginBottom: 4,
@@ -532,7 +532,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
                   <p
                     style={{
                       fontFamily: "var(--font-body), sans-serif",
-                      fontSize: "0.58rem",
+                      fontSize: "0.7rem",
                       fontWeight: 500,
                       letterSpacing: "0.08em",
                       color: "#F8F4EE",
@@ -544,7 +544,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
                   <p
                     style={{
                       fontFamily: "var(--font-body), sans-serif",
-                      fontSize: "0.55rem",
+                      fontSize: "0.68rem",
                       letterSpacing: "0.1em",
                       color: accentColor,
                     }}
@@ -578,7 +578,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
               <p
                 style={{
                   fontFamily: "var(--font-body), sans-serif",
-                  fontSize: "0.62rem",
+                  fontSize: "0.75rem",
                   letterSpacing: "0.12em",
                   color: accentColor,
                   marginBottom: 4,
