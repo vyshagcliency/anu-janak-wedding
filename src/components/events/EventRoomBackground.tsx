@@ -8,9 +8,9 @@ const ROOM_STYLES: Record<
 > = {
   sunset: {
     background:
-      "radial-gradient(ellipse at 70% 40%, #7A4A12 0%, #4A2800 35%, #1C0D00 70%, #0D0500 100%)",
+      "radial-gradient(ellipse at 70% 40%, #8B4500 0%, #6B3200 35%, #3A1A00 70%, #1A0C00 100%)",
     vignette:
-      "radial-gradient(ellipse at center, transparent 30%, rgba(10,4,0,0.65) 100%)",
+      "radial-gradient(ellipse at center, transparent 30%, rgba(20,8,0,0.6) 100%)",
   },
   night: {
     background:
@@ -20,15 +20,15 @@ const ROOM_STYLES: Record<
   },
   morning: {
     background:
-      "radial-gradient(ellipse at 50% 20%, #7A5515 0%, #4A3008 30%, #261600 60%, #100800 100%)",
+      "radial-gradient(ellipse at 50% 20%, #8C6B4A 0%, #6B4A30 30%, #3D2A18 60%, #1E140C 100%)",
     vignette:
-      "radial-gradient(ellipse at center, transparent 30%, rgba(10,5,0,0.65) 100%)",
+      "radial-gradient(ellipse at center, transparent 30%, rgba(15,8,4,0.55) 100%)",
   },
   evening: {
     background:
-      "radial-gradient(ellipse at 30% 60%, #1A1210 0%, #0D0A08 40%, #050304 70%, #000000 100%)",
+      "radial-gradient(ellipse at 30% 60%, #5A0A1E 0%, #3A0614 40%, #1E030A 70%, #0A0104 100%)",
     vignette:
-      "radial-gradient(ellipse at center, transparent 25%, rgba(0,0,0,0.75) 100%)",
+      "radial-gradient(ellipse at center, transparent 25%, rgba(10,1,4,0.7) 100%)",
   },
 };
 
@@ -97,7 +97,7 @@ export default function EventRoomBackground({
             height: "45vw",
             borderRadius: "50%",
             background:
-              "radial-gradient(circle, rgba(255,160,50,0.12) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(255,140,0,0.18) 0%, transparent 70%)",
           }}
         />
       )}
@@ -126,7 +126,7 @@ export default function EventRoomBackground({
             height: "60vw",
             borderRadius: "50%",
             background:
-              "radial-gradient(circle, rgba(210,160,60,0.18) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(242,208,181,0.2) 0%, transparent 70%)",
           }}
         />
       )}
@@ -140,7 +140,7 @@ export default function EventRoomBackground({
             height: "40vw",
             borderRadius: "50%",
             background:
-              "radial-gradient(circle, rgba(200,165,80,0.09) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(128,0,32,0.15) 0%, transparent 70%)",
           }}
         />
       )}
