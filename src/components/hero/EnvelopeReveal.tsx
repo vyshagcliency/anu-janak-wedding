@@ -230,11 +230,47 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
   // Shared card content for both the main card and clip-path halves
   const cardContent = (
     <>
+      {/* Envelope flap — decorative V at top */}
+      <div
+        className="absolute inset-x-0 top-0"
+        style={{
+          height: "28%",
+          background:
+            "linear-gradient(175deg, #F7F3EE 0%, #EDE8E1 100%)",
+          clipPath: "polygon(0 0, 50% 100%, 100% 0)",
+          zIndex: 1,
+        }}
+        aria-hidden="true"
+      >
+        {/* Flap fold shadow */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-6"
+          style={{
+            background: "linear-gradient(to top, rgba(0,0,0,0.04), transparent)",
+            clipPath: "polygon(0 100%, 50% 0%, 100% 100%)",
+          }}
+        />
+      </div>
+
+      {/* Flap inner liner — muted blush/rose accent visible behind flap */}
+      <div
+        className="absolute inset-x-0 top-0"
+        style={{
+          height: "26%",
+          background:
+            "linear-gradient(180deg, #E8D5C4 0%, #DECCBB 60%, #E8D5C4 100%)",
+          clipPath: "polygon(0 0, 50% 100%, 100% 0)",
+          zIndex: 0,
+        }}
+        aria-hidden="true"
+      />
+
       {/* Outer gold border — SVG rect drawn with strokeDashoffset */}
       <svg
         className="absolute inset-0 h-full w-full"
         viewBox="0 0 400 533"
         preserveAspectRatio="none"
+        style={{ zIndex: 2 }}
         aria-hidden="true"
       >
         <rect
@@ -257,14 +293,15 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
         className="absolute rounded-sm"
         style={{
           inset: "12px",
-          border: "0.5px solid var(--gold)",
+          border: "0.5px solid rgba(201, 169, 110, 0.4)",
           opacity: 0,
           pointerEvents: "none",
+          zIndex: 2,
         }}
       />
 
       {/* Content stack */}
-      <div className="relative z-10 flex h-full flex-col items-center justify-center gap-4 px-8 py-10">
+      <div className="relative flex h-full flex-col items-center justify-center gap-4 px-8 py-10" style={{ zIndex: 3 }}>
         {/* Ornamental flourish */}
         <svg
           ref={ornamentRef}
@@ -294,7 +331,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           ref={invitedTextRef}
           className="text-center text-[10px] uppercase tracking-[0.25em]"
           style={{
-            color: "var(--gold-light)",
+            color: "var(--gold)",
             fontFamily: "var(--font-body), sans-serif",
             opacity: 0,
           }}
@@ -330,7 +367,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
             y="64"
             fontFamily="var(--font-playfair), serif"
             fontSize="14"
-            fill="var(--gold-light)"
+            fill="var(--gold)"
             textAnchor="middle"
             style={{ opacity: 0 }}
           >
@@ -366,7 +403,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           ref={tapPromptRef}
           className="tap-prompt-pulse text-center text-[10px] uppercase tracking-[0.2em]"
           style={{
-            color: "var(--gold-light)",
+            color: "var(--gold)",
             fontFamily: "var(--font-body), sans-serif",
             opacity: 0,
           }}
@@ -419,7 +456,8 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           tabIndex={0}
           className="invitation-card-glow absolute inset-0 cursor-pointer overflow-hidden rounded-sm"
           style={{
-            background: "#0D0A08",
+            background: "linear-gradient(175deg, #FFFDF9 0%, #FAF7F2 40%, #F5F0E8 100%)",
+            boxShadow: "0 8px 40px rgba(0,0,0,0.18), 0 2px 10px rgba(0,0,0,0.08)",
             opacity: 0,
           }}
         >
@@ -431,7 +469,8 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           ref={leftHalfRef}
           className="pointer-events-none absolute inset-0 overflow-hidden rounded-sm"
           style={{
-            background: "#0D0A08",
+            background: "linear-gradient(175deg, #FFFDF9 0%, #FAF7F2 40%, #F5F0E8 100%)",
+            boxShadow: "0 8px 40px rgba(0,0,0,0.18), 0 2px 10px rgba(0,0,0,0.08)",
             clipPath: "inset(0 50% 0 0)",
             visibility: "hidden",
             opacity: 0,
@@ -446,7 +485,8 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           ref={rightHalfRef}
           className="pointer-events-none absolute inset-0 overflow-hidden rounded-sm"
           style={{
-            background: "#0D0A08",
+            background: "linear-gradient(175deg, #FFFDF9 0%, #FAF7F2 40%, #F5F0E8 100%)",
+            boxShadow: "0 8px 40px rgba(0,0,0,0.18), 0 2px 10px rgba(0,0,0,0.08)",
             clipPath: "inset(0 0 0 50%)",
             visibility: "hidden",
             opacity: 0,

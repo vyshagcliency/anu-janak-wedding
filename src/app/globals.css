@@ -341,7 +341,7 @@ body {
   transition: box-shadow 0.3s ease;
 }
 .invitation-card-glow:hover {
-  box-shadow: 0 0 40px rgba(201, 169, 110, 0.08);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.22), 0 0 50px rgba(201, 169, 110, 0.1);
 }
 @media (prefers-reduced-motion: reduce) {
   .tap-prompt-pulse { animation: none; opacity: 0.5; }
