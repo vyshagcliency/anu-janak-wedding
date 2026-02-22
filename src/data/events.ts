@@ -40,7 +40,7 @@ export const EVENTS: WeddingEvent[] = [
       "/images/events/sundowner/photo5.jpg",
       "/images/events/sundowner/photo6.jpg",
     ],
-    attireImages: ["/images/events/attire/sundowner-ref.webp"],
+    attireImages: ["/images/events/attire/sundowner-ref.png"],
   },
   {
     id: "sangeet",
@@ -68,7 +68,7 @@ export const EVENTS: WeddingEvent[] = [
       "/images/events/sangeet/photo3.jpg",
       "/images/events/sangeet/photo4.jpg",
     ],
-    attireImages: ["/images/events/attire/sangeet-ref.webp"],
+    attireImages: ["/images/events/attire/sangeet-ref.png"],
   },
   {
     id: "wedding",
@@ -88,7 +88,7 @@ export const EVENTS: WeddingEvent[] = [
       "/images/events/wedding/photo3.jpg",
       "/images/events/wedding/photo4.jpg",
     ],
-    attireImages: ["/images/events/attire/wedding-ref.webp"],
+    attireImages: ["/images/events/attire/wedding-ref.jpeg"],
   },
   {
     id: "reception",
@@ -108,6 +108,6 @@ export const EVENTS: WeddingEvent[] = [
       "/images/events/reception/photo3.jpg",
       "/images/events/reception/photo4.jpg",
     ],
-    attireImages: ["/images/events/attire/reception-ref.webp"],
+    attireImages: ["/images/events/attire/reception-ref.png"],
   },
 ];
