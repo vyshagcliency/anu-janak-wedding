@@ -175,7 +175,7 @@ export default function InvitationCTA() {
           margin: "0 auto 16px",
         }}
       >
-        Four days of joy, music, and togetherness await —
+        Three days of joy, music, and togetherness await —
         <br />
         from the warmth of a Sundowner to the grace of the
         <br />

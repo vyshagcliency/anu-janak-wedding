@@ -21,7 +21,7 @@ export const FAQ_ITEMS: FAQItem[] = [
       "Festive Ethnic! Embrace bold, bright colors — think Pink, Red, Violet, Orange, Green, and Blue. It's a vibrant carnival-themed evening, so go all out with color.",
     category: "attire",
     attireImages: [
-      "/images/events/attire/sundowner-ref.webp",
+      "/images/events/attire/sundowner-ref.png",
     ],
   },
   {
@@ -31,7 +31,14 @@ export const FAQ_ITEMS: FAQItem[] = [
       "Sparkle and Shine — Cocktail Attire (Indo-Western Chic). Embrace dark, elegant hues like Dark Blue, Dark Green, Black, Maroon, Golden, Purple, or Silver. Think glamorous and dazzling.",
     category: "attire",
     attireImages: [
-      "/images/events/attire/sangeet-ref.webp",
+      "/images/events/attire/sangeet-ref.png",
     ],
+  },
+  {
+    id: "hashtag",
+    question: "What's the wedding hashtag?",
+    answer:
+      "It's #AnuWedsJanak! Use it on all your photos and stories so we can find and treasure every captured moment.",
+    category: "general",
   },
 ];
