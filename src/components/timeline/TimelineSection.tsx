@@ -39,7 +39,7 @@ const STOPS = [
     title: "Friendship to Love",
     subtitle: "Chapter 3",
     description:
-      "Somewhere between walks and conversations, friendship quietly turned into something more. They just knew.",
+      "2012 is when something shifted. We stopped being just friends, though neither of us could tell you exactly when or how.",
     imageSrc: "/images/timeline/img2.jpeg",
     imageAlt: "Walking together on a nature path",
     position: 42,
@@ -131,8 +131,10 @@ export default function TimelineSection() {
     if (mobile) {
       let progress = 0;
       let startX = 0;
+      let startY = 0;
       let startProgress = 0;
-      let isSwiping = false;
+      // null = undecided, "horizontal" = we handle it, "vertical" = let browser handle
+      let swipeDirection: "horizontal" | "vertical" | null = null;
 
       // Snap points for each chapter (0, 0.2, 0.4, 0.6, 0.8, 1.0)
       const snapPoints = [0, 0.2, 0.4, 0.6, 0.8, 1.0];
@@ -164,7 +166,6 @@ export default function TimelineSection() {
           duration: 0.4,
           ease: "power2.out",
           onUpdate: () => {
-            // Derive progress from current xPercent
             const current = gsap.getProperty(track, "xPercent") as number;
             progress = -(current / 83.33);
             setBusProgress(progress);
@@ -176,26 +177,46 @@ export default function TimelineSection() {
         });
       };
 
+      // Hide swipe cue after first swipe
+      const cue = section.querySelector(".swipe-cue") as HTMLElement;
+
       const onTouchStart = (e: TouchEvent) => {
         startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
         startProgress = progress;
-        isSwiping = true;
+        swipeDirection = null;
         gsap.killTweensOf(track);
       };
 
       const onTouchMove = (e: TouchEvent) => {
-        if (!isSwiping) return;
         const dx = e.touches[0].clientX - startX;
-        // Swipe left = positive progress, swipe right = negative
-        // Scale: full screen swipe = 0.25 progress (one chapter)
+        const dy = e.touches[0].clientY - startY;
+
+        // Decide direction on first significant movement
+        if (swipeDirection === null) {
+          const absDx = Math.abs(dx);
+          const absDy = Math.abs(dy);
+          if (absDx < 8 && absDy < 8) return; // too small to decide
+          swipeDirection = absDx > absDy ? "horizontal" : "vertical";
+        }
+
+        // Vertical swipe — let the browser handle page scroll
+        if (swipeDirection === "vertical") return;
+
+        // Horizontal swipe — we drive the timeline
+        e.preventDefault();
         const delta = -dx / (window.innerWidth * 0.8);
         applyProgress(startProgress + delta);
-        e.preventDefault();
+
+        // Hide cue on first horizontal swipe
+        if (cue) {
+          cue.style.opacity = "0";
+          cue.style.transition = "opacity 0.3s";
+        }
       };
 
       const onTouchEnd = () => {
-        if (!isSwiping) return;
-        isSwiping = false;
+        if (swipeDirection !== "horizontal") return;
         const target = snapToNearest(progress);
         animateToSnap(target);
       };
@@ -355,6 +376,53 @@ export default function TimelineSection() {
             onNext={i === STOPS.length - 1 ? handleNext : undefined}
           />
         ))}
+      </div>
+
+      {/* Mobile swipe cue — positioned over chapter 1 area */}
+      <div
+        className="swipe-cue"
+        style={{
+          position: "absolute",
+          bottom: "6vh",
+          left: "50%",
+          transform: "translateX(-50%)",
+          textAlign: "center",
+          pointerEvents: "none",
+          zIndex: 30,
+        }}
+      >
+        <p
+          style={{
+            fontFamily: "var(--font-body), sans-serif",
+            fontSize: "0.7rem",
+            letterSpacing: "0.15em",
+            color: "rgba(100,80,60,0.6)",
+            whiteSpace: "nowrap",
+          }}
+        >
+          swipe to see our story
+        </p>
+        <svg
+          width="32"
+          height="16"
+          viewBox="0 0 32 16"
+          style={{ margin: "6px auto 0", opacity: 0.4 }}
+        >
+          <path
+            d="M4 8 L16 8 M12 4 L16 8 L12 12"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            fill="none"
+            style={{ color: "rgba(100,80,60,0.6)" }}
+          />
+        </svg>
+        <style jsx>{`
+          @media (min-width: 769px) {
+            .swipe-cue {
+              display: none !important;
+            }
+          }
+        `}</style>
       </div>
 
       {/* Ch6 celebration — rendered outside the scrolling track so it stays fixed */}
