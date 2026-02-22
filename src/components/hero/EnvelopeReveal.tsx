@@ -234,7 +234,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
       <div
         className="absolute inset-x-0 top-0"
         style={{
-          height: "28%",
+          height: "24%",
           background:
             "linear-gradient(175deg, #F7F3EE 0%, #EDE8E1 100%)",
           clipPath: "polygon(0 0, 50% 100%, 100% 0)",
@@ -256,7 +256,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
       <div
         className="absolute inset-x-0 top-0"
         style={{
-          height: "26%",
+          height: "22%",
           background:
             "linear-gradient(180deg, #E8D5C4 0%, #DECCBB 60%, #E8D5C4 100%)",
           clipPath: "polygon(0 0, 50% 100%, 100% 0)",
@@ -265,10 +265,22 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
         aria-hidden="true"
       />
 
+      {/* Paper grain texture */}
+      <div
+        className="absolute inset-0 opacity-30"
+        style={{
+          backgroundImage:
+            `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E")`,
+          backgroundSize: "200px 200px",
+          zIndex: 1,
+        }}
+        aria-hidden="true"
+      />
+
       {/* Outer gold border — SVG rect drawn with strokeDashoffset */}
       <svg
         className="absolute inset-0 h-full w-full"
-        viewBox="0 0 400 533"
+        viewBox="0 0 440 528"
         preserveAspectRatio="none"
         style={{ zIndex: 2 }}
         aria-hidden="true"
@@ -277,14 +289,28 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           ref={outerBorderRef}
           x="0.5"
           y="0.5"
-          width="399"
-          height="532"
+          width="439"
+          height="527"
           rx="4"
           ry="4"
           fill="none"
           stroke="var(--gold)"
           strokeWidth="1"
         />
+        {/* Corner flourishes — top-left */}
+        <g stroke="var(--gold)" strokeWidth="0.5" fill="none" opacity="0.6">
+          <path d="M 20 40 Q 20 20 40 20" />
+          <path d="M 16 48 Q 16 16 48 16" />
+          {/* top-right */}
+          <path d="M 400 20 Q 420 20 420 40" />
+          <path d="M 392 16 Q 424 16 424 48" />
+          {/* bottom-left */}
+          <path d="M 40 508 Q 20 508 20 488" />
+          <path d="M 48 512 Q 16 512 16 480" />
+          {/* bottom-right */}
+          <path d="M 420 488 Q 420 508 400 508" />
+          <path d="M 424 480 Q 424 512 392 512" />
+        </g>
       </svg>
 
       {/* Inner border */}
@@ -292,8 +318,8 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
         ref={innerBorderRef}
         className="absolute rounded-sm"
         style={{
-          inset: "12px",
-          border: "0.5px solid rgba(201, 169, 110, 0.4)",
+          inset: "14px",
+          border: "0.5px solid rgba(201, 169, 110, 0.35)",
           opacity: 0,
           pointerEvents: "none",
           zIndex: 2,
@@ -305,25 +331,29 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
         {/* Ornamental flourish */}
         <svg
           ref={ornamentRef}
-          width="120"
+          width="160"
           height="16"
-          viewBox="0 0 120 16"
+          viewBox="0 0 160 16"
           fill="none"
           aria-hidden="true"
           style={{ opacity: 0 }}
         >
-          <line x1="0" y1="8" x2="48" y2="8" stroke="var(--gold)" strokeWidth="0.5" />
-          <line x1="72" y1="8" x2="120" y2="8" stroke="var(--gold)" strokeWidth="0.5" />
+          <line x1="0" y1="8" x2="62" y2="8" stroke="var(--gold)" strokeWidth="0.5" />
+          <line x1="98" y1="8" x2="160" y2="8" stroke="var(--gold)" strokeWidth="0.5" />
+          {/* Center diamond */}
           <rect
-            x="54"
+            x="74"
             y="2"
             width="12"
             height="12"
-            transform="rotate(45 60 8)"
+            transform="rotate(45 80 8)"
             fill="none"
             stroke="var(--gold)"
             strokeWidth="0.5"
           />
+          {/* Small dots flanking diamond */}
+          <circle cx="66" cy="8" r="1" fill="var(--gold)" opacity="0.5" />
+          <circle cx="94" cy="8" r="1" fill="var(--gold)" opacity="0.5" />
         </svg>
 
         {/* "You are invited to celebrate" */}
@@ -389,7 +419,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
         {/* Gold horizontal rule */}
         <div
           ref={ruleRef}
-          className="h-px w-32"
+          className="h-px w-40"
           style={{
             background:
               "linear-gradient(90deg, transparent 0%, var(--gold) 20%, var(--gold-light) 50%, var(--gold) 80%, transparent 100%)",
@@ -440,7 +470,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
       </div>
 
       {/* Card wrapper — centered */}
-      <div className="relative w-[85vw] max-w-[400px]" style={{ aspectRatio: "3 / 4" }}>
+      <div className="relative w-[90vw] max-w-[440px]" style={{ aspectRatio: "5 / 6" }}>
         {/* Main visible card */}
         <div
           ref={cardRef}
