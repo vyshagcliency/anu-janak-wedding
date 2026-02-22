@@ -188,6 +188,18 @@ export default function LuxuryEventsSection() {
         >
           A look at how the days unfold.
         </p>
+        <p
+          className="hashtag-shimmer"
+          style={{
+            fontFamily: "var(--font-playfair), serif",
+            fontSize: "clamp(1.2rem, 3vw, 1.8rem)",
+            color: "#C9A96E",
+            letterSpacing: "0.02em",
+            marginTop: 20,
+          }}
+        >
+          #JaAnKeDilSe
+        </p>
       </div>
 
       {/* Individual event galleries */}

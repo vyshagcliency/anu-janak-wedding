@@ -65,24 +65,34 @@ export default function FAQItem({ item, isOpen, onToggle }: Props) {
               </p>
 
               {item.attireImages && item.attireImages.length > 0 && (
-                <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                  {item.attireImages.map((src) => (
-                    <div
-                      key={src}
-                      className="relative flex aspect-[3/4] items-center justify-center overflow-hidden rounded-xl"
-                      style={{
-                        background: "rgba(201,169,110,0.08)",
-                        border: "1px dashed rgba(201,169,110,0.3)",
-                      }}
-                    >
-                      <p
-                        className="text-center text-xs"
-                        style={{ color: "rgba(248,244,238,0.4)" }}
+                <div className="mt-4">
+                  <p
+                    className="mb-3 text-xs uppercase tracking-wider"
+                    style={{ color: "rgba(201,169,110,0.7)" }}
+                  >
+                    Style Guide
+                  </p>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    {item.attireImages.map((src) => (
+                      <div
+                        key={src}
+                        className="relative aspect-[3/4] overflow-hidden rounded-lg"
+                        style={{
+                          border: "1px solid rgba(201,169,110,0.2)",
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+                        }}
                       >
-                        Attire reference
-                      </p>
-                    </div>
-                  ))}
+                        <Image
+                          src={src}
+                          alt="Attire style guide"
+                          fill
+                          sizes="(max-width: 640px) 50vw, 33vw"
+                          style={{ objectFit: "cover" }}
+                          className="transition-transform hover:scale-105"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

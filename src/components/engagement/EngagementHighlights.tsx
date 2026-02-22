@@ -96,7 +96,7 @@ export default function EngagementHighlights() {
             opacity: 0.8,
           }}
         >
-          Our Engagement
+          Our
         </p>
         <h2
           style={{
@@ -179,7 +179,7 @@ export default function EngagementHighlights() {
             marginTop: 16,
           }}
         >
-          Scroll to watch &middot; Tap for sound
+          Tap for sound
         </p>
       </div>
 

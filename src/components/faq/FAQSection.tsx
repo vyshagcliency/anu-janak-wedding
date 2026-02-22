@@ -73,21 +73,6 @@ export default function FAQSection() {
         }}
       />
       <div className="relative mx-auto max-w-2xl px-5">
-        {/* Label */}
-        <p
-          style={{
-            textAlign: "center",
-            fontFamily: "var(--font-body), sans-serif",
-            fontSize: "0.55rem",
-            letterSpacing: "0.38em",
-            textTransform: "uppercase",
-            color: "#C9A96E",
-            marginBottom: 16,
-            opacity: 0.85,
-          }}
-        >
-          Questions
-        </p>
         <h2
           ref={headingRef}
           className="mb-10 text-center text-3xl sm:text-4xl"
