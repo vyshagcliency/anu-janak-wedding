@@ -70,7 +70,7 @@ const STOPS = [
     subtitle: "Chapter 6",
     description:
       "All of this brings us to one big day. Come celebrate with us on April 26, 2026.",
-    imageSrc: "/images/timeline/chapter_6img",
+    imageSrc: "/images/timeline/chapter_6img.jpeg",
     imageAlt: "Couple at the floral wedding entrance",
     position: 92,
     revealType: "grand" as const,

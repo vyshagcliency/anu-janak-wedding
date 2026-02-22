@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 const PHOTOS = [
   "/images/engagement/img1.jpeg",
   "/images/engagement/img3.jpeg",
-  "/images/engagement/wedding_high",
+  "/images/engagement/wedding_high.jpeg",
 ];
 
 export default function EngagementHighlights() {
