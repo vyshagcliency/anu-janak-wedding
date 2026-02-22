@@ -19,6 +19,8 @@ const ACCENT_COLORS: Record<string, string> = {
   evening: "#C9A96E",
 };
 
+const ROMAN_NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"];
+
 interface Props {
   event: WeddingEvent;
   index: number;
@@ -151,7 +153,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
               opacity: 0.8,
             }}
           >
-            0{index + 1} &mdash;{" "}
+            {ROMAN_NUMERALS[index]} &mdash;{" "}
             {event.timeOfDay === "sunset"
               ? "Afternoon"
               : event.timeOfDay === "morning"
@@ -511,7 +513,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
               opacity: 0.9,
             }}
           >
-            0{index + 1} &mdash; {event.date}
+            {ROMAN_NUMERALS[index]} &mdash; {event.date}
           </p>
           <h2
             style={{
