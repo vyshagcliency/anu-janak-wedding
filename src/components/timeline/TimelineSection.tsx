@@ -120,7 +120,6 @@ export default function TimelineSection() {
   const girlProgress = getStopProgress(busProgress, 0.0, 0.18);
   const boyProgress = getStopProgress(busProgress, 0.18, 0.38);
 
-  // Single useEffect — checks window width directly to avoid race conditions
   useEffect(() => {
     if (!sectionRef.current || !trackRef.current) return;
 
@@ -128,17 +127,92 @@ export default function TimelineSection() {
     const track = trackRef.current;
     const mobile = window.innerWidth <= 768;
 
-    // ── MOBILE: native horizontal scroll ──
+    // ── MOBILE: touch-driven horizontal movement ──
     if (mobile) {
-      const handleScroll = () => {
-        const scrollLeft = section.scrollLeft;
-        const maxScroll = section.scrollWidth - section.clientWidth;
-        const progress = maxScroll > 0 ? scrollLeft / maxScroll : 0;
+      let progress = 0;
+      let startX = 0;
+      let startProgress = 0;
+      let isSwiping = false;
+
+      // Snap points for each chapter (0, 0.2, 0.4, 0.6, 0.8, 1.0)
+      const snapPoints = [0, 0.2, 0.4, 0.6, 0.8, 1.0];
+
+      const snapToNearest = (p: number) => {
+        let closest = snapPoints[0];
+        let minDist = Math.abs(p - closest);
+        for (const sp of snapPoints) {
+          const dist = Math.abs(p - sp);
+          if (dist < minDist) {
+            minDist = dist;
+            closest = sp;
+          }
+        }
+        return closest;
+      };
+
+      const applyProgress = (p: number) => {
+        progress = Math.max(0, Math.min(1, p));
+        const xPct = -(progress * 83.33);
+        gsap.set(track, { xPercent: xPct });
         setBusProgress(progress);
       };
 
-      section.addEventListener("scroll", handleScroll);
-      return () => section.removeEventListener("scroll", handleScroll);
+      const animateToSnap = (target: number) => {
+        const xPct = -(target * 83.33);
+        gsap.to(track, {
+          xPercent: xPct,
+          duration: 0.4,
+          ease: "power2.out",
+          onUpdate: () => {
+            // Derive progress from current xPercent
+            const current = gsap.getProperty(track, "xPercent") as number;
+            progress = -(current / 83.33);
+            setBusProgress(progress);
+          },
+          onComplete: () => {
+            progress = target;
+            setBusProgress(target);
+          },
+        });
+      };
+
+      const onTouchStart = (e: TouchEvent) => {
+        startX = e.touches[0].clientX;
+        startProgress = progress;
+        isSwiping = true;
+        gsap.killTweensOf(track);
+      };
+
+      const onTouchMove = (e: TouchEvent) => {
+        if (!isSwiping) return;
+        const dx = e.touches[0].clientX - startX;
+        // Swipe left = positive progress, swipe right = negative
+        // Scale: full screen swipe = 0.25 progress (one chapter)
+        const delta = -dx / (window.innerWidth * 0.8);
+        applyProgress(startProgress + delta);
+        e.preventDefault();
+      };
+
+      const onTouchEnd = () => {
+        if (!isSwiping) return;
+        isSwiping = false;
+        const target = snapToNearest(progress);
+        animateToSnap(target);
+      };
+
+      section.addEventListener("touchstart", onTouchStart, { passive: true });
+      section.addEventListener("touchmove", onTouchMove, { passive: false });
+      section.addEventListener("touchend", onTouchEnd, { passive: true });
+
+      // Set initial position
+      applyProgress(0);
+
+      return () => {
+        section.removeEventListener("touchstart", onTouchStart);
+        section.removeEventListener("touchmove", onTouchMove);
+        section.removeEventListener("touchend", onTouchEnd);
+        gsap.killTweensOf(track);
+      };
     }
 
     // ── DESKTOP: vertical scroll with GSAP ScrollTrigger ──
@@ -225,86 +299,66 @@ export default function TimelineSection() {
   }, []);
 
   return (
-    <>
-      {/* CSS media query ensures correct overflow before JS hydrates */}
-      <style jsx global>{`
-        .timeline-mobile-scroll {
-          height: 100vh;
-          background: var(--ivory);
-          overflow: hidden;
-        }
-        @media (max-width: 768px) {
-          .timeline-mobile-scroll {
-            overflow-x: scroll !important;
-            overflow-y: hidden !important;
-            -webkit-overflow-scrolling: touch;
-          }
-          .timeline-mobile-scroll::-webkit-scrollbar {
-            display: none;
-          }
-          .timeline-mobile-scroll {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-          }
-        }
-      `}</style>
-
-      <section
-        ref={sectionRef}
-        className="timeline-pin-spacer timeline-mobile-scroll relative w-full"
+    <section
+      ref={sectionRef}
+      className="timeline-pin-spacer relative w-full overflow-hidden"
+      style={{
+        height: "100vh",
+        background: "var(--ivory)",
+        touchAction: "pan-y",
+      }}
+    >
+      {/* The wide horizontal track */}
+      <div
+        ref={trackRef}
+        className="relative flex h-full"
+        style={{ width: "600vw" }}
       >
-        {/* The wide horizontal track */}
-        <div
-          ref={trackRef}
-          className="relative flex h-full"
-          style={{ width: "600vw" }}
-        >
-          {/* Background layers */}
-          <div className="absolute inset-0">
-            <ParallaxLayers />
-            <RoadsideScenery />
-            <BusRoad />
-          </div>
-
-          {/* Boarding Figures */}
-          {girlProgress > 0 && girlProgress < 1 && (
-            <BoardingFigure
-              type="girl"
-              stopProgress={girlProgress}
-              position={8}
-            />
-          )}
-          {boyProgress > 0 && boyProgress < 1 && (
-            <BoardingFigure
-              type="boy"
-              stopProgress={boyProgress}
-              position={25}
-            />
-          )}
-
-          {/* School Van (bus / plane) */}
-          <SchoolVan progress={busProgress} vehicleState={vehicleState} />
-
-          {/* Timeline stops */}
-          {STOPS.map((stop, i) => (
-            <TimelineStop
-              key={i}
-              index={i + 1}
-              title={stop.title}
-              subtitle={stop.subtitle}
-              description={stop.description}
-              imageSrc={stop.imageSrc}
-              imageAlt={stop.imageAlt}
-              position={stop.position}
-              revealType={stop.revealType}
-              onNext={i === STOPS.length - 1 ? handleNext : undefined}
-            />
-          ))}
+        {/* Background layers */}
+        <div className="absolute inset-0">
+          <ParallaxLayers />
+          <RoadsideScenery />
+          <BusRoad />
         </div>
 
-        {/* Ch6 celebration — rendered outside the scrolling track so it stays fixed */}
-        <CelebrationBurst active={atFinale} />
-      </section>
-    </>
+        {/* Boarding Figures */}
+        {girlProgress > 0 && girlProgress < 1 && (
+          <BoardingFigure
+            type="girl"
+            stopProgress={girlProgress}
+            position={8}
+          />
+        )}
+        {boyProgress > 0 && boyProgress < 1 && (
+          <BoardingFigure
+            type="boy"
+            stopProgress={boyProgress}
+            position={25}
+          />
+        )}
+
+        {/* School Van (bus / plane) */}
+        <SchoolVan progress={busProgress} vehicleState={vehicleState} />
+
+        {/* Timeline stops */}
+        {STOPS.map((stop, i) => (
+          <TimelineStop
+            key={i}
+            index={i + 1}
+            title={stop.title}
+            subtitle={stop.subtitle}
+            description={stop.description}
+            imageSrc={stop.imageSrc}
+            imageAlt={stop.imageAlt}
+            position={stop.position}
+            revealType={stop.revealType}
+            onNext={i === STOPS.length - 1 ? handleNext : undefined}
+          />
+        ))}
+      </div>
+
+      {/* Ch6 celebration — rendered outside the scrolling track so it stays fixed */}
+      <CelebrationBurst active={atFinale} />
+    </section>
   );
 }
