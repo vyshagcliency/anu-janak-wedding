@@ -1,3 +1,10 @@
+export interface SubEvent {
+  name: string;
+  venue: string;
+  venueMapUrl?: string;
+  time: string;
+}
+
 export interface WeddingEvent {
   id: string;
   title: string;
@@ -12,6 +19,7 @@ export interface WeddingEvent {
   timeOfDay: "sunset" | "night" | "morning" | "evening";
   photos: string[];
   attireImages: string[];
+  subEvents?: SubEvent[];
 }
 
 export const EVENTS: WeddingEvent[] = [
@@ -75,13 +83,26 @@ export const EVENTS: WeddingEvent[] = [
     title: "Wedding Ceremony",
     subtitle: "The sacred union",
     date: "Sunday, April 26, 2026",
-    time: "11:00 AM onwards",
-    venue: "Gokulam Park, Guruvayur",
-    venueAddress: "Gokulam Park, Guruvayur",
+    time: "7:30 AM onwards",
+    venue: "Gokulam Park - East Nada, Guruvayur",
+    venueAddress: "Gokulam Park - East Nada, Guruvayur",
     venueMapUrl: "https://share.google/Q8iyUCIuGkN3TrjnZ",
     dressCode: "Traditional Attire — Colors of your choice",
     colors: [],
     timeOfDay: "morning",
+    subEvents: [
+      {
+        name: "Thaalikettu",
+        venue: "Sree Krishna Temple, Guruvayur",
+        time: "7:30 AM – 8:00 AM",
+      },
+      {
+        name: "Wedding Ceremony & Lunch thereafter",
+        venue: "Gokulam Park - East Nada, Guruvayur",
+        venueMapUrl: "https://share.google/Q8iyUCIuGkN3TrjnZ",
+        time: "11:00 AM onwards",
+      },
+    ],
     photos: [
       "/images/events/wedding/photo1.jpg",
       "/images/events/wedding/photo2.jpg",

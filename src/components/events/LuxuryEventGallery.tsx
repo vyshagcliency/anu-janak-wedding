@@ -207,50 +207,118 @@ export default function LuxuryEventGallery({ event, index }: Props) {
           >
             {event.date}
           </p>
-          <p
-            style={{
-              fontFamily: "var(--font-body), sans-serif",
-              fontSize: "0.65rem",
-              letterSpacing: "0.14em",
-              color: accentColor,
-              marginBottom: 20,
-            }}
-          >
-            {event.time}
-          </p>
 
-          <p
-            style={{
-              fontFamily: "var(--font-body), sans-serif",
-              fontSize: "0.7rem",
-              letterSpacing: "0.04em",
-              color: "rgba(248,244,238,0.55)",
-              marginBottom: 4,
-            }}
-          >
-            {event.venue}
-          </p>
+          {event.subEvents && event.subEvents.length > 0 ? (
+            <div style={{ marginBottom: 4 }}>
+              {event.subEvents.map((sub, si) => (
+                <div key={si} style={{ marginBottom: si < event.subEvents!.length - 1 ? 18 : 0 }}>
+                  <p
+                    style={{
+                      fontFamily: "var(--font-body), sans-serif",
+                      fontSize: "0.62rem",
+                      fontWeight: 500,
+                      letterSpacing: "0.1em",
+                      color: "#F8F4EE",
+                      marginBottom: 4,
+                    }}
+                  >
+                    {sub.name}
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: "var(--font-body), sans-serif",
+                      fontSize: "0.6rem",
+                      letterSpacing: "0.04em",
+                      color: "rgba(248,244,238,0.55)",
+                      marginBottom: 3,
+                    }}
+                  >
+                    {sub.venue}
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: "var(--font-body), sans-serif",
+                      fontSize: "0.6rem",
+                      letterSpacing: "0.14em",
+                      color: accentColor,
+                      marginBottom: sub.venueMapUrl ? 4 : 0,
+                    }}
+                  >
+                    {sub.time}
+                  </p>
+                  {sub.venueMapUrl && (
+                    <a
+                      href={sub.venueMapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        fontFamily: "var(--font-body), sans-serif",
+                        fontSize: "0.55rem",
+                        letterSpacing: "0.2em",
+                        textTransform: "uppercase",
+                        color: accentColor,
+                        textDecoration: "none",
+                        borderBottom: `1px solid ${accentColor}60`,
+                        paddingBottom: 2,
+                        pointerEvents: "auto",
+                        display: "inline-block",
+                        opacity: 0.85,
+                      }}
+                    >
+                      View Map
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <>
+              <p
+                style={{
+                  fontFamily: "var(--font-body), sans-serif",
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.14em",
+                  color: accentColor,
+                  marginBottom: 20,
+                }}
+              >
+                {event.time}
+              </p>
 
-          <a
-            href={event.venueMapUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontFamily: "var(--font-body), sans-serif",
-              fontSize: "0.58rem",
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              color: accentColor,
-              textDecoration: "none",
-              borderBottom: `1px solid ${accentColor}60`,
-              paddingBottom: 2,
-              pointerEvents: "auto",
-              display: "inline-block",
-              opacity: 0.85,
-            }}
-          >
-            View Map
-          </a>
+              <p
+                style={{
+                  fontFamily: "var(--font-body), sans-serif",
+                  fontSize: "0.7rem",
+                  letterSpacing: "0.04em",
+                  color: "rgba(248,244,238,0.55)",
+                  marginBottom: 4,
+                }}
+              >
+                {event.venue}
+              </p>
+
+              <a
+                href={event.venueMapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontFamily: "var(--font-body), sans-serif",
+                  fontSize: "0.58rem",
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  color: accentColor,
+                  textDecoration: "none",
+                  borderBottom: `1px solid ${accentColor}60`,
+                  paddingBottom: 2,
+                  pointerEvents: "auto",
+                  display: "inline-block",
+                  opacity: 0.85,
+                }}
+              >
+                View Map
+              </a>
+            </>
+          )}
 
           {/* Dress Code & Color Palette */}
           <div style={{ marginTop: 28 }}>
@@ -457,35 +525,87 @@ export default function LuxuryEventGallery({ event, index }: Props) {
           >
             {event.title}
           </h2>
-          <p
-            style={{
-              fontFamily: "var(--font-body), sans-serif",
-              fontSize: "0.62rem",
-              letterSpacing: "0.12em",
-              color: accentColor,
-              marginBottom: 4,
-            }}
-          >
-            {event.time} &middot; {event.venue}
-          </p>
-          <a
-            href={event.venueMapUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontFamily: "var(--font-body), sans-serif",
-              fontSize: "0.55rem",
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              color: accentColor,
-              textDecoration: "none",
-              opacity: 0.75,
-              marginBottom: 12,
-              display: "inline-block",
-            }}
-          >
-            Map &rarr;
-          </a>
+          {event.subEvents && event.subEvents.length > 0 ? (
+            <div>
+              {event.subEvents.map((sub, si) => (
+                <div key={si} style={{ marginBottom: si < event.subEvents!.length - 1 ? 10 : 0 }}>
+                  <p
+                    style={{
+                      fontFamily: "var(--font-body), sans-serif",
+                      fontSize: "0.58rem",
+                      fontWeight: 500,
+                      letterSpacing: "0.08em",
+                      color: "#F8F4EE",
+                      marginBottom: 2,
+                    }}
+                  >
+                    {sub.name}
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: "var(--font-body), sans-serif",
+                      fontSize: "0.55rem",
+                      letterSpacing: "0.1em",
+                      color: accentColor,
+                    }}
+                  >
+                    {sub.time} &middot; {sub.venue}
+                  </p>
+                  {sub.venueMapUrl && (
+                    <a
+                      href={sub.venueMapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        fontFamily: "var(--font-body), sans-serif",
+                        fontSize: "0.5rem",
+                        letterSpacing: "0.2em",
+                        textTransform: "uppercase",
+                        color: accentColor,
+                        textDecoration: "none",
+                        opacity: 0.75,
+                        display: "inline-block",
+                      }}
+                    >
+                      Map &rarr;
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <>
+              <p
+                style={{
+                  fontFamily: "var(--font-body), sans-serif",
+                  fontSize: "0.62rem",
+                  letterSpacing: "0.12em",
+                  color: accentColor,
+                  marginBottom: 4,
+                }}
+              >
+                {event.time} &middot; {event.venue}
+              </p>
+              <a
+                href={event.venueMapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontFamily: "var(--font-body), sans-serif",
+                  fontSize: "0.55rem",
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  color: accentColor,
+                  textDecoration: "none",
+                  opacity: 0.75,
+                  marginBottom: 12,
+                  display: "inline-block",
+                }}
+              >
+                Map &rarr;
+              </a>
+            </>
+          )}
 
         </div>
 
