@@ -62,7 +62,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
     tl.fromTo(
       cardRef.current,
       { opacity: 0, scale: 0.95 },
-      { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }
+      { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }
     );
 
     // Outer gold border draws clockwise via strokeDashoffset
@@ -74,8 +74,8 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
       });
       tl.to(
         outerBorderRef.current,
-        { strokeDashoffset: 0, duration: 1.2, ease: "power1.inOut" },
-        "-=0.3"
+        { strokeDashoffset: 0, duration: 0.9, ease: "power1.inOut" },
+        "-=0.2"
       );
     }
 
@@ -83,27 +83,27 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
     tl.fromTo(
       innerBorderRef.current,
       { opacity: 0 },
-      { opacity: 1, duration: 0.4, ease: "power1.out" },
-      "-=0.5"
+      { opacity: 1, duration: 0.3, ease: "power1.out" },
+      "-=0.6"
     );
 
     // Ornament draws itself
     tl.fromTo(
       ornamentRef.current,
       { opacity: 0 },
-      { opacity: 1, duration: 0.5, ease: "power1.out" },
-      "-=0.2"
+      { opacity: 1, duration: 0.4, ease: "power1.out" },
+      "-=0.1"
     );
 
     // "You are invited" fades in
     tl.fromTo(
       invitedTextRef.current,
       { opacity: 0 },
-      { opacity: 0.6, duration: 0.4, ease: "power1.out" },
-      "-=0.1"
+      { opacity: 0.6, duration: 0.3, ease: "power1.out" },
+      "+=0.05"
     );
 
-    // Monogram circle
+    // Monogram circle — start earlier, overlap more
     if (monogramCircleRef.current) {
       const circPerimeter = monogramCircleRef.current.getTotalLength();
       gsap.set(monogramCircleRef.current, {
@@ -112,33 +112,33 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
       });
       tl.to(
         monogramCircleRef.current,
-        { strokeDashoffset: 0, duration: 0.5, ease: "power1.inOut" },
+        { strokeDashoffset: 0, duration: 0.6, ease: "power1.inOut" },
         "-=0.2"
       );
     }
 
-    // Monogram letters stagger in
+    // Monogram letters stagger in — overlap with circle draw
     tl.fromTo(
       [monogramARef.current, monogramAmpRef.current, monogramJRef.current],
       { opacity: 0 },
-      { opacity: 1, duration: 0.5, stagger: 0.15, ease: "power1.out" },
-      "-=0.3"
+      { opacity: 1, duration: 0.4, stagger: 0.1, ease: "power1.out" },
+      "-=0.4"
     );
 
     // Gold rule expands from center
     tl.fromTo(
       ruleRef.current,
       { scaleX: 0, opacity: 1 },
-      { scaleX: 1, duration: 0.5, ease: "power2.out" },
-      "-=0.2"
+      { scaleX: 1, duration: 0.4, ease: "power2.out" },
+      "-=0.3"
     );
 
     // "Tap to reveal" fades in
     tl.fromTo(
       tapPromptRef.current,
       { opacity: 0 },
-      { opacity: 1, duration: 0.3, ease: "power1.out" },
-      "-=0.1"
+      { opacity: 1, duration: 0.25, ease: "power1.out" },
+      "-=0.15"
     );
 
     return () => {
