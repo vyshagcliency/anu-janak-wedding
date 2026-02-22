@@ -101,6 +101,7 @@ export default function TimelineSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [busProgress, setBusProgress] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   const vehicleState = useMemo(
     () => deriveVehicleState(busProgress),
@@ -120,8 +121,37 @@ export default function TimelineSection() {
   const girlProgress = getStopProgress(busProgress, 0.0, 0.18);
   const boyProgress = getStopProgress(busProgress, 0.18, 0.38);
 
+  // Detect mobile on mount
   useEffect(() => {
-    if (!sectionRef.current || !trackRef.current) return;
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Mobile: native horizontal scroll
+  useEffect(() => {
+    if (!isMobile || !sectionRef.current || !trackRef.current) return;
+
+    const section = sectionRef.current;
+    const track = trackRef.current;
+
+    const handleScroll = () => {
+      const scrollLeft = section.scrollLeft;
+      const maxScroll = section.scrollWidth - section.clientWidth;
+      const progress = maxScroll > 0 ? scrollLeft / maxScroll : 0;
+      setBusProgress(progress);
+    };
+
+    section.addEventListener("scroll", handleScroll);
+    return () => section.removeEventListener("scroll", handleScroll);
+  }, [isMobile]);
+
+  // Desktop: vertical scroll with GSAP ScrollTrigger
+  useEffect(() => {
+    if (isMobile || !sectionRef.current || !trackRef.current) return;
 
     const track = trackRef.current;
 
@@ -146,7 +176,7 @@ export default function TimelineSection() {
       },
     });
 
-    // Parallax layers at different speeds
+    // Parallax layers at different speeds (desktop only)
     const clouds = sectionRef.current.querySelector(
       ".parallax-clouds"
     ) as HTMLElement;
@@ -157,58 +187,73 @@ export default function TimelineSection() {
       ".parallax-trees"
     ) as HTMLElement;
 
+    const parallaxTweens: gsap.core.Tween[] = [];
+
     if (clouds) {
-      gsap.to(clouds, {
-        x: () => -window.innerWidth * 0.5,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          scrub: true,
-          start: "top top",
-          end: () => `+=${window.innerHeight * 5}`,
-        },
-      });
+      parallaxTweens.push(
+        gsap.to(clouds, {
+          x: () => -window.innerWidth * 0.5,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            scrub: true,
+            start: "top top",
+            end: () => `+=${window.innerHeight * 5}`,
+          },
+        })
+      );
     }
 
     if (hills) {
-      gsap.to(hills, {
-        x: () => -window.innerWidth * 1.5,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          scrub: true,
-          start: "top top",
-          end: () => `+=${window.innerHeight * 5}`,
-        },
-      });
+      parallaxTweens.push(
+        gsap.to(hills, {
+          x: () => -window.innerWidth * 1.5,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            scrub: true,
+            start: "top top",
+            end: () => `+=${window.innerHeight * 5}`,
+          },
+        })
+      );
     }
 
     if (trees) {
-      gsap.to(trees, {
-        x: () => -window.innerWidth * 2.5,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          scrub: true,
-          start: "top top",
-          end: () => `+=${window.innerHeight * 5}`,
-        },
-      });
+      parallaxTweens.push(
+        gsap.to(trees, {
+          x: () => -window.innerWidth * 2.5,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            scrub: true,
+            start: "top top",
+            end: () => `+=${window.innerHeight * 5}`,
+          },
+        })
+      );
     }
 
     return () => {
       scrollTween.scrollTrigger?.kill();
       scrollTween.kill();
+      parallaxTweens.forEach((tween) => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+      });
     };
-  }, []);
+  }, [isMobile]);
 
   return (
     <section
       ref={sectionRef}
-      className="timeline-pin-spacer relative w-full overflow-hidden"
+      className="timeline-pin-spacer relative w-full"
       style={{
         height: "100vh",
         background: "var(--ivory)",
+        overflow: isMobile ? "auto" : "hidden",
+        overflowY: isMobile ? "hidden" : "visible",
+        WebkitOverflowScrolling: "touch",
       }}
     >
       {/* The wide horizontal track */}
