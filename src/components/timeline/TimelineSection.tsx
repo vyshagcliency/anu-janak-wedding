@@ -19,17 +19,17 @@ const STOPS = [
     title: "Where It All Began",
     subtitle: "Chapter 1",
     description:
-      "Two kids in the same class, same school van — not knowing the universe had already written their story.",
+      "It started with a school van and two kids who had no idea what was coming in 2007.",
     imageSrc: "/images/timeline/classphoto1.jpeg",
     imageAlt: "Anu and Janak's class photo",
     position: 8,
     revealType: "circle" as const,
   },
   {
-    title: "School Van Memories",
+    title: "Childhood memories",
     subtitle: "Chapter 2",
     description:
-      "Morning rides, shared laughter, and the kind of friendship that feels effortless. The school van was their first world together.",
+      "Same school, same neighborhood, same school van, and a lot of growing up together.",
     imageSrc: "/images/timeline/classphoto2.jpeg",
     imageAlt: "School group photo with teachers",
     position: 25,
@@ -49,7 +49,7 @@ const STOPS = [
     title: "Growing Up, Separately",
     subtitle: "Chapter 4",
     description:
-      "Life took them on different paths — different cities, different dreams. But some threads can't be cut by distance.",
+      "What followed was years of figuring out adulthood, navigating distance, and somehow always ending up back in each other's corner of the world.",
     imageSrc: "/images/timeline/img5.jpeg",
     imageAlt: "She walks ahead, he follows",
     position: 58,
@@ -59,8 +59,8 @@ const STOPS = [
     title: "Choosing Each Other",
     subtitle: "Chapter 5",
     description:
-      "After all the years, all the roads — they chose each other. Not by chance, but by heart.",
-    imageSrc: "/images/timeline/img6.jpeg",
+      "After all of that, saying yes felt less like a decision and more like something we'd already known for a long time.",
+    imageSrc: "/images/timeline/img4.jpeg",
     imageAlt: "Intimate embrace through foliage",
     position: 75,
     revealType: "blur" as const,
@@ -69,8 +69,8 @@ const STOPS = [
     title: "Arriving at Forever",
     subtitle: "Chapter 6",
     description:
-      "And so the journey leads here — to April 26, 2026. To the beginning of the rest of their lives, together.",
-    imageSrc: "/images/timeline/img4.jpeg",
+      "All of this brings us to one big day. Come celebrate with us on April 26, 2026.",
+    imageSrc: "/images/timeline/chapter_6img",
     imageAlt: "Couple at the floral wedding entrance",
     position: 92,
     revealType: "grand" as const,
