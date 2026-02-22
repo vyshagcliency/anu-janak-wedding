@@ -101,7 +101,6 @@ export default function TimelineSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [busProgress, setBusProgress] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
 
   const vehicleState = useMemo(
     () => deriveVehicleState(busProgress),
@@ -121,47 +120,34 @@ export default function TimelineSection() {
   const girlProgress = getStopProgress(busProgress, 0.0, 0.18);
   const boyProgress = getStopProgress(busProgress, 0.18, 0.38);
 
-  // Detect mobile on mount
+  // Single useEffect — checks window width directly to avoid race conditions
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  // Mobile: native horizontal scroll
-  useEffect(() => {
-    if (!isMobile || !sectionRef.current || !trackRef.current) return;
+    if (!sectionRef.current || !trackRef.current) return;
 
     const section = sectionRef.current;
     const track = trackRef.current;
+    const mobile = window.innerWidth <= 768;
 
-    const handleScroll = () => {
-      const scrollLeft = section.scrollLeft;
-      const maxScroll = section.scrollWidth - section.clientWidth;
-      const progress = maxScroll > 0 ? scrollLeft / maxScroll : 0;
-      setBusProgress(progress);
-    };
+    // ── MOBILE: native horizontal scroll ──
+    if (mobile) {
+      const handleScroll = () => {
+        const scrollLeft = section.scrollLeft;
+        const maxScroll = section.scrollWidth - section.clientWidth;
+        const progress = maxScroll > 0 ? scrollLeft / maxScroll : 0;
+        setBusProgress(progress);
+      };
 
-    section.addEventListener("scroll", handleScroll);
-    return () => section.removeEventListener("scroll", handleScroll);
-  }, [isMobile]);
+      section.addEventListener("scroll", handleScroll);
+      return () => section.removeEventListener("scroll", handleScroll);
+    }
 
-  // Desktop: vertical scroll with GSAP ScrollTrigger
-  useEffect(() => {
-    if (isMobile || !sectionRef.current || !trackRef.current) return;
-
-    const track = trackRef.current;
-
-    // Horizontal scroll via GSAP ScrollTrigger pin
+    // ── DESKTOP: vertical scroll with GSAP ScrollTrigger ──
     const scrollTween = gsap.to(track, {
       xPercent: -83.33,
       ease: "none",
       scrollTrigger: {
         id: "timeline-horizontal",
-        trigger: sectionRef.current,
+        trigger: section,
         pin: true,
         scrub: 1,
         snap: {
@@ -176,16 +162,10 @@ export default function TimelineSection() {
       },
     });
 
-    // Parallax layers at different speeds (desktop only)
-    const clouds = sectionRef.current.querySelector(
-      ".parallax-clouds"
-    ) as HTMLElement;
-    const hills = sectionRef.current.querySelector(
-      ".parallax-hills"
-    ) as HTMLElement;
-    const trees = sectionRef.current.querySelector(
-      ".parallax-trees"
-    ) as HTMLElement;
+    // Parallax layers at different speeds
+    const clouds = section.querySelector(".parallax-clouds") as HTMLElement;
+    const hills = section.querySelector(".parallax-hills") as HTMLElement;
+    const trees = section.querySelector(".parallax-trees") as HTMLElement;
 
     const parallaxTweens: gsap.core.Tween[] = [];
 
@@ -195,7 +175,7 @@ export default function TimelineSection() {
           x: () => -window.innerWidth * 0.5,
           ease: "none",
           scrollTrigger: {
-            trigger: sectionRef.current,
+            trigger: section,
             scrub: true,
             start: "top top",
             end: () => `+=${window.innerHeight * 5}`,
@@ -210,7 +190,7 @@ export default function TimelineSection() {
           x: () => -window.innerWidth * 1.5,
           ease: "none",
           scrollTrigger: {
-            trigger: sectionRef.current,
+            trigger: section,
             scrub: true,
             start: "top top",
             end: () => `+=${window.innerHeight * 5}`,
@@ -225,7 +205,7 @@ export default function TimelineSection() {
           x: () => -window.innerWidth * 2.5,
           ease: "none",
           scrollTrigger: {
-            trigger: sectionRef.current,
+            trigger: section,
             scrub: true,
             start: "top top",
             end: () => `+=${window.innerHeight * 5}`,
@@ -242,71 +222,89 @@ export default function TimelineSection() {
         tween.kill();
       });
     };
-  }, [isMobile]);
+  }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="timeline-pin-spacer relative w-full"
-      style={{
-        height: "100vh",
-        background: "var(--ivory)",
-        overflow: isMobile ? "auto" : "hidden",
-        overflowY: isMobile ? "hidden" : "visible",
-        WebkitOverflowScrolling: "touch",
-      }}
-    >
-      {/* The wide horizontal track */}
-      <div
-        ref={trackRef}
-        className="relative flex h-full"
-        style={{ width: "600vw" }}
+    <>
+      {/* CSS media query ensures correct overflow before JS hydrates */}
+      <style jsx global>{`
+        .timeline-mobile-scroll {
+          height: 100vh;
+          background: var(--ivory);
+          overflow: hidden;
+        }
+        @media (max-width: 768px) {
+          .timeline-mobile-scroll {
+            overflow-x: scroll !important;
+            overflow-y: hidden !important;
+            -webkit-overflow-scrolling: touch;
+          }
+          .timeline-mobile-scroll::-webkit-scrollbar {
+            display: none;
+          }
+          .timeline-mobile-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        }
+      `}</style>
+
+      <section
+        ref={sectionRef}
+        className="timeline-pin-spacer timeline-mobile-scroll relative w-full"
       >
-        {/* Background layers */}
-        <div className="absolute inset-0">
-          <ParallaxLayers />
-          <RoadsideScenery />
-          <BusRoad />
+        {/* The wide horizontal track */}
+        <div
+          ref={trackRef}
+          className="relative flex h-full"
+          style={{ width: "600vw" }}
+        >
+          {/* Background layers */}
+          <div className="absolute inset-0">
+            <ParallaxLayers />
+            <RoadsideScenery />
+            <BusRoad />
+          </div>
+
+          {/* Boarding Figures */}
+          {girlProgress > 0 && girlProgress < 1 && (
+            <BoardingFigure
+              type="girl"
+              stopProgress={girlProgress}
+              position={8}
+            />
+          )}
+          {boyProgress > 0 && boyProgress < 1 && (
+            <BoardingFigure
+              type="boy"
+              stopProgress={boyProgress}
+              position={25}
+            />
+          )}
+
+          {/* School Van (bus / plane) */}
+          <SchoolVan progress={busProgress} vehicleState={vehicleState} />
+
+          {/* Timeline stops */}
+          {STOPS.map((stop, i) => (
+            <TimelineStop
+              key={i}
+              index={i + 1}
+              title={stop.title}
+              subtitle={stop.subtitle}
+              description={stop.description}
+              imageSrc={stop.imageSrc}
+              imageAlt={stop.imageAlt}
+              position={stop.position}
+              revealType={stop.revealType}
+              onNext={i === STOPS.length - 1 ? handleNext : undefined}
+            />
+          ))}
         </div>
 
-        {/* Boarding Figures */}
-        {girlProgress > 0 && girlProgress < 1 && (
-          <BoardingFigure
-            type="girl"
-            stopProgress={girlProgress}
-            position={8}
-          />
-        )}
-        {boyProgress > 0 && boyProgress < 1 && (
-          <BoardingFigure
-            type="boy"
-            stopProgress={boyProgress}
-            position={25}
-          />
-        )}
-
-        {/* School Van (bus / plane) */}
-        <SchoolVan progress={busProgress} vehicleState={vehicleState} />
-
-        {/* Timeline stops */}
-        {STOPS.map((stop, i) => (
-          <TimelineStop
-            key={i}
-            index={i + 1}
-            title={stop.title}
-            subtitle={stop.subtitle}
-            description={stop.description}
-            imageSrc={stop.imageSrc}
-            imageAlt={stop.imageAlt}
-            position={stop.position}
-            revealType={stop.revealType}
-            onNext={i === STOPS.length - 1 ? handleNext : undefined}
-          />
-        ))}
-      </div>
-
-      {/* Ch6 celebration — rendered outside the scrolling track so it stays fixed */}
-      <CelebrationBurst active={atFinale} />
-    </section>
+        {/* Ch6 celebration — rendered outside the scrolling track so it stays fixed */}
+        <CelebrationBurst active={atFinale} />
+      </section>
+    </>
   );
 }
