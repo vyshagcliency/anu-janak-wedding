@@ -494,7 +494,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
         <div
           style={{
             position: "absolute",
-            top: 48,
+            top: 32,
             left: 24,
             right: 24,
             zIndex: 10,
@@ -516,7 +516,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
           <h2
             style={{
               fontFamily: "var(--font-heading), serif",
-              fontSize: "clamp(1.6rem, 7vw, 2.2rem)",
+              fontSize: "clamp(1.3rem, 5.5vw, 1.8rem)",
               fontWeight: 400,
               color: "#F8F4EE",
               lineHeight: 1.15,
@@ -532,7 +532,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
                   <p
                     style={{
                       fontFamily: "var(--font-body), sans-serif",
-                      fontSize: "0.7rem",
+                      fontSize: "0.62rem",
                       fontWeight: 500,
                       letterSpacing: "0.08em",
                       color: "#F8F4EE",
@@ -544,7 +544,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
                   <p
                     style={{
                       fontFamily: "var(--font-body), sans-serif",
-                      fontSize: "0.68rem",
+                      fontSize: "0.6rem",
                       letterSpacing: "0.1em",
                       color: accentColor,
                     }}
@@ -578,7 +578,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
               <p
                 style={{
                   fontFamily: "var(--font-body), sans-serif",
-                  fontSize: "0.75rem",
+                  fontSize: "0.65rem",
                   letterSpacing: "0.12em",
                   color: accentColor,
                   marginBottom: 4,
@@ -619,7 +619,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             right: 0,
             display: "flex",
             alignItems: "center",
-            paddingTop: 80,
+            paddingTop: 100,
           }}
         >
           <div
