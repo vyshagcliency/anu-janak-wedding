@@ -329,35 +329,20 @@ body {
   100% { background-position: -100% 50%; }
 }
 
-/* ───── Envelope Reveal ───── */
-
-/* Wax seal — subtle glow pulse */
-.seal-shimmer {
-  transition: transform 0.3s;
+/* ───── Invitation Reveal ───── */
+.tap-prompt-pulse {
+  animation: tapPulse 2.5s ease-in-out infinite;
 }
-
-.seal-shimmer::before {
-  content: "";
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(139, 26, 26, 0.15) 0%,
-    transparent 70%
-  );
-  animation: sealGlow 2.5s ease-in-out infinite;
-  pointer-events: none;
+@keyframes tapPulse {
+  0%, 100% { opacity: 0.3; }
+  50%      { opacity: 0.6; }
 }
-
-@keyframes sealGlow {
-  0%, 100% { opacity: 0.3; transform: scale(0.97); }
-  50%      { opacity: 0.8; transform: scale(1.05); }
+.invitation-card-glow {
+  transition: box-shadow 0.3s ease;
 }
-
-/* Reduced motion */
+.invitation-card-glow:hover {
+  box-shadow: 0 0 40px rgba(201, 169, 110, 0.08);
+}
 @media (prefers-reduced-motion: reduce) {
-  .seal-shimmer::before {
-    animation: none;
-  }
+  .tap-prompt-pulse { animation: none; opacity: 0.5; }
 }

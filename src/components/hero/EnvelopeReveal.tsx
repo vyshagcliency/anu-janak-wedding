@@ -10,34 +10,135 @@ interface Props {
 
 export default function EnvelopeReveal({ onRevealed }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const envelopeRef = useRef<HTMLDivElement>(null);
-  const flapRef = useRef<HTMLDivElement>(null);
-  const sealRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const outerBorderRef = useRef<SVGRectElement>(null);
+  const innerBorderRef = useRef<HTMLDivElement>(null);
+  const ornamentRef = useRef<SVGSVGElement>(null);
+  const invitedTextRef = useRef<HTMLParagraphElement>(null);
+  const monogramARef = useRef<SVGTextElement>(null);
+  const monogramAmpRef = useRef<SVGTextElement>(null);
+  const monogramJRef = useRef<SVGTextElement>(null);
+  const monogramCircleRef = useRef<SVGCircleElement>(null);
+  const ruleRef = useRef<HTMLDivElement>(null);
+  const tapPromptRef = useRef<HTMLParagraphElement>(null);
+  const leftHalfRef = useRef<HTMLDivElement>(null);
+  const rightHalfRef = useRef<HTMLDivElement>(null);
+  const centerGlowRef = useRef<HTMLDivElement>(null);
   const hasOpened = useRef(false);
 
+  // Entrance animation
   useEffect(() => {
-    if (!containerRef.current || !sealRef.current) return;
+    if (!containerRef.current || !cardRef.current) return;
+
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReduced) {
+      // Skip animations — show everything immediately
+      gsap.set(cardRef.current, { opacity: 1, scale: 1 });
+      gsap.set(
+        [
+          innerBorderRef.current,
+          ornamentRef.current,
+          invitedTextRef.current,
+          ruleRef.current,
+          tapPromptRef.current,
+        ],
+        { opacity: 1 }
+      );
+      gsap.set([monogramARef.current, monogramAmpRef.current, monogramJRef.current], { opacity: 1 });
+      gsap.set(monogramCircleRef.current, { opacity: 1 });
+      gsap.set(ruleRef.current, { scaleX: 1 });
+      if (outerBorderRef.current) {
+        outerBorderRef.current.style.strokeDashoffset = "0";
+      }
+      return;
+    }
 
     const tl = gsap.timeline();
 
+    // Card fade in with scale
     tl.fromTo(
-      envelopeRef.current,
-      { opacity: 0, scale: 0.92 },
+      cardRef.current,
+      { opacity: 0, scale: 0.95 },
       { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }
     );
 
+    // Outer gold border draws clockwise via strokeDashoffset
+    if (outerBorderRef.current) {
+      const perimeter = outerBorderRef.current.getTotalLength();
+      gsap.set(outerBorderRef.current, {
+        strokeDasharray: perimeter,
+        strokeDashoffset: perimeter,
+      });
+      tl.to(
+        outerBorderRef.current,
+        { strokeDashoffset: 0, duration: 1.2, ease: "power1.inOut" },
+        "-=0.3"
+      );
+    }
+
+    // Inner border fades in
     tl.fromTo(
-      sealRef.current,
-      { opacity: 0, scale: 0, rotation: -20 },
-      {
-        opacity: 1,
-        scale: 1,
-        rotation: 0,
-        duration: 0.5,
-        ease: "back.out(1.7)",
-      },
-      "+=0.3"
+      innerBorderRef.current,
+      { opacity: 0 },
+      { opacity: 1, duration: 0.4, ease: "power1.out" },
+      "-=0.5"
+    );
+
+    // Ornament draws itself
+    tl.fromTo(
+      ornamentRef.current,
+      { opacity: 0 },
+      { opacity: 1, duration: 0.5, ease: "power1.out" },
+      "-=0.2"
+    );
+
+    // "You are invited" fades in
+    tl.fromTo(
+      invitedTextRef.current,
+      { opacity: 0 },
+      { opacity: 0.6, duration: 0.4, ease: "power1.out" },
+      "-=0.1"
+    );
+
+    // Monogram circle
+    if (monogramCircleRef.current) {
+      const circPerimeter = monogramCircleRef.current.getTotalLength();
+      gsap.set(monogramCircleRef.current, {
+        strokeDasharray: circPerimeter,
+        strokeDashoffset: circPerimeter,
+      });
+      tl.to(
+        monogramCircleRef.current,
+        { strokeDashoffset: 0, duration: 0.5, ease: "power1.inOut" },
+        "-=0.2"
+      );
+    }
+
+    // Monogram letters stagger in
+    tl.fromTo(
+      [monogramARef.current, monogramAmpRef.current, monogramJRef.current],
+      { opacity: 0 },
+      { opacity: 1, duration: 0.5, stagger: 0.15, ease: "power1.out" },
+      "-=0.3"
+    );
+
+    // Gold rule expands from center
+    tl.fromTo(
+      ruleRef.current,
+      { scaleX: 0, opacity: 1 },
+      { scaleX: 1, duration: 0.5, ease: "power2.out" },
+      "-=0.2"
+    );
+
+    // "Tap to reveal" fades in
+    tl.fromTo(
+      tapPromptRef.current,
+      { opacity: 0 },
+      { opacity: 1, duration: 0.3, ease: "power1.out" },
+      "-=0.1"
     );
 
     return () => {
@@ -45,53 +146,236 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
     };
   }, []);
 
+  // Reveal animation on tap
   const handleOpen = useCallback(() => {
     if (hasOpened.current) return;
     hasOpened.current = true;
 
-    const tl = gsap.timeline({
-      onComplete: onRevealed,
-    });
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
-    tl.to(sealRef.current, {
-      scale: 1.3,
-      rotation: 15,
+    if (prefersReduced) {
+      gsap.to(containerRef.current, {
+        opacity: 0,
+        duration: 0.3,
+        onComplete: onRevealed,
+      });
+      return;
+    }
+
+    const tl = gsap.timeline({ onComplete: onRevealed });
+
+    // Fade out tap prompt
+    tl.to(tapPromptRef.current, {
       opacity: 0,
-      duration: 0.4,
-      ease: "power2.in",
+      duration: 0.15,
+      ease: "power1.in",
     });
 
+    // Hide original card, show clip-path halves
+    tl.call(() => {
+      gsap.set(cardRef.current, { opacity: 0 });
+      gsap.set([leftHalfRef.current, rightHalfRef.current], {
+        visibility: "visible",
+        opacity: 1,
+      });
+    });
+
+    // Split halves apart with subtle 3D rotation
     tl.to(
-      flapRef.current,
+      leftHalfRef.current,
       {
-        rotateX: 180,
-        duration: 0.8,
+        x: "-55%",
+        rotateY: 15,
+        opacity: 0.6,
+        duration: 0.7,
         ease: "power2.inOut",
       },
-      "-=0.1"
+      "+=0.05"
     );
-
     tl.to(
-      cardRef.current,
+      rightHalfRef.current,
       {
-        y: -280,
-        duration: 0.8,
-        ease: "power2.out",
+        x: "55%",
+        rotateY: -15,
+        opacity: 0.6,
+        duration: 0.7,
+        ease: "power2.inOut",
       },
-      "-=0.2"
+      "<"
     );
 
+    // Gold glow fades in between halves
+    tl.fromTo(
+      centerGlowRef.current,
+      { opacity: 0 },
+      { opacity: 1, duration: 0.4, ease: "power1.out" },
+      "-=0.4"
+    );
+
+    // Everything fades out
     tl.to(
       containerRef.current,
       {
         opacity: 0,
-        scale: 0.9,
+        scale: 0.97,
         duration: 0.5,
         ease: "power2.in",
       },
-      "+=0.2"
+      "+=0.1"
     );
   }, [onRevealed]);
+
+  // Shared card content for both the main card and clip-path halves
+  const cardContent = (
+    <>
+      {/* Outer gold border — SVG rect drawn with strokeDashoffset */}
+      <svg
+        className="absolute inset-0 h-full w-full"
+        viewBox="0 0 400 533"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <rect
+          ref={outerBorderRef}
+          x="0.5"
+          y="0.5"
+          width="399"
+          height="532"
+          rx="4"
+          ry="4"
+          fill="none"
+          stroke="var(--gold)"
+          strokeWidth="1"
+        />
+      </svg>
+
+      {/* Inner border */}
+      <div
+        ref={innerBorderRef}
+        className="absolute rounded-sm"
+        style={{
+          inset: "12px",
+          border: "0.5px solid var(--gold)",
+          opacity: 0,
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Content stack */}
+      <div className="relative z-10 flex h-full flex-col items-center justify-center gap-4 px-8 py-10">
+        {/* Ornamental flourish */}
+        <svg
+          ref={ornamentRef}
+          width="120"
+          height="16"
+          viewBox="0 0 120 16"
+          fill="none"
+          aria-hidden="true"
+          style={{ opacity: 0 }}
+        >
+          <line x1="0" y1="8" x2="48" y2="8" stroke="var(--gold)" strokeWidth="0.5" />
+          <line x1="72" y1="8" x2="120" y2="8" stroke="var(--gold)" strokeWidth="0.5" />
+          <rect
+            x="54"
+            y="2"
+            width="12"
+            height="12"
+            transform="rotate(45 60 8)"
+            fill="none"
+            stroke="var(--gold)"
+            strokeWidth="0.5"
+          />
+        </svg>
+
+        {/* "You are invited to celebrate" */}
+        <p
+          ref={invitedTextRef}
+          className="text-center text-[10px] uppercase tracking-[0.25em]"
+          style={{
+            color: "var(--gold-light)",
+            fontFamily: "var(--font-body), sans-serif",
+            opacity: 0,
+          }}
+        >
+          You are invited to celebrate
+        </p>
+
+        {/* A & J Monogram */}
+        <svg width="90" height="90" viewBox="0 0 120 120" aria-label="A and J monogram">
+          <circle
+            ref={monogramCircleRef}
+            cx="60"
+            cy="60"
+            r="55"
+            fill="none"
+            stroke="var(--gold)"
+            strokeWidth="0.8"
+          />
+          <text
+            ref={monogramARef}
+            x="32"
+            y="72"
+            fontFamily="var(--font-playfair), serif"
+            fontSize="36"
+            fill="var(--gold)"
+            style={{ opacity: 0 }}
+          >
+            A
+          </text>
+          <text
+            ref={monogramAmpRef}
+            x="50"
+            y="64"
+            fontFamily="var(--font-playfair), serif"
+            fontSize="14"
+            fill="var(--gold-light)"
+            textAnchor="middle"
+            style={{ opacity: 0 }}
+          >
+            &amp;
+          </text>
+          <text
+            ref={monogramJRef}
+            x="68"
+            y="72"
+            fontFamily="var(--font-playfair), serif"
+            fontSize="36"
+            fill="var(--gold)"
+            style={{ opacity: 0 }}
+          >
+            J
+          </text>
+        </svg>
+
+        {/* Gold horizontal rule */}
+        <div
+          ref={ruleRef}
+          className="h-px w-32"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent 0%, var(--gold) 20%, var(--gold-light) 50%, var(--gold) 80%, transparent 100%)",
+            transformOrigin: "center",
+            transform: "scaleX(0)",
+          }}
+        />
+
+        {/* "Tap to reveal" */}
+        <p
+          ref={tapPromptRef}
+          className="tap-prompt-pulse text-center text-[10px] uppercase tracking-[0.2em]"
+          style={{
+            color: "var(--gold-light)",
+            fontFamily: "var(--font-body), sans-serif",
+            opacity: 0,
+          }}
+        >
+          Tap to reveal
+        </p>
+      </div>
+    </>
+  );
 
   return (
     <div
@@ -109,7 +393,6 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           className="object-cover blur-[20px] scale-110"
           sizes="100vw"
         />
-        {/* Dark overlay for contrast */}
         <div
           className="absolute inset-0"
           style={{
@@ -119,289 +402,72 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
         />
       </div>
 
-      {/* Centered envelope card */}
-      <div
-        ref={envelopeRef}
-        className="relative w-[85vw] max-w-[400px]"
-        style={{
-          aspectRatio: "3 / 4",
-          opacity: 0,
-          transformStyle: "preserve-3d",
-        }}
-      >
-        {/* Inner liner — deep burgundy, visible when flap opens */}
+      {/* Card wrapper — centered */}
+      <div className="relative w-[85vw] max-w-[400px]" style={{ aspectRatio: "3 / 4" }}>
+        {/* Main visible card */}
         <div
-          className="absolute inset-x-0 top-0 overflow-hidden rounded-t-lg"
-          style={{
-            height: "55%",
-            background:
-              "linear-gradient(180deg, #4A1520 0%, #6B2030 60%, #4A1520 100%)",
-            clipPath: "polygon(0 0, 50% 100%, 100% 0)",
-            zIndex: 1,
-          }}
-        />
-
-        {/* Envelope body */}
-        <div
-          className="absolute inset-x-0 bottom-0 overflow-hidden rounded-b-lg"
-          style={{
-            height: "52%",
-            background:
-              "linear-gradient(175deg, #F5EDE2 0%, #EDE3D5 40%, #E8DBCA 100%)",
-            boxShadow:
-              "0 8px 32px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.1)",
-            zIndex: 3,
-          }}
-        >
-          {/* Paper grain */}
-          <div
-            className="absolute inset-0 opacity-40"
-            style={{
-              backgroundImage:
-                `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E")`,
-              backgroundSize: "200px 200px",
-            }}
-          />
-
-          {/* Fold shadows */}
-          <div
-            className="absolute top-0 h-full"
-            style={{
-              left: 0,
-              width: "30%",
-              background: "linear-gradient(to right, rgba(0,0,0,0.03), transparent)",
-              clipPath: "polygon(0 0, 100% 30%, 0 100%)",
-            }}
-          />
-          <div
-            className="absolute top-0 h-full"
-            style={{
-              right: 0,
-              width: "30%",
-              background: "linear-gradient(to left, rgba(0,0,0,0.03), transparent)",
-              clipPath: "polygon(100% 0, 0 30%, 100% 100%)",
-            }}
-          />
-
-          {/* Card inside envelope */}
-          <div
-            ref={cardRef}
-            className="absolute bottom-[8%] left-[8%] right-[8%] top-[8%]"
-            style={{
-              background: "#FFFDF9",
-              boxShadow:
-                "0 1px 8px rgba(0,0,0,0.05), 0 0 1px rgba(0,0,0,0.08)",
-              zIndex: 2,
-            }}
-          >
-            <div className="flex h-full flex-col items-center justify-center">
-              <svg width="70" height="70" viewBox="0 0 120 120">
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="55"
-                  fill="none"
-                  stroke="var(--gold)"
-                  strokeWidth="0.8"
-                />
-                <text
-                  x="32"
-                  y="72"
-                  fontFamily="var(--font-playfair), serif"
-                  fontSize="36"
-                  fill="var(--gold)"
-                >
-                  A
-                </text>
-                <text
-                  x="68"
-                  y="72"
-                  fontFamily="var(--font-playfair), serif"
-                  fontSize="36"
-                  fill="var(--gold)"
-                >
-                  J
-                </text>
-                <text
-                  x="50"
-                  y="64"
-                  fontFamily="var(--font-playfair), serif"
-                  fontSize="14"
-                  fill="var(--gold-light)"
-                  textAnchor="middle"
-                >
-                  &amp;
-                </text>
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        {/* Envelope flap */}
-        <div
-          ref={flapRef}
-          className="absolute inset-x-0 top-0"
-          style={{
-            height: "55%",
-            transformOrigin: "top center",
-            transformStyle: "preserve-3d",
-            zIndex: 4,
-            willChange: "transform",
-          }}
-        >
-          {/* Front of flap */}
-          <div
-            className="absolute inset-0 rounded-t-lg"
-            style={{
-              background:
-                "linear-gradient(175deg, #F0E6D8 0%, #E8DCCC 50%, #E2D4C2 100%)",
-              clipPath: "polygon(0 0, 50% 100%, 100% 0)",
-              backfaceVisibility: "hidden",
-            }}
-          >
-            <div
-              className="absolute inset-0 opacity-35"
-              style={{
-                backgroundImage:
-                  `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E")`,
-                backgroundSize: "200px 200px",
-              }}
-            />
-            <div
-              className="absolute inset-x-0 bottom-0 h-8"
-              style={{
-                background: "linear-gradient(to top, rgba(0,0,0,0.06), transparent)",
-                clipPath: "polygon(0 100%, 50% 0%, 100% 100%)",
-              }}
-            />
-          </div>
-
-          {/* Back of flap */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(180deg, #4A1520 0%, #6B2030 60%, #4A1520 100%)",
-              clipPath: "polygon(0 0, 50% 100%, 100% 0)",
-              backfaceVisibility: "hidden",
-              transform: "rotateX(180deg)",
-            }}
-          />
-        </div>
-
-        {/* Wax seal */}
-        <div
-          ref={sealRef}
+          ref={cardRef}
           onClick={handleOpen}
-          className="seal-shimmer absolute left-1/2 cursor-pointer"
-          style={{
-            top: "calc(55% - 48px)",
-            transform: "translateX(-50%)",
-            zIndex: 5,
-            opacity: 0,
-            willChange: "transform, opacity",
-          }}
-          role="button"
-          aria-label="Open wedding invitation"
-          tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
               handleOpen();
             }
           }}
+          role="button"
+          aria-label="Open wedding invitation"
+          tabIndex={0}
+          className="invitation-card-glow absolute inset-0 cursor-pointer overflow-hidden rounded-sm"
+          style={{
+            background: "#0D0A08",
+            opacity: 0,
+          }}
         >
-          <svg width="96" height="96" viewBox="0 0 96 96">
-            <defs>
-              <radialGradient id="waxGrad" cx="45%" cy="40%" r="55%">
-                <stop offset="0%" stopColor="#A62B2B" />
-                <stop offset="60%" stopColor="#8B1A1A" />
-                <stop offset="100%" stopColor="#6E1414" />
-              </radialGradient>
-              <filter id="waxShadow">
-                <feDropShadow
-                  dx="0"
-                  dy="2"
-                  stdDeviation="4"
-                  floodOpacity="0.3"
-                />
-              </filter>
-            </defs>
-            <circle
-              cx="48"
-              cy="48"
-              r="42"
-              fill="url(#waxGrad)"
-              filter="url(#waxShadow)"
-            />
-            <circle
-              cx="48"
-              cy="48"
-              r="40"
-              fill="none"
-              stroke="rgba(255,255,255,0.08)"
-              strokeWidth="1"
-            />
-            <circle
-              cx="48"
-              cy="48"
-              r="34"
-              fill="none"
-              stroke="var(--gold)"
-              strokeWidth="0.7"
-              opacity="0.5"
-            />
-            <circle
-              cx="48"
-              cy="48"
-              r="30"
-              fill="none"
-              stroke="var(--gold)"
-              strokeWidth="0.4"
-              opacity="0.3"
-            />
-            <text
-              x="30"
-              y="56"
-              fontFamily="var(--font-playfair), serif"
-              fontSize="26"
-              fill="var(--gold)"
-              fontWeight="400"
-            >
-              A
-            </text>
-            <text
-              x="54"
-              y="56"
-              fontFamily="var(--font-playfair), serif"
-              fontSize="26"
-              fill="var(--gold)"
-              fontWeight="400"
-            >
-              J
-            </text>
-            <text
-              x="48"
-              y="49"
-              fontFamily="var(--font-playfair), serif"
-              fontSize="11"
-              fill="var(--gold-light)"
-              textAnchor="middle"
-            >
-              &amp;
-            </text>
-          </svg>
-
-          <p
-            className="mt-2 text-center text-[10px] uppercase tracking-[0.2em]"
-            style={{
-              color: "rgba(255, 255, 255, 0.5)",
-              fontFamily: "var(--font-body), sans-serif",
-            }}
-          >
-            Tap to open
-          </p>
+          {cardContent}
         </div>
+
+        {/* Left clip-path half (invisible until tap) */}
+        <div
+          ref={leftHalfRef}
+          className="pointer-events-none absolute inset-0 overflow-hidden rounded-sm"
+          style={{
+            background: "#0D0A08",
+            clipPath: "inset(0 50% 0 0)",
+            visibility: "hidden",
+            opacity: 0,
+          }}
+          aria-hidden="true"
+        >
+          {cardContent}
+        </div>
+
+        {/* Right clip-path half (invisible until tap) */}
+        <div
+          ref={rightHalfRef}
+          className="pointer-events-none absolute inset-0 overflow-hidden rounded-sm"
+          style={{
+            background: "#0D0A08",
+            clipPath: "inset(0 0 0 50%)",
+            visibility: "hidden",
+            opacity: 0,
+          }}
+          aria-hidden="true"
+        >
+          {cardContent}
+        </div>
+
+        {/* Center glow (shown during split) */}
+        <div
+          ref={centerGlowRef}
+          className="pointer-events-none absolute inset-y-0 left-1/2 -translate-x-1/2"
+          style={{
+            width: "60px",
+            background:
+              "radial-gradient(ellipse at center, rgba(201,169,110,0.4) 0%, rgba(201,169,110,0.15) 40%, transparent 70%)",
+            opacity: 0,
+          }}
+          aria-hidden="true"
+        />
       </div>
     </div>
   );
