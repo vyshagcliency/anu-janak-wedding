@@ -498,10 +498,10 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           ref={tapPromptRef}
           className="tap-prompt-pulse text-center text-base uppercase tracking-[0.2em] font-semibold"
           style={{
-            color: "#FFD700",
+            color: "var(--gold)",
             fontFamily: "var(--font-body), sans-serif",
             opacity: 0,
-            textShadow: "0 0 12px rgba(255, 215, 0, 0.6), 0 0 4px rgba(255, 215, 0, 0.4)",
+            textShadow: "0 0 12px rgba(201, 169, 110, 0.6), 0 0 4px rgba(201, 169, 110, 0.4)",
           }}
         >
           Tap to reveal

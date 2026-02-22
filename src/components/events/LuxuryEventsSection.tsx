@@ -162,7 +162,7 @@ export default function LuxuryEventsSection() {
           position: "relative",
           zIndex: 1,
           textAlign: "center",
-          padding: "80px 24px 48px",
+          padding: "40px 24px 48px",
           background: "#0D0A08",
         }}
       >

@@ -177,9 +177,6 @@ export default function TimelineSection() {
         });
       };
 
-      // Hide swipe cue after first swipe
-      const cue = section.querySelector(".swipe-cue") as HTMLElement;
-
       const onTouchStart = (e: TouchEvent) => {
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
@@ -207,12 +204,6 @@ export default function TimelineSection() {
         e.preventDefault();
         const delta = -dx / (window.innerWidth * 0.8);
         applyProgress(startProgress + delta);
-
-        // Hide cue on first horizontal swipe
-        if (cue) {
-          cue.style.opacity = "0";
-          cue.style.transition = "opacity 0.3s";
-        }
       };
 
       const onTouchEnd = () => {
@@ -376,53 +367,6 @@ export default function TimelineSection() {
             onNext={i === STOPS.length - 1 ? handleNext : undefined}
           />
         ))}
-      </div>
-
-      {/* Mobile swipe cue — positioned over chapter 1 area */}
-      <div
-        className="swipe-cue"
-        style={{
-          position: "absolute",
-          bottom: "6vh",
-          left: "50%",
-          transform: "translateX(-50%)",
-          textAlign: "center",
-          pointerEvents: "none",
-          zIndex: 30,
-        }}
-      >
-        <p
-          style={{
-            fontFamily: "var(--font-body), sans-serif",
-            fontSize: "0.7rem",
-            letterSpacing: "0.15em",
-            color: "rgba(100,80,60,0.6)",
-            whiteSpace: "nowrap",
-          }}
-        >
-          swipe to see our story
-        </p>
-        <svg
-          width="32"
-          height="16"
-          viewBox="0 0 32 16"
-          style={{ margin: "6px auto 0", opacity: 0.4 }}
-        >
-          <path
-            d="M4 8 L16 8 M12 4 L16 8 L12 12"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            fill="none"
-            style={{ color: "rgba(100,80,60,0.6)" }}
-          />
-        </svg>
-        <style jsx>{`
-          @media (min-width: 769px) {
-            .swipe-cue {
-              display: none !important;
-            }
-          }
-        `}</style>
       </div>
 
       {/* Ch6 celebration — rendered outside the scrolling track so it stays fixed */}
