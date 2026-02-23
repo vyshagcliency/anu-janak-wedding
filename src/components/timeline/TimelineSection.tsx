@@ -152,10 +152,22 @@ export default function TimelineSection() {
         return closest;
       };
 
-      const applyProgress = (p: number) => {
+      const applyProgress = (p: number, smooth = false) => {
         progress = Math.max(0, Math.min(1, p));
         const xPct = -(progress * 83.33);
-        gsap.set(track, { xPercent: xPct });
+
+        if (smooth) {
+          // Smooth interpolation during drag
+          gsap.to(track, {
+            xPercent: xPct,
+            duration: 0.15,
+            ease: "power1.out",
+            overwrite: true,
+          });
+        } else {
+          gsap.set(track, { xPercent: xPct });
+        }
+
         setBusProgress(progress);
       };
 
@@ -163,8 +175,8 @@ export default function TimelineSection() {
         const xPct = -(target * 83.33);
         gsap.to(track, {
           xPercent: xPct,
-          duration: 0.4,
-          ease: "power2.out",
+          duration: 0.6,
+          ease: "power2.inOut",
           onUpdate: () => {
             const current = gsap.getProperty(track, "xPercent") as number;
             progress = -(current / 83.33);
@@ -193,17 +205,17 @@ export default function TimelineSection() {
         if (swipeDirection === null) {
           const absDx = Math.abs(dx);
           const absDy = Math.abs(dy);
-          if (absDx < 8 && absDy < 8) return; // too small to decide
+          if (absDx < 10 && absDy < 10) return; // increased threshold for calmer response
           swipeDirection = absDx > absDy ? "horizontal" : "vertical";
         }
 
         // Vertical swipe — let the browser handle page scroll
         if (swipeDirection === "vertical") return;
 
-        // Horizontal swipe — we drive the timeline
+        // Horizontal swipe — we drive the timeline (reduced sensitivity)
         e.preventDefault();
-        const delta = -dx / (window.innerWidth * 0.8);
-        applyProgress(startProgress + delta);
+        const delta = -dx / (window.innerWidth * 1.5); // increased divisor = less sensitive
+        applyProgress(startProgress + delta, true); // smooth interpolation
       };
 
       const onTouchEnd = () => {
