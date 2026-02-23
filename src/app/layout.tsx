@@ -28,6 +28,20 @@ export const metadata: Metadata = {
     title: "Anu & Janak — April 26, 2026",
     description: "A love story that began in a school van.",
     type: "website",
+    images: [
+      {
+        url: "/images/timeline/img4.jpeg",
+        width: 1200,
+        height: 630,
+        alt: "Anu & Janak",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Anu & Janak — April 26, 2026",
+    description: "A love story that began in a school van.",
+    images: ["/images/timeline/img4.jpeg"],
   },
 };
 
