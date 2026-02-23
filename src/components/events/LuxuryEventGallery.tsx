@@ -89,8 +89,8 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             }) translateY(${(1 - t) * 24}px)`;
           });
 
-          // Style card reveals at the end (skip for sundowner — card is first)
-          if (styleCardRef.current && event.id !== "sundowner") {
+          // Style card reveals at the end (skip for sundowner & reception — cards are first)
+          if (styleCardRef.current && event.id !== "sundowner" && event.id !== "reception") {
             const t = Math.max(0, Math.min(1, (p - 0.8) / 0.2));
             styleCardRef.current.style.opacity = String(t);
           }
@@ -419,11 +419,92 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             willChange: "transform",
           }}
         >
-          {/* Style guide FIRST for sundowner */}
+          {/* Style guide FIRST for sundowner & reception */}
           {event.id === "sundowner" && (
             <div style={{ opacity: 0.9 }}>
               <StyleGuideCard onClick={openAttire} accentColor={accentColor} />
             </div>
+          )}
+          {event.id === "reception" && (
+            <button
+              onClick={openAttire}
+              aria-label="Open style guide"
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+                opacity: 0.9,
+              }}
+            >
+              <div
+                style={{
+                  backgroundColor: "#F8F4EE",
+                  padding: "12px 12px 40px 12px",
+                  boxShadow:
+                    "0 4px 8px rgba(0,0,0,0.15), 0 12px 32px rgba(0,0,0,0.22)",
+                  borderRadius: "1px",
+                  width: 304,
+                  height: 392,
+                  transform: "rotate(-1.2deg)",
+                  overflow: "hidden",
+                  position: "relative",
+                  transition: "transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.4s",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.transform = "rotate(0deg) scale(1.03)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 16px rgba(0,0,0,0.2), 0 24px 48px rgba(0,0,0,0.3)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.transform = "rotate(-1.2deg)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 8px rgba(0,0,0,0.15), 0 12px 32px rgba(0,0,0,0.22)";
+                }}
+              >
+                <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+                  <Image
+                    src={event.attireImages[0]}
+                    alt={`${event.title} style guide`}
+                    fill
+                    sizes="304px"
+                    style={{ objectFit: "cover" }}
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      background: "linear-gradient(to top, rgba(0,0,0,0.8), transparent)",
+                      padding: "36px 16px 16px",
+                      textAlign: "center",
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontFamily: "var(--font-heading), serif",
+                        fontSize: "1.2rem",
+                        color: "#F8F4EE",
+                        letterSpacing: "0.06em",
+                        marginBottom: 4,
+                      }}
+                    >
+                      Style Guide
+                    </p>
+                    <p
+                      style={{
+                        fontFamily: "var(--font-body), sans-serif",
+                        fontSize: "0.55rem",
+                        letterSpacing: "0.2em",
+                        textTransform: "uppercase",
+                        color: "rgba(248,244,238,0.6)",
+                      }}
+                    >
+                      Tap to expand
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </button>
           )}
 
           {event.photos.map((src, photoIndex) => (
@@ -433,7 +514,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
                 printRefs.current[photoIndex] = el;
               }}
               style={{
-                opacity: photoIndex === 0 && event.id !== "sundowner" ? 0.9 : 0.06,
+                opacity: photoIndex === 0 && event.id !== "sundowner" && event.id !== "reception" ? 0.9 : 0.06,
                 transition: "none",
               }}
             >
@@ -799,6 +880,78 @@ export default function LuxuryEventGallery({ event, index }: Props) {
               </div>
             )}
 
+            {/* Style guide FIRST for reception (mobile) */}
+            {event.id === "reception" && (
+              <div
+                style={{
+                  flexShrink: 0,
+                  width: "75vw",
+                  maxWidth: 280,
+                  backgroundColor: "#F8F4EE",
+                  padding: "10px 10px 36px 10px",
+                  boxShadow:
+                    "0 4px 10px rgba(0,0,0,0.2), 0 14px 32px rgba(0,0,0,0.28)",
+                  transform: "rotate(-1.2deg)",
+                  scrollSnapAlign: "center",
+                  overflow: "hidden",
+                }}
+                onClick={openAttire}
+              >
+                <div
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    aspectRatio: "3/4",
+                    overflow: "hidden",
+                    backgroundColor: "#1a1a1a",
+                  }}
+                >
+                  <Image
+                    src={event.attireImages[0]}
+                    alt={`${event.title} style guide`}
+                    fill
+                    sizes="75vw"
+                    style={{ objectFit: "cover" }}
+                    loading="lazy"
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      background: "linear-gradient(to top, rgba(0,0,0,0.8), transparent)",
+                      padding: "32px 12px 12px",
+                      textAlign: "center",
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontFamily: "var(--font-heading), serif",
+                        fontSize: "1.1rem",
+                        color: "#F8F4EE",
+                        letterSpacing: "0.06em",
+                        marginBottom: 3,
+                      }}
+                    >
+                      Style Guide
+                    </p>
+                    <p
+                      style={{
+                        fontFamily: "var(--font-body), sans-serif",
+                        fontSize: "0.5rem",
+                        letterSpacing: "0.2em",
+                        textTransform: "uppercase",
+                        color: "rgba(248,244,238,0.6)",
+                      }}
+                    >
+                      Tap to expand
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {event.photos.map((src, photoIndex) => (
               <div
                 key={photoIndex}
@@ -835,8 +988,8 @@ export default function LuxuryEventGallery({ event, index }: Props) {
               </div>
             ))}
 
-            {/* Style guide at END for non-sundowner (mobile) */}
-            {event.id !== "sundowner" && (
+            {/* Style guide at END for sangeet & wedding only (mobile) */}
+            {event.id !== "sundowner" && event.id !== "reception" && (
               event.id === "wedding" ? (
                 /* Wedding: show attire image thumbnail */
                 <div
