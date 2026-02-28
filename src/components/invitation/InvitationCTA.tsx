@@ -72,7 +72,7 @@ export default function InvitationCTA() {
       />
 
       {/* Top ornament */}
-      <div className="inv-animate" style={{ marginBottom: 28 }}>
+      <div className="inv-animate" style={{ marginBottom: 16 }}>
         <div
           style={{
             display: "inline-flex",
@@ -89,23 +89,11 @@ export default function InvitationCTA() {
                 "linear-gradient(to bottom, transparent, #C9A96E, transparent)",
             }}
           />
-          <p
-            style={{
-              fontFamily: "var(--font-body), sans-serif",
-              fontSize: "0.55rem",
-              letterSpacing: "0.38em",
-              textTransform: "uppercase",
-              color: "#C9A96E",
-              opacity: 0.85,
-            }}
-          >
-            You are Invited
-          </p>
         </div>
       </div>
 
       {/* Monogram */}
-      <div className="inv-animate" style={{ marginBottom: 32 }}>
+      <div className="inv-animate" style={{ marginBottom: 16 }}>
         <p
           style={{
             fontFamily: "var(--font-heading), serif",
@@ -127,6 +115,22 @@ export default function InvitationCTA() {
             &amp;
           </span>{" "}
           J
+        </p>
+      </div>
+
+      {/* You are Invited */}
+      <div className="inv-animate" style={{ marginBottom: 32 }}>
+        <p
+          style={{
+            fontFamily: "var(--font-body), sans-serif",
+            fontSize: "0.55rem",
+            letterSpacing: "0.38em",
+            textTransform: "uppercase",
+            color: "#C9A96E",
+            opacity: 0.85,
+          }}
+        >
+          You are Invited
         </p>
       </div>
 
