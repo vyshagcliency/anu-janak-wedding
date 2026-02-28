@@ -125,7 +125,7 @@ export const EVENTS: WeddingEvent[] = [
       "/images/events/reception/reception_final1.jpg",
       "/images/events/reception/reception_final2.jpg",
       "/images/events/reception/reception_final3.jpg",
-      "/images/events/reception/reception_final4.jpg",
+      "/images/events/reception/reception_final4_nowatermark.jpeg",
     ],
     attireImages: ["/images/events/attire/reception-ref.png"],
   },
