@@ -101,6 +101,8 @@ export default function TimelineSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [busProgress, setBusProgress] = useState(0);
+  const [showSwipeHint, setShowSwipeHint] = useState(false);
+  const swipeHintShown = useRef(false);
 
   const vehicleState = useMemo(
     () => deriveVehicleState(busProgress),
@@ -119,6 +121,34 @@ export default function TimelineSection() {
   // Wider ranges so figures are visible across the full snap segment
   const girlProgress = getStopProgress(busProgress, 0.0, 0.18);
   const boyProgress = getStopProgress(busProgress, 0.18, 0.38);
+
+  // Show swipe hint when timeline section enters view on mobile
+  useEffect(() => {
+    if (typeof window === "undefined" || window.innerWidth > 768) return;
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !swipeHintShown.current) {
+          swipeHintShown.current = true;
+          setShowSwipeHint(true);
+          // Auto-hide after 3 seconds
+          setTimeout(() => setShowSwipeHint(false), 3000);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  // Hide swipe hint once user starts swiping
+  useEffect(() => {
+    if (busProgress > 0.02 && showSwipeHint) {
+      setShowSwipeHint(false);
+    }
+  }, [busProgress, showSwipeHint]);
 
   useEffect(() => {
     if (!sectionRef.current || !trackRef.current) return;
@@ -383,6 +413,64 @@ export default function TimelineSection() {
 
       {/* Ch6 celebration — rendered outside the scrolling track so it stays fixed */}
       <CelebrationBurst active={atFinale} />
+
+      {/* Swipe hint for mobile users */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 80,
+          left: 0,
+          right: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 8,
+          zIndex: 20,
+          opacity: showSwipeHint ? 1 : 0,
+          transition: "opacity 0.6s ease",
+          pointerEvents: "none",
+        }}
+      >
+        <div
+          className="swipe-hint-arrow"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+          }}
+        >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8B7355" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8B7355" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5 }}>
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </div>
+        <p
+          style={{
+            fontFamily: "var(--font-body), sans-serif",
+            fontSize: "0.65rem",
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            color: "#8B7355",
+          }}
+        >
+          Swipe to explore
+        </p>
+      </div>
+
+      <style jsx>{`
+        @keyframes swipeLeft {
+          0%, 100% { transform: translateX(0); }
+          50% { transform: translateX(-12px); }
+        }
+        .swipe-hint-arrow {
+          animation: swipeLeft 1.2s ease-in-out infinite;
+        }
+        @media (min-width: 769px) {
+          .swipe-hint-arrow { display: none !important; }
+        }
+      `}</style>
     </section>
   );
 }
