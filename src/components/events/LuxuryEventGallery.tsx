@@ -612,51 +612,6 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             </>
           )}
 
-          {/* Dress Code & Color Palette — below map */}
-          <div style={{ marginTop: 14, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <div>
-              <p
-                style={{
-                  fontFamily: "var(--font-body), sans-serif",
-                  fontSize: "0.5rem",
-                  letterSpacing: "0.16em",
-                  textTransform: "uppercase",
-                  color: "rgba(248,244,238,0.45)",
-                  marginBottom: 3,
-                }}
-              >
-                Dress Code
-              </p>
-              <p
-                style={{
-                  fontFamily: "var(--font-body), sans-serif",
-                  fontSize: "0.65rem",
-                  color: "#F8F4EE",
-                  letterSpacing: "0.03em",
-                  lineHeight: 1.4,
-                }}
-              >
-                {event.dressCode}
-              </p>
-            </div>
-            {event.colors.length > 0 && (
-              <div style={{ display: "flex", gap: 6, flexShrink: 0, marginLeft: 16 }}>
-                {event.colors.map((color, idx) => (
-                  <div
-                    key={idx}
-                    style={{
-                      width: 16,
-                      height: 16,
-                      borderRadius: "50%",
-                      backgroundColor: color.hex,
-                      border: "1px solid rgba(248,244,238,0.25)",
-                      boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
-                    }}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
 
         </div>
 
@@ -670,7 +625,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             right: 0,
             display: "flex",
             alignItems: "center",
-            paddingTop: event.id === "wedding" ? 140 : 120,
+            paddingTop: event.id === "wedding" ? 100 : 80,
           }}
         >
           <div
@@ -795,6 +750,63 @@ export default function LuxuryEventGallery({ event, index }: Props) {
               </div>
             ))}
 
+          </div>
+        </div>
+
+        {/* Dress Code & Color Palette — bottom bar */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 10,
+            padding: "14px 24px 20px",
+            background:
+              "linear-gradient(to top, rgba(13,10,8,0.85) 0%, rgba(13,10,8,0.5) 70%, transparent 100%)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div>
+              <p
+                style={{
+                  fontFamily: "var(--font-body), sans-serif",
+                  fontSize: "0.5rem",
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                  color: "rgba(248,244,238,0.45)",
+                  marginBottom: 3,
+                }}
+              >
+                Dress Code
+              </p>
+              <p
+                style={{
+                  fontFamily: "var(--font-body), sans-serif",
+                  fontSize: "0.65rem",
+                  color: "#F8F4EE",
+                  letterSpacing: "0.03em",
+                  lineHeight: 1.4,
+                }}
+              >
+                {event.dressCode}
+              </p>
+            </div>
+            <div style={{ display: "flex", gap: 6, flexShrink: 0, marginLeft: 16 }}>
+              {event.colors.map((color, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    width: 16,
+                    height: 16,
+                    borderRadius: "50%",
+                    backgroundColor: color.hex,
+                    border: "1px solid rgba(248,244,238,0.25)",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
