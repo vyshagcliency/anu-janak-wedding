@@ -467,16 +467,16 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
         />
 
         {/* A & J Monogram — large, premium */}
-        <svg width="130" height="130" viewBox="0 0 160 160" aria-label="A and J monogram">
-          <circle ref={monogramCircleRef} cx="80" cy="80" r="75" fill="none" stroke="var(--gold)" strokeWidth="0.8" />
-          <circle cx="80" cy="80" r="70" fill="none" stroke="var(--gold)" strokeWidth="0.3" opacity="0.35" />
-          <circle cx="80" cy="5" r="1.5" fill="var(--gold)" opacity="0.4" />
-          <circle cx="80" cy="155" r="1.5" fill="var(--gold)" opacity="0.4" />
-          <circle cx="5" cy="80" r="1.5" fill="var(--gold)" opacity="0.4" />
-          <circle cx="155" cy="80" r="1.5" fill="var(--gold)" opacity="0.4" />
-          <text ref={monogramARef} x="38" y="96" fontFamily="var(--font-playfair), serif" fontSize="52" fontWeight="400" fontStyle="italic" fill="var(--gold)" style={{ opacity: 0 }}>A</text>
-          <text ref={monogramAmpRef} x="80" y="86" fontFamily="var(--font-playfair), serif" fontSize="18" fontStyle="italic" fill="var(--gold)" textAnchor="middle" style={{ opacity: 0 }}>&amp;</text>
-          <text ref={monogramJRef} x="92" y="96" fontFamily="var(--font-playfair), serif" fontSize="52" fontWeight="400" fontStyle="italic" fill="var(--gold)" style={{ opacity: 0 }}>J</text>
+        <svg width="160" height="160" viewBox="0 0 160 160" aria-label="A and J monogram">
+          <circle ref={monogramCircleRef} cx="80" cy="80" r="75" fill="none" stroke="#B8923C" strokeWidth="1" />
+          <circle cx="80" cy="80" r="70" fill="none" stroke="#B8923C" strokeWidth="0.4" opacity="0.4" />
+          <circle cx="80" cy="5" r="1.5" fill="#B8923C" opacity="0.5" />
+          <circle cx="80" cy="155" r="1.5" fill="#B8923C" opacity="0.5" />
+          <circle cx="5" cy="80" r="1.5" fill="#B8923C" opacity="0.5" />
+          <circle cx="155" cy="80" r="1.5" fill="#B8923C" opacity="0.5" />
+          <text ref={monogramARef} x="38" y="96" fontFamily="var(--font-playfair), serif" fontSize="56" fontWeight="400" fontStyle="italic" fill="#A07830" style={{ opacity: 0 }}>A</text>
+          <text ref={monogramAmpRef} x="80" y="86" fontFamily="var(--font-playfair), serif" fontSize="20" fontStyle="italic" fill="#A07830" textAnchor="middle" style={{ opacity: 0 }}>&amp;</text>
+          <text ref={monogramJRef} x="94" y="96" fontFamily="var(--font-playfair), serif" fontSize="56" fontWeight="400" fontStyle="italic" fill="#A07830" style={{ opacity: 0 }}>J</text>
         </svg>
 
         {/* Gold rule below monogram */}
