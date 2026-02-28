@@ -63,7 +63,6 @@ export const EVENTS: WeddingEvent[] = [
     colors: [
       { hex: "#0D47A1", name: "Dark Blue" },
       { hex: "#1B5E20", name: "Dark Green" },
-      { hex: "#000000", name: "Black" },
       { hex: "#5D0F0D", name: "Maroon" },
       { hex: "#B8860B", name: "Golden" },
       { hex: "#4A148C", name: "Purple" },
@@ -108,7 +107,7 @@ export const EVENTS: WeddingEvent[] = [
       "/images/events/wedding/photo3.jpg",
       "/images/events/wedding/photo4.jpg",
     ],
-    attireImages: ["/images/events/attire/wedding-ref.jpeg"],
+    attireImages: ["/images/events/wedding/wedding_dress_code.jpeg"],
   },
   {
     id: "reception",
