@@ -1,13 +1,19 @@
 "use client";
 
+import Image from "next/image";
+
 interface StyleGuideCardProps {
   onClick: () => void;
   accentColor: string;
+  imageSrc: string;
+  imageAlt: string;
 }
 
 export default function StyleGuideCard({
   onClick,
   accentColor,
+  imageSrc,
+  imageAlt,
 }: StyleGuideCardProps) {
   return (
     <button
@@ -31,12 +37,11 @@ export default function StyleGuideCard({
           borderRadius: "1px",
           width: 304,
           height: 392,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
           transform: "rotate(-1.2deg)",
-          transition: "transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.4s",
+          overflow: "hidden",
+          position: "relative" as const,
+          transition:
+            "transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.4s",
         }}
         onMouseEnter={(e) => {
           (e.currentTarget as HTMLDivElement).style.transform =
@@ -51,70 +56,56 @@ export default function StyleGuideCard({
             "0 4px 8px rgba(0,0,0,0.15), 0 12px 32px rgba(0,0,0,0.22), 0 2px 4px rgba(0,0,0,0.08)";
         }}
       >
-        {/* Inner bordered area */}
         <div
           style={{
+            position: "relative",
             width: "100%",
             height: "100%",
-            border: `1px solid ${accentColor}40`,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 16,
-            padding: 24,
+            overflow: "hidden",
           }}
         >
-          {/* Decorative rule */}
+          <Image
+            src={imageSrc}
+            alt={imageAlt}
+            fill
+            sizes="304px"
+            style={{ objectFit: "cover" }}
+          />
           <div
             style={{
-              width: 40,
-              height: 1,
-              background: accentColor,
-              opacity: 0.6,
-            }}
-          />
-
-          {/* Serif heading */}
-          <p
-            style={{
-              fontFamily: "var(--font-heading), serif",
-              fontSize: "1.5rem",
-              fontWeight: 400,
-              color: "#2C2C2C",
-              letterSpacing: "0.06em",
-              textAlign: "center",
-              lineHeight: 1.2,
-            }}
-          >
-            Style
-            <br />
-            Guide
-          </p>
-
-          {/* Subtext */}
-          <p
-            style={{
-              fontFamily: "var(--font-body), sans-serif",
-              fontSize: "0.6rem",
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              color: "#5A5A5A",
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              background:
+                "linear-gradient(to top, rgba(0,0,0,0.8), transparent)",
+              padding: "36px 16px 16px",
               textAlign: "center",
             }}
           >
-            Tap to explore
-          </p>
-
-          {/* Decorative rule */}
-          <div
-            style={{
-              width: 40,
-              height: 1,
-              background: accentColor,
-              opacity: 0.6,
-            }}
-          />
+            <p
+              style={{
+                fontFamily: "var(--font-heading), serif",
+                fontSize: "1.2rem",
+                color: "#F8F4EE",
+                letterSpacing: "0.06em",
+                marginBottom: 4,
+              }}
+            >
+              Style Guide
+            </p>
+            <p
+              style={{
+                fontFamily: "var(--font-body), sans-serif",
+                fontSize: "0.55rem",
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                color: "rgba(248,244,238,0.6)",
+              }}
+            >
+              Tap to expand
+            </p>
+          </div>
         </div>
       </div>
     </button>

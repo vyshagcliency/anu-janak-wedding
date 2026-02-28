@@ -73,8 +73,8 @@ export default function Home() {
                 <LuxuryEventsSection />
               </div>
               <EngagementHighlights />
-              <InvitationCTA />
               <FAQSection />
+              <InvitationCTA />
               <RSVPSection />
             </>
           )}

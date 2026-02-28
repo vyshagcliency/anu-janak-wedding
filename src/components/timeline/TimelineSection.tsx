@@ -60,7 +60,7 @@ const STOPS = [
     subtitle: "Chapter 5",
     description:
       "After all of that, saying yes felt less like a decision and more like something we'd already known for a long time.",
-    imageSrc: "/images/timeline/img4.jpeg",
+    imageSrc: "/images/timeline/chapter_5img.jpeg",
     imageAlt: "Intimate embrace through foliage",
     position: 75,
     revealType: "blur" as const,
