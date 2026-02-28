@@ -16,6 +16,10 @@ interface AudioContextValue {
   toggle: () => void;
   play: () => void;
   fadeOut: () => void;
+  /** Pause bg music temporarily (e.g. while engagement video plays) */
+  pauseBg: () => void;
+  /** Resume bg music after temporary pause */
+  resumeBg: () => void;
 }
 
 const AudioCtx = createContext<AudioContextValue>({
@@ -23,6 +27,8 @@ const AudioCtx = createContext<AudioContextValue>({
   toggle: () => {},
   play: () => {},
   fadeOut: () => {},
+  pauseBg: () => {},
+  resumeBg: () => {},
 });
 
 export const useAudio = () => useContext(AudioCtx);
@@ -30,14 +36,17 @@ export const useAudio = () => useContext(AudioCtx);
 export default function AudioProvider({ children }: { children: ReactNode }) {
   const howlRef = useRef<Howl | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  // Track whether bg was playing before a temporary pause
+  const wasPlayingRef = useRef(false);
 
   useEffect(() => {
-    const muted = localStorage.getItem("aj-muted") === "true";
+    // Always start fresh — ignore previous muted state
+    localStorage.removeItem("aj-muted");
 
     howlRef.current = new Howl({
-      src: ["/audio/romantic-piano.webm"],
+      src: ["/audio/Marry You.mp3"],
       loop: true,
-      volume: muted ? 0 : 0.35,
+      volume: 0.35,
       html5: true,
     });
 
@@ -82,8 +91,33 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
     }, 2000);
   }, []);
 
+  const pauseBg = useCallback(() => {
+    const h = howlRef.current;
+    if (!h) return;
+    wasPlayingRef.current = h.playing();
+    if (h.playing()) {
+      h.fade(0.35, 0, 500);
+      setTimeout(() => {
+        h.pause();
+        setIsPlaying(false);
+      }, 500);
+    }
+  }, []);
+
+  const resumeBg = useCallback(() => {
+    const h = howlRef.current;
+    if (!h) return;
+    const muted = localStorage.getItem("aj-muted") === "true";
+    if (wasPlayingRef.current && !muted) {
+      h.volume(0);
+      h.play();
+      h.fade(0, 0.35, 500);
+      setIsPlaying(true);
+    }
+  }, []);
+
   return (
-    <AudioCtx.Provider value={{ isPlaying, toggle, play, fadeOut }}>
+    <AudioCtx.Provider value={{ isPlaying, toggle, play, fadeOut, pauseBg, resumeBg }}>
       {children}
     </AudioCtx.Provider>
   );

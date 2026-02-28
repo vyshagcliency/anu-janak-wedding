@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useAudio } from "@/components/providers/AudioProvider";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,6 +19,7 @@ export default function EngagementHighlights() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
+  const { pauseBg, resumeBg } = useAudio();
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -56,7 +58,7 @@ export default function EngagementHighlights() {
     return () => ctx.revert();
   }, []);
 
-  // Auto-play video when it scrolls into view
+  // Auto-play video when it scrolls into view; manage bg music
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -64,16 +66,22 @@ export default function EngagementHighlights() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
+          pauseBg();
           video.play().catch(() => {});
         } else {
           video.pause();
+          resumeBg();
         }
       },
       { threshold: 0.3 }
     );
     observer.observe(video);
-    return () => observer.disconnect();
-  }, []);
+    return () => {
+      observer.disconnect();
+      // Ensure bg resumes if component unmounts while video is visible
+      resumeBg();
+    };
+  }, [pauseBg, resumeBg]);
 
   return (
     <div ref={sectionRef} style={{ background: "#0D0A08", position: "relative" }}>
@@ -156,7 +164,6 @@ export default function EngagementHighlights() {
             src="/images/engagement/highlight-video.mp4"
             controls
             playsInline
-            muted
             loop
             preload="metadata"
             style={{
@@ -168,19 +175,6 @@ export default function EngagementHighlights() {
             }}
           />
         </div>
-        <p
-          style={{
-            fontFamily: "var(--font-body), sans-serif",
-            fontSize: "0.58rem",
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
-            color: "rgba(248,244,238,0.35)",
-            textAlign: "center",
-            marginTop: 16,
-          }}
-        >
-          Tap for sound
-        </p>
       </div>
 
       {/* Photo gallery */}
