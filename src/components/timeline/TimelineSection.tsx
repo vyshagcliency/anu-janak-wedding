@@ -20,7 +20,7 @@ const STOPS = [
     subtitle: "Chapter 1",
     description:
       "It started with a school van and two kids who had no idea what was coming in 2007.",
-    imageSrc: "/images/timeline/classphoto1.jpeg",
+    imageSrc: "/images/timeline/chapter_1_final.jpeg",
     imageAlt: "Anu and Janak's class photo",
     position: 8,
     revealType: "circle" as const,
@@ -30,7 +30,7 @@ const STOPS = [
     subtitle: "Chapter 2",
     description:
       "Same school, same neighborhood, same school van, and a lot of growing up together.",
-    imageSrc: "/images/timeline/classphoto2.jpeg",
+    imageSrc: "/images/timeline/chapter_2_final.jpeg",
     imageAlt: "School group photo with teachers",
     position: 25,
     revealType: "slide" as const,
@@ -40,7 +40,7 @@ const STOPS = [
     subtitle: "Chapter 3",
     description:
       "2012 is when something shifted. We stopped being just friends, though neither of us could tell you exactly when or how.",
-    imageSrc: "/images/timeline/img2.jpeg",
+    imageSrc: "/images/timeline/chapter_3_final.jpeg",
     imageAlt: "Walking together on a nature path",
     position: 42,
     revealType: "fade" as const,
@@ -50,7 +50,7 @@ const STOPS = [
     subtitle: "Chapter 4",
     description:
       "What followed was years of figuring out adulthood, navigating distance, and somehow always ending up back in each other's corner of the world.",
-    imageSrc: "/images/timeline/img5.jpeg",
+    imageSrc: "/images/timeline/img2.jpeg",
     imageAlt: "She walks ahead, he follows",
     position: 58,
     revealType: "split" as const,
