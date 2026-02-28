@@ -35,7 +35,18 @@ export default function CelebrationBurst({ active }: Props) {
   // We do this by toggling an opacity so the burst plays every time you arrive
   useEffect(() => {
     if (!containerRef.current) return;
-    containerRef.current.style.opacity = active ? "1" : "0";
+    if (active) {
+      containerRef.current.style.opacity = "1";
+      // Auto-hide after animations finish (~5s covers all confetti + delays)
+      const timer = setTimeout(() => {
+        if (containerRef.current) {
+          containerRef.current.style.opacity = "0";
+        }
+      }, 5000);
+      return () => clearTimeout(timer);
+    } else {
+      containerRef.current.style.opacity = "0";
+    }
   }, [active]);
 
   if (!active) return null;
