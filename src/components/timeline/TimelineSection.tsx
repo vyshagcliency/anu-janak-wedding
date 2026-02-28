@@ -418,13 +418,13 @@ export default function TimelineSection() {
       <div
         style={{
           position: "absolute",
-          bottom: 80,
+          bottom: 70,
           left: 0,
           right: 0,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: 8,
+          gap: 10,
           zIndex: 20,
           opacity: showSwipeHint ? 1 : 0,
           transition: "opacity 0.6s ease",
@@ -432,31 +432,46 @@ export default function TimelineSection() {
         }}
       >
         <div
-          className="swipe-hint-arrow"
           style={{
+            background: "rgba(30, 22, 12, 0.75)",
+            backdropFilter: "blur(8px)",
+            borderRadius: 24,
+            padding: "10px 24px",
             display: "flex",
             alignItems: "center",
-            gap: 6,
+            gap: 10,
+            border: "1px solid rgba(201, 169, 110, 0.3)",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
           }}
         >
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8B7355" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8B7355" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5 }}>
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
+          <div
+            className="swipe-hint-arrow"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.4 }}>
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </div>
+          <p
+            style={{
+              fontFamily: "var(--font-body), sans-serif",
+              fontSize: "0.72rem",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "#F8F4EE",
+              fontWeight: 500,
+            }}
+          >
+            Swipe to explore
+          </p>
         </div>
-        <p
-          style={{
-            fontFamily: "var(--font-body), sans-serif",
-            fontSize: "0.65rem",
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
-            color: "#8B7355",
-          }}
-        >
-          Swipe to explore
-        </p>
       </div>
 
       <style jsx>{`
