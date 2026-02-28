@@ -134,7 +134,7 @@ export default function TimelineSection() {
           swipeHintShown.current = true;
           setShowSwipeHint(true);
           // Auto-hide after 3 seconds
-          setTimeout(() => setShowSwipeHint(false), 3000);
+          setTimeout(() => setShowSwipeHint(false), 5000);
         }
       },
       { threshold: 0.3 }
@@ -418,7 +418,7 @@ export default function TimelineSection() {
       <div
         style={{
           position: "absolute",
-          bottom: 70,
+          bottom: 110,
           left: 0,
           right: 0,
           display: "flex",
