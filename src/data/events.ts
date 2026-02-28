@@ -107,7 +107,7 @@ export const EVENTS: WeddingEvent[] = [
       "/images/events/wedding/photo3.jpg",
       "/images/events/wedding/photo4.jpg",
     ],
-    attireImages: ["/images/events/wedding/wedding_dress_code.jpeg"],
+    attireImages: ["/images/events/attire/wedding-ref.jpeg"],
   },
   {
     id: "reception",
