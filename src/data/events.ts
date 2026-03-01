@@ -32,7 +32,7 @@ export const EVENTS: WeddingEvent[] = [
     venue: "The Leaf, Poomala",
     venueAddress: "The Leaf, Poomala",
     venueMapUrl: "https://share.google/1fN4rknlVSPCqqrbU",
-    dressCode: "Festive Ethnic",
+    dressCode: "Festive Ethnic (Bold Brights)",
     colors: [
       { hex: "#E91E63", name: "Pink" },
       { hex: "#F44336", name: "Red" },
