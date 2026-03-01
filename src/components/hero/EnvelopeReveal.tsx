@@ -133,12 +133,12 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
       "-=0.3"
     );
 
-    // "Tap to reveal" fades in
+    // "Tap to reveal" fades in - appears last after all content
     tl.fromTo(
       tapPromptRef.current,
       { opacity: 0 },
       { opacity: 1, duration: 0.4, ease: "power1.out" },
-      "-=0.15"
+      "+=0.2"
     );
 
     return () => {
