@@ -1,51 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-
-const RSVP_FILE = path.join(process.cwd(), "data", "rsvp-submissions.json");
-
-// Ensure data directory exists
-async function ensureDataDir() {
-  const dataDir = path.join(process.cwd(), "data");
-  try {
-    await fs.access(dataDir);
-  } catch {
-    await fs.mkdir(dataDir, { recursive: true });
-  }
-}
-
-// Read existing RSVPs
-async function readRSVPs() {
-  try {
-    await ensureDataDir();
-    const content = await fs.readFile(RSVP_FILE, "utf-8");
-    return JSON.parse(content);
-  } catch {
-    return [];
-  }
-}
-
-// Write RSVPs
-async function writeRSVPs(data: any[]) {
-  await ensureDataDir();
-  await fs.writeFile(RSVP_FILE, JSON.stringify(data, null, 2));
-}
+import { appendToSheet } from "@/lib/googleSheets";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    const { name, email, phone, guests, events } = body;
 
-    const submission = {
-      id: Date.now().toString(),
-      timestamp: new Date().toISOString(),
-      ...body,
-    };
+    // Format timestamp
+    const timestamp = new Date().toLocaleString("en-IN", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
 
-    const rsvps = await readRSVPs();
-    rsvps.push(submission);
-    await writeRSVPs(rsvps);
+    // Format events as comma-separated string
+    const eventsList = events.join(", ");
 
-    return NextResponse.json({ success: true, id: submission.id });
+    // Append to Google Sheet
+    await appendToSheet([
+      timestamp,
+      name,
+      email,
+      phone || "N/A",
+      guests,
+      eventsList,
+    ]);
+
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error("RSVP submission error:", error);
     return NextResponse.json(

@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { getSheetData } from "@/lib/googleSheets";
 
-const RSVP_FILE = path.join(process.cwd(), "data", "rsvp-submissions.json");
 const ADMIN_PASSWORD = "anu@123#34";
 
 export async function GET(request: NextRequest) {
@@ -16,10 +14,13 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const content = await fs.readFile(RSVP_FILE, "utf-8");
-    const rsvps = JSON.parse(content);
+    const rsvps = await getSheetData();
     return NextResponse.json({ success: true, data: rsvps });
-  } catch {
-    return NextResponse.json({ success: true, data: [] });
+  } catch (error) {
+    console.error("Error fetching RSVPs:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to fetch RSVPs" },
+      { status: 500 }
+    );
   }
 }

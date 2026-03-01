@@ -1,15 +1,26 @@
-# RSVP Data Directory
+# RSVP Data Storage
 
-This directory stores RSVP submissions from the website.
+RSVP submissions are now stored in **Google Sheets** instead of local files.
 
-- `rsvp-submissions.json` - Contains all RSVP form submissions (auto-generated, gitignored)
+## Setup Instructions
+
+Follow the detailed guide in `GOOGLE_SHEETS_SETUP.md` at the root of this project.
 
 ## Accessing RSVP Data
 
-Visit `/admin/rsvp` on your deployed site and enter the password to view submissions.
+1. **Via Google Sheets**: Open your Google Sheet directly to view all submissions in real-time
+2. **Via Admin Page**: Visit `/admin/rsvp` on your website and enter password: `anu@123#34`
 
-Password: `anu@123#34`
+## Benefits of Google Sheets
 
-## Security Note
+✅ Works in production (Vercel, Netlify, etc.)
+✅ Easy to view and share with family
+✅ No database hosting costs
+✅ Automatic backups by Google
+✅ Export to Excel/CSV anytime
+✅ Real-time updates
 
-The rsvp-submissions.json file is gitignored to protect user privacy. Make sure to backup this file separately if needed.
+## Legacy Note
+
+This directory previously stored `rsvp-submissions.json` for local development.
+That has been replaced with Google Sheets integration.
