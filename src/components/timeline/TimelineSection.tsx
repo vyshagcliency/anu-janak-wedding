@@ -14,32 +14,44 @@ import CelebrationBurst from "./CelebrationBurst";
 gsap.registerPlugin(ScrollTrigger);
 
 /* ───── Stop data (positions adjusted per plan) ───── */
-const STOPS = [
+type Stop = {
+  title: string;
+  subtitle: string;
+  description: string;
+  imageSrc: string;
+  imageAlt: string;
+  position: number;
+  revealType: "circle" | "slide" | "fade" | "split" | "blur" | "grand";
+  imagePosition?: string;
+};
+
+const STOPS: Stop[] = [
   {
     title: "Where It All Began",
     subtitle: "Chapter 1",
     description:
-      "It started with a school van and two kids who had no idea what was coming in 2007.",
+      "It started with a school van and two kids who had no idea what was coming in 2007. Same school, same neighborhood, same school van, and a lot of growing up together.",
     imageSrc: "/images/timeline/chapter_1_final.jpeg",
     imageAlt: "Anu and Janak's class photo",
     position: 8,
     revealType: "circle" as const,
+    imagePosition: "center 30%",
   },
   {
     title: "Childhood memories",
     subtitle: "Chapter 2",
     description:
-      "Same school, same neighborhood, same school van, and a lot of growing up together.",
+      "2012 is when something shifted. We stopped being just friends, though neither of us could tell you exactly when or how.",
     imageSrc: "/images/timeline/chapter_2_final.jpeg",
     imageAlt: "School group photo with teachers",
     position: 25,
     revealType: "slide" as const,
   },
   {
-    title: "Friendship to Love",
+    title: "College Days",
     subtitle: "Chapter 3",
     description:
-      "2012 is when something shifted. We stopped being just friends, though neither of us could tell you exactly when or how.",
+      "Even through the busy college years, if there was a chance to meet, we took it.",
     imageSrc: "/images/timeline/chapter_3_final.jpeg",
     imageAlt: "Walking together on a nature path",
     position: 42,
@@ -406,6 +418,7 @@ export default function TimelineSection() {
             imageAlt={stop.imageAlt}
             position={stop.position}
             revealType={stop.revealType}
+            imagePosition={stop.imagePosition}
             onNext={i === STOPS.length - 1 ? handleNext : undefined}
           />
         ))}

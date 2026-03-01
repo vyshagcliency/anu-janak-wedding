@@ -53,6 +53,7 @@ interface Props {
   imageAlt: string;
   position: number;
   revealType?: "circle" | "slide" | "fade" | "split" | "blur" | "grand";
+  imagePosition?: string;
   onNext?: () => void;
 }
 
@@ -65,6 +66,7 @@ export default function TimelineStop({
   imageAlt,
   position,
   revealType = "fade",
+  imagePosition,
   onNext,
 }: Props) {
   const stopRef = useRef<HTMLDivElement>(null);
@@ -216,6 +218,7 @@ export default function TimelineStop({
             className="object-cover"
             sizes="(max-width: 768px) 85vw, 480px"
             loading="lazy"
+            style={imagePosition ? { objectPosition: imagePosition } : undefined}
           />
 
           {/* Grand reveal: gold border with corner accents */}
