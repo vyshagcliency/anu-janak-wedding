@@ -38,7 +38,7 @@ const STOPS: Stop[] = [
     imagePosition: "center 30%",
   },
   {
-    title: "Childhood memories",
+    title: "Friendship to Love",
     subtitle: "Chapter 2",
     description:
       "2012 is when something shifted. We stopped being just friends, though neither of us could tell you exactly when or how.",
