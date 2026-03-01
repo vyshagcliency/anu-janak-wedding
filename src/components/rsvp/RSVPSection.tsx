@@ -67,10 +67,27 @@ export default function RSVPSection() {
     }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("RSVP submitted:", formData);
-    setSubmitted(true);
+    try {
+      const response = await fetch("/api/rsvp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        console.error("Failed to submit RSVP");
+        alert("Failed to submit RSVP. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting RSVP:", error);
+      alert("Failed to submit RSVP. Please try again.");
+    }
   };
 
   // Dark-theme input shared styles

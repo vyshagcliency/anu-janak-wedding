@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# RSVP data (contains user information)
+/data/rsvp-submissions.json
