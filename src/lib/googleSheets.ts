@@ -2,35 +2,40 @@ import { google } from "googleapis";
 
 // Get credentials from environment variables
 const getGoogleAuth = () => {
-  const credentialsJson = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
-  if (!credentialsJson) {
+  const credentialsData = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
+  if (!credentialsData) {
     throw new Error("GOOGLE_SERVICE_ACCOUNT_KEY environment variable is not set");
   }
 
   let credentials;
   try {
-    credentials = JSON.parse(credentialsJson);
+    // Try to decode as base64 first (recommended format for Netlify)
+    if (!credentialsData.trim().startsWith('{')) {
+      // It's base64 encoded
+      const decoded = Buffer.from(credentialsData, 'base64').toString('utf-8');
+      credentials = JSON.parse(decoded);
+    } else {
+      // It's plain JSON
+      credentials = JSON.parse(credentialsData);
 
-    // Fix the private key format
-    if (credentials.private_key) {
-      // Replace literal \n with actual newlines
-      credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
+      // Fix the private key format for plain JSON
+      if (credentials.private_key) {
+        // Replace literal \n with actual newlines
+        credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
 
-      // Remove extra spaces that may have been added during copy/paste
-      // These extra spaces break the key format
-      credentials.private_key = credentials.private_key
-        .replace(/-----BEGIN PRIVATE\s+KEY-----/g, '-----BEGIN PRIVATE KEY-----')
-        .replace(/-----END PRIVATE\s+KEY-----/g, '-----END PRIVATE KEY-----')
-        // Remove spaces from the middle of base64 lines
-        .split('\n')
-        .map((line: string) => {
-          // Only remove spaces from base64 content, not from BEGIN/END markers
-          if (line.includes('-----')) {
-            return line;
-          }
-          return line.replace(/\s+/g, '');
-        })
-        .join('\n');
+        // Remove extra spaces that may have been added during copy/paste
+        credentials.private_key = credentials.private_key
+          .replace(/-----BEGIN PRIVATE\s+KEY-----/g, '-----BEGIN PRIVATE KEY-----')
+          .replace(/-----END PRIVATE\s+KEY-----/g, '-----END PRIVATE KEY-----')
+          .split('\n')
+          .map((line: string) => {
+            if (line.includes('-----')) {
+              return line;
+            }
+            return line.replace(/\s+/g, '');
+          })
+          .join('\n');
+      }
     }
   } catch (error) {
     console.error("Failed to parse GOOGLE_SERVICE_ACCOUNT_KEY:", error);

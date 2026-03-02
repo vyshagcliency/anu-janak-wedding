@@ -42,3 +42,5 @@ next-env.d.ts
 
 # RSVP data (contains user information)
 /data/rsvp-submissions.json
+google-credentials-base64.txt
+encode-credentials.js
