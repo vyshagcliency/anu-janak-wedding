@@ -619,7 +619,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
           style={{
             position: "absolute",
             top: event.id === "wedding" ? 120 : 130,
-            bottom: 60,
+            bottom: event.id === "reception" ? 30 : 60,
             left: 0,
             right: 0,
             display: "flex",
