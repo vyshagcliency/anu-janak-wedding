@@ -10,6 +10,11 @@ const getGoogleAuth = () => {
   let credentials;
   try {
     credentials = JSON.parse(credentialsJson);
+
+    // Fix the private key format - replace literal \n with actual newlines
+    if (credentials.private_key) {
+      credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
+    }
   } catch (error) {
     console.error("Failed to parse GOOGLE_SERVICE_ACCOUNT_KEY:", error);
     throw new Error("Invalid GOOGLE_SERVICE_ACCOUNT_KEY format");
