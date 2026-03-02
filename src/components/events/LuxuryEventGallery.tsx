@@ -760,7 +760,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             left: 0,
             right: 0,
             zIndex: 10,
-            padding: "14px 24px 20px",
+            padding: "8px 24px 16px",
             background:
               "linear-gradient(to top, rgba(13,10,8,0.85) 0%, rgba(13,10,8,0.5) 70%, transparent 100%)",
           }}
@@ -774,7 +774,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
                   letterSpacing: "0.16em",
                   textTransform: "uppercase",
                   color: "rgba(248,244,238,0.45)",
-                  marginBottom: 3,
+                  marginBottom: 2,
                 }}
               >
                 Dress Code
