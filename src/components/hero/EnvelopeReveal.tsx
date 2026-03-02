@@ -93,9 +93,9 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
       "-=0.6"
     );
 
-    // All content appears together at once
-    const contentStartTime = "+=0.1";
-    const contentDuration = 0.3;
+    // All content appears together at once - with the card
+    const contentStartTime = "-=0.4";
+    const contentDuration = 0.4;
 
     // Ornament
     tl.fromTo(
@@ -146,14 +146,14 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
     // Mark when content is done
     tl.add("contentDone");
 
-    // "Tap to reveal" fades in AFTER all content (with 0.5s delay)
+    // "Tap to reveal" fades in AFTER all content (with short delay)
     tl.fromTo(
       tapPromptRef.current,
       { opacity: 0, visibility: "hidden" },
       {
         opacity: 1,
         visibility: "visible",
-        duration: 0.5,
+        duration: 0.4,
         ease: "power1.out",
         onComplete: () => {
           if (tapPromptRef.current) {
@@ -161,7 +161,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
           }
         }
       },
-      "contentDone+=0.5"
+      "contentDone+=0.2"
     );
 
     return () => {
