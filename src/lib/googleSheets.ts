@@ -11,9 +11,26 @@ const getGoogleAuth = () => {
   try {
     credentials = JSON.parse(credentialsJson);
 
-    // Fix the private key format - replace literal \n with actual newlines
+    // Fix the private key format
     if (credentials.private_key) {
+      // Replace literal \n with actual newlines
       credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
+
+      // Remove extra spaces that may have been added during copy/paste
+      // These extra spaces break the key format
+      credentials.private_key = credentials.private_key
+        .replace(/-----BEGIN PRIVATE\s+KEY-----/g, '-----BEGIN PRIVATE KEY-----')
+        .replace(/-----END PRIVATE\s+KEY-----/g, '-----END PRIVATE KEY-----')
+        // Remove spaces from the middle of base64 lines
+        .split('\n')
+        .map(line => {
+          // Only remove spaces from base64 content, not from BEGIN/END markers
+          if (line.includes('-----')) {
+            return line;
+          }
+          return line.replace(/\s+/g, '');
+        })
+        .join('\n');
     }
   } catch (error) {
     console.error("Failed to parse GOOGLE_SERVICE_ACCOUNT_KEY:", error);
