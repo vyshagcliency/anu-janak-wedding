@@ -618,14 +618,12 @@ export default function LuxuryEventGallery({ event, index }: Props) {
         <div
           style={{
             position: "absolute",
-            top: 0,
-            bottom: 0,
+            top: event.id === "wedding" ? 150 : 160,
+            bottom: 90,
             left: 0,
             right: 0,
             display: "flex",
-            alignItems: "flex-end",
-            paddingTop: event.id === "wedding" ? 60 : 50,
-            paddingBottom: 80,
+            alignItems: "center",
           }}
         >
           <div
