@@ -2,38 +2,56 @@ import { google } from "googleapis";
 
 // Get credentials from environment variables
 const getGoogleAuth = () => {
-  const credentials = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
-  if (!credentials) {
+  const credentialsJson = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
+  if (!credentialsJson) {
     throw new Error("GOOGLE_SERVICE_ACCOUNT_KEY environment variable is not set");
   }
 
+  let credentials;
+  try {
+    credentials = JSON.parse(credentialsJson);
+  } catch (error) {
+    console.error("Failed to parse GOOGLE_SERVICE_ACCOUNT_KEY:", error);
+    throw new Error("Invalid GOOGLE_SERVICE_ACCOUNT_KEY format");
+  }
+
   const auth = new google.auth.GoogleAuth({
-    credentials: JSON.parse(credentials),
+    credentials,
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+    projectId: credentials.project_id,
   });
 
   return auth;
 };
 
 export async function appendToSheet(values: any[]) {
-  const auth = getGoogleAuth();
-  const sheets = google.sheets({ version: "v4", auth });
+  try {
+    const auth = getGoogleAuth();
+    const sheets = google.sheets({ version: "v4", auth });
 
-  const spreadsheetId = process.env.GOOGLE_SHEET_ID;
-  if (!spreadsheetId) {
-    throw new Error("GOOGLE_SHEET_ID environment variable is not set");
+    const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+    if (!spreadsheetId) {
+      throw new Error("GOOGLE_SHEET_ID environment variable is not set");
+    }
+
+    const response = await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range: "Sheet1!A:F", // Adjust if your sheet has a different name
+      valueInputOption: "USER_ENTERED",
+      requestBody: {
+        values: [values],
+      },
+    });
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Error appending to sheet:", error);
+    if (error.response) {
+      console.error("Response data:", error.response.data);
+      console.error("Response status:", error.response.status);
+    }
+    throw error;
   }
-
-  const response = await sheets.spreadsheets.values.append({
-    spreadsheetId,
-    range: "Sheet1!A:F", // Adjust if your sheet has a different name
-    valueInputOption: "USER_ENTERED",
-    requestBody: {
-      values: [values],
-    },
-  });
-
-  return response.data;
 }
 
 export async function getSheetData() {
