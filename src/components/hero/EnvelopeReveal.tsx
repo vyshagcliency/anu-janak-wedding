@@ -53,10 +53,16 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
       if (outerBorderRef.current) {
         outerBorderRef.current.style.strokeDashoffset = "0";
       }
+      if (tapPromptRef.current) {
+        tapPromptRef.current.classList.add("tap-prompt-pulse");
+      }
       return;
     }
 
     const tl = gsap.timeline();
+
+    // Force tap prompt to be invisible initially
+    gsap.set(tapPromptRef.current, { opacity: 0, visibility: "hidden" });
 
     // Card fade in with scale
     tl.fromTo(
@@ -87,23 +93,27 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
       "-=0.6"
     );
 
-    // Ornament draws itself
+    // All content appears together at once
+    const contentStartTime = "+=0.1";
+    const contentDuration = 0.3;
+
+    // Ornament
     tl.fromTo(
       ornamentRef.current,
       { opacity: 0 },
-      { opacity: 1, duration: 0.4, ease: "power1.out" },
-      "-=0.1"
+      { opacity: 1, duration: contentDuration, ease: "power1.out" },
+      contentStartTime
     );
 
-    // "You are invited" fades in
+    // "You are invited"
     tl.fromTo(
       invitedTextRef.current,
       { opacity: 0 },
-      { opacity: 0.6, duration: 0.3, ease: "power1.out" },
-      "+=0.05"
+      { opacity: 0.6, duration: contentDuration, ease: "power1.out" },
+      contentStartTime
     );
 
-    // Monogram circle — start earlier, overlap more
+    // Monogram circle
     if (monogramCircleRef.current) {
       const circPerimeter = monogramCircleRef.current.getTotalLength();
       gsap.set(monogramCircleRef.current, {
@@ -112,33 +122,46 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
       });
       tl.to(
         monogramCircleRef.current,
-        { strokeDashoffset: 0, duration: 0.6, ease: "power1.inOut" },
-        "-=0.2"
+        { strokeDashoffset: 0, duration: contentDuration, ease: "power1.inOut" },
+        contentStartTime
       );
     }
 
-    // Monogram letters stagger in — overlap with circle draw
+    // Monogram letters (all at once, no stagger)
     tl.fromTo(
       [monogramARef.current, monogramAmpRef.current, monogramJRef.current],
       { opacity: 0 },
-      { opacity: 1, duration: 0.4, stagger: 0.1, ease: "power1.out" },
-      "-=0.4"
+      { opacity: 1, duration: contentDuration, ease: "power1.out" },
+      contentStartTime
     );
 
-    // Gold rule expands from center
+    // Gold rule
     tl.fromTo(
       ruleRef.current,
       { scaleX: 0, opacity: 1 },
-      { scaleX: 1, duration: 0.4, ease: "power2.out" },
-      "-=0.3"
+      { scaleX: 1, duration: contentDuration, ease: "power2.out" },
+      contentStartTime
     );
 
-    // "Tap to reveal" fades in - appears last after all content
+    // Mark when content is done
+    tl.add("contentDone");
+
+    // "Tap to reveal" fades in AFTER all content (with 0.5s delay)
     tl.fromTo(
       tapPromptRef.current,
-      { opacity: 0 },
-      { opacity: 1, duration: 0.4, ease: "power1.out" },
-      "+=0.2"
+      { opacity: 0, visibility: "hidden" },
+      {
+        opacity: 1,
+        visibility: "visible",
+        duration: 0.5,
+        ease: "power1.out",
+        onComplete: () => {
+          if (tapPromptRef.current) {
+            tapPromptRef.current.classList.add("tap-prompt-pulse");
+          }
+        }
+      },
+      "contentDone+=0.5"
     );
 
     return () => {
@@ -496,7 +519,7 @@ export default function EnvelopeReveal({ onRevealed }: Props) {
         {/* "Tap to reveal" */}
         <p
           ref={tapPromptRef}
-          className="tap-prompt-pulse text-center text-base uppercase tracking-[0.2em] font-semibold"
+          className="text-center text-base uppercase tracking-[0.2em] font-semibold"
           style={{
             color: "var(--gold)",
             fontFamily: "var(--font-body), sans-serif",
