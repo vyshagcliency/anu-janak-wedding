@@ -520,7 +520,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
           <h2
             style={{
               fontFamily: "var(--font-heading), serif",
-              fontSize: event.id === "wedding" ? "clamp(1.3rem, 5.5vw, 1.8rem)" : "clamp(1.6rem, 7vw, 2.2rem)",
+              fontSize: event.id === "wedding" ? "clamp(1.2rem, 5vw, 1.65rem)" : "clamp(1.6rem, 7vw, 2.2rem)",
               fontWeight: 400,
               color: "#F8F4EE",
               lineHeight: 1.15,
@@ -536,7 +536,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
                   <p
                     style={{
                       fontFamily: "var(--font-body), sans-serif",
-                      fontSize: event.id === "wedding" ? "0.68rem" : "0.77rem",
+                      fontSize: event.id === "wedding" ? "0.64rem" : "0.77rem",
                       fontWeight: 500,
                       letterSpacing: "0.08em",
                       color: "#F8F4EE",
@@ -548,7 +548,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
                   <p
                     style={{
                       fontFamily: "var(--font-body), sans-serif",
-                      fontSize: event.id === "wedding" ? "0.66rem" : "0.75rem",
+                      fontSize: event.id === "wedding" ? "0.62rem" : "0.75rem",
                       letterSpacing: "0.1em",
                       color: accentColor,
                     }}
@@ -582,7 +582,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
               <p
                 style={{
                   fontFamily: "var(--font-body), sans-serif",
-                  fontSize: event.id === "wedding" ? "0.72rem" : "0.82rem",
+                  fontSize: event.id === "wedding" ? "0.68rem" : "0.82rem",
                   letterSpacing: "0.12em",
                   color: accentColor,
                   marginBottom: 4,
