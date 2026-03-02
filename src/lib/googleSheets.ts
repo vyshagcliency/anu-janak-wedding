@@ -23,7 +23,7 @@ const getGoogleAuth = () => {
         .replace(/-----END PRIVATE\s+KEY-----/g, '-----END PRIVATE KEY-----')
         // Remove spaces from the middle of base64 lines
         .split('\n')
-        .map(line => {
+        .map((line: string) => {
           // Only remove spaces from base64 content, not from BEGIN/END markers
           if (line.includes('-----')) {
             return line;
