@@ -28,7 +28,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     id: "dresscode-sangeet",
     question: "What should I wear to the Sangeet Mélange?",
     answer:
-      "Sparkle and Shine — Cocktail Attire (Indo-Western Chic). Embrace dark, elegant hues like Dark Blue, Dark Green, Black, Maroon, Golden, Purple, or Silver. Think glamorous and dazzling.",
+      "Sparkle and Shine — Cocktail Attire (Indo-Western Chic). Embrace dark, elegant hues like Dark Blue, Dark Green, Maroon, Golden, Purple, or Silver. Think glamorous and dazzling.",
     category: "attire",
     attireImages: [
       "/images/events/attire/sangeet-ref.png",

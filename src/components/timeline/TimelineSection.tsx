@@ -48,10 +48,10 @@ const STOPS: Stop[] = [
     revealType: "slide" as const,
   },
   {
-    title: "College Days",
+    title: "The Years That Shaped Us",
     subtitle: "Chapter 3",
     description:
-      "Even through the busy college years, if there was a chance to meet, we took it.",
+      "Though life placed us in different campuses, different states, different worlds, love gently wove a bridge strong enough to hold us. And in the middle of it all, we found time for laughter, for late-night talks, for moments that felt like our forever secret",
     imageSrc: "/images/timeline/chapter_3_final.jpeg",
     imageAlt: "Walking together on a nature path",
     position: 42,
