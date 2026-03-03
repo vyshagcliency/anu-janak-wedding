@@ -811,6 +811,19 @@ export default function LuxuryEventGallery({ event, index }: Props) {
           </div>
         </div>
 
+        {/* Bottom blocker to hide any artifacts */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: "2px",
+            background: "#0D0A08",
+            zIndex: 20,
+          }}
+        />
+
       </section>
 
       <AttireOverlay
