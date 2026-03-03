@@ -761,8 +761,9 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             left: 0,
             right: 0,
             zIndex: 10,
-            padding: "12px 24px 12px",
-            background: "#0D0A08",
+            padding: "0px 24px 8px",
+            background:
+              "linear-gradient(to top, #0D0A08 0%, #0D0A08 40%, rgba(13,10,8,0) 100%)",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
