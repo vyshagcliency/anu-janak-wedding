@@ -487,8 +487,10 @@ export default function LuxuryEventGallery({ event, index }: Props) {
         style={{
           display: "none", // overridden to block by globals.css on mobile
           position: "relative",
-          height: "100vh",
+          minHeight: "100vh",
           overflow: "hidden",
+          borderBottom: "none",
+          marginBottom: 0,
         }}
         data-event-id={`${event.id}-mobile`}
       >
@@ -619,7 +621,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
           style={{
             position: "absolute",
             top: event.id === "wedding" ? 120 : 130,
-            bottom: 32,
+            bottom: event.id === "reception" || event.id === "wedding" ? 0 : 10,
             left: 0,
             right: 0,
             display: "flex",
@@ -761,7 +763,8 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             zIndex: 10,
             padding: "0px 24px 8px",
             background:
-              "linear-gradient(to top, rgba(13,10,8,1) 0%, rgba(13,10,8,0.85) 30%, rgba(13,10,8,0) 100%)",
+              "linear-gradient(to top, rgba(13,10,8,0.85) 0%, rgba(13,10,8,0.5) 70%, transparent 100%)",
+            transform: "translateY(-40px)",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
