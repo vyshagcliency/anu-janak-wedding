@@ -762,6 +762,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
             padding: "0px 24px 8px",
             background:
               "linear-gradient(to top, rgba(13,10,8,0.85) 0%, rgba(13,10,8,0.5) 70%, transparent 100%)",
+            transform: event.id === "reception" || event.id === "wedding" ? "translateY(-40px)" : "none",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
