@@ -757,14 +757,13 @@ export default function LuxuryEventGallery({ event, index }: Props) {
         <div
           style={{
             position: "absolute",
-            bottom: 0,
+            bottom: 40,
             left: 0,
             right: 0,
             zIndex: 10,
             padding: "0px 24px 8px",
             background:
               "linear-gradient(to top, rgba(13,10,8,0.85) 0%, rgba(13,10,8,0.5) 70%, transparent 100%)",
-            transform: "translateY(-40px)",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
