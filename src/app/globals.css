@@ -267,6 +267,10 @@ body {
   .luxury-event-gallery-mobile {
     display: block !important;
   }
+  .luxury-event-gallery-mobile::after,
+  .luxury-event-gallery-mobile::before {
+    display: none !important;
+  }
   .mobile-swipe-track::-webkit-scrollbar {
     display: none;
   }
