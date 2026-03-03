@@ -487,7 +487,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
         style={{
           display: "none", // overridden to block by globals.css on mobile
           position: "relative",
-          height: "100vh",
+          minHeight: "100vh",
           overflow: "hidden",
         }}
         data-event-id={`${event.id}-mobile`}
