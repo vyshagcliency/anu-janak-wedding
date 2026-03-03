@@ -266,6 +266,9 @@ body {
   }
   .luxury-event-gallery-mobile {
     display: block !important;
+    border: none !important;
+    outline: none !important;
+    margin-bottom: 0 !important;
   }
   .luxury-event-gallery-mobile::after,
   .luxury-event-gallery-mobile::before {
