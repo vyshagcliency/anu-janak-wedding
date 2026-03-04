@@ -23,10 +23,10 @@ const dancingScript = Dancing_Script({
 export const metadata: Metadata = {
   title: "Anu & Janak — April 26, 2026",
   description:
-    "Join us as we celebrate the wedding of Anu & Janak. A love story that began in a school van.",
+    "Join us as we celebrate the wedding of Anu & Janak. A promise for a Lifetime.",
   openGraph: {
     title: "Anu & Janak — April 26, 2026",
-    description: "A love story that began in a school van.",
+    description: "A promise for a Lifetime.",
     type: "website",
     images: [
       {
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Anu & Janak — April 26, 2026",
-    description: "A love story that began in a school van.",
+    description: "A promise for a Lifetime.",
     images: ["/images/timeline/img4.jpeg"],
   },
 };
