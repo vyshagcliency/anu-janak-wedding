@@ -51,7 +51,7 @@ const STOPS: Stop[] = [
     title: "The Years That Shaped Us",
     subtitle: "Chapter 3",
     description:
-      "Though life placed us in different campuses, different states, different worlds, love gently wove a bridge strong enough to hold us. And in the middle of it all, we found time for laughter, for late-night talks, for moments that felt like our forever secret",
+      "Though life placed us in different campuses, different states, different worlds, love gently wove a bridge strong enough to hold us. And in the middle of it all, we found time for laughter, for late-night talks, for moments that felt like our forever secret.",
     imageSrc: "/images/timeline/chapter_3_final.jpeg",
     imageAlt: "Walking together on a nature path",
     position: 42,
