@@ -318,7 +318,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
           )}
 
           {/* Dress Code & Color Palette */}
-          <div style={{ marginTop: 28 }}>
+          <div style={{ marginTop: 14 }}>
             <p
               style={{
                 fontFamily: "var(--font-body), sans-serif",
@@ -757,7 +757,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
         <div
           style={{
             position: "absolute",
-            bottom: 40,
+            bottom: 70,
             left: 0,
             right: 0,
             zIndex: 10,
