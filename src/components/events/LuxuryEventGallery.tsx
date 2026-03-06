@@ -757,7 +757,7 @@ export default function LuxuryEventGallery({ event, index }: Props) {
         <div
           style={{
             position: "absolute",
-            bottom: 55,
+            bottom: event.id === "sangeet" ? 40 : 55,
             left: 0,
             right: 0,
             zIndex: 10,
