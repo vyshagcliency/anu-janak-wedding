@@ -43,15 +43,37 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
     // Always start fresh — ignore previous muted state
     localStorage.removeItem("aj-muted");
 
-    howlRef.current = new Howl({
+    const howl = new Howl({
       src: ["/audio/Marry You.mp3"],
       loop: true,
       volume: 0.35,
       html5: true,
     });
+    howlRef.current = howl;
+
+    // Try to autoplay immediately
+    howl.once("play", () => setIsPlaying(true));
+    howl.play();
+
+    // Fallback: if browser blocks autoplay, start on first user interaction
+    const startOnInteraction = () => {
+      if (howl && !howl.playing()) {
+        howl.play();
+        setIsPlaying(true);
+      }
+      cleanup();
+    };
+
+    const events = ["click", "touchstart", "scroll", "keydown"] as const;
+    events.forEach((e) => document.addEventListener(e, startOnInteraction, { once: true, passive: true }));
+
+    const cleanup = () => {
+      events.forEach((e) => document.removeEventListener(e, startOnInteraction));
+    };
 
     return () => {
-      howlRef.current?.unload();
+      cleanup();
+      howl.unload();
     };
   }, []);
 
