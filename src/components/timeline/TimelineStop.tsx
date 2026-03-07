@@ -272,7 +272,7 @@ export default function TimelineStop({
           style={{ opacity: 0 }}
         >
           <p
-            className="mb-1 text-sm sm:text-base uppercase tracking-[0.2em]"
+            className="mb-1 text-xs uppercase tracking-[0.2em]"
             style={{ color: theme.textAccent, fontFamily: "var(--font-playfair), serif" }}
           >
             {subtitle}
