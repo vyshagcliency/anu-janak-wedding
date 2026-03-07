@@ -273,7 +273,7 @@ export default function TimelineStop({
         >
           <p
             className="mb-1 text-xs uppercase tracking-[0.2em]"
-            style={{ color: theme.textAccent, fontFamily: "var(--font-playfair), serif" }}
+            style={{ color: theme.textAccent }}
           >
             {subtitle}
           </p>
@@ -288,7 +288,7 @@ export default function TimelineStop({
           </h3>
           <p
             className="text-sm leading-relaxed sm:text-base"
-            style={{ color: "var(--charcoal-light)", fontFamily: "var(--font-playfair), serif" }}
+            style={{ color: "var(--charcoal-light)" }}
           >
             {description}
           </p>
