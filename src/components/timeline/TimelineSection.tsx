@@ -35,7 +35,6 @@ const STOPS: Stop[] = [
     imageAlt: "Anu and Janak's class photo",
     position: 8,
     revealType: "circle" as const,
-    imagePosition: "center 30%",
   },
   {
     title: "Friendship to Love",
