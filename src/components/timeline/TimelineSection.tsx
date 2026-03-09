@@ -32,7 +32,7 @@ const STOPS: Stop[] = [
     subtitle: "Chapter 1",
     description:
       "It started with a school van and two kids who had no idea what was coming in 2007. Same school, same neighborhood, same school van, and a lot of growing up together.",
-    imageSrc: "/images/timeline/chapter_1_prod_final.jpeg",
+    imageSrc: "/images/timeline/chapter_1_prod_final_wide.jpeg",
     imageAlt: "Anu and Janak's class photo",
     position: 8,
     revealType: "circle" as const,
