@@ -54,6 +54,7 @@ interface Props {
   position: number;
   revealType?: "circle" | "slide" | "fade" | "split" | "blur" | "grand";
   imagePosition?: string;
+  imageFit?: "cover" | "contain";
   onNext?: () => void;
 }
 
@@ -67,6 +68,7 @@ export default function TimelineStop({
   position,
   revealType = "fade",
   imagePosition,
+  imageFit = "cover",
   onNext,
 }: Props) {
   const stopRef = useRef<HTMLDivElement>(null);
@@ -215,7 +217,7 @@ export default function TimelineStop({
             src={imageSrc}
             alt={imageAlt}
             fill
-            className="object-cover"
+            className={imageFit === "contain" ? "object-contain" : "object-cover"}
             sizes="(max-width: 768px) 85vw, 480px"
             loading="lazy"
             style={imagePosition ? { objectPosition: imagePosition } : undefined}

@@ -23,6 +23,7 @@ type Stop = {
   position: number;
   revealType: "circle" | "slide" | "fade" | "split" | "blur" | "grand";
   imagePosition?: string;
+  imageFit?: "cover" | "contain";
 };
 
 const STOPS: Stop[] = [
@@ -35,6 +36,7 @@ const STOPS: Stop[] = [
     imageAlt: "Anu and Janak's class photo",
     position: 8,
     revealType: "circle" as const,
+    imageFit: "contain" as const,
   },
   {
     title: "Friendship to Love",
@@ -418,6 +420,7 @@ export default function TimelineSection() {
             position={stop.position}
             revealType={stop.revealType}
             imagePosition={stop.imagePosition}
+            imageFit={stop.imageFit}
             onNext={i === STOPS.length - 1 ? handleNext : undefined}
           />
         ))}
