@@ -201,8 +201,8 @@ export default function TimelineStop({
           ref={imageRef}
           className="relative overflow-hidden rounded-2xl shadow-xl"
           style={{
-            height: imageFit === "contain" ? "50vh" : "35vh",
-            width: imageFit === "contain" ? "min(60vw, 280px)" : "min(85vw, 420px)",
+            height: "35vh",
+            width: "min(85vw, 420px)",
             opacity: 0,
             border: `2px solid ${theme.border}`,
             boxShadow: theme.glow,
